@@ -79,7 +79,7 @@ public class SecurityConfig {
                 })
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/docente", true)
+                .defaultSuccessUrl("/inicio", true)
                 .permitAll()).logout(
                 logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).

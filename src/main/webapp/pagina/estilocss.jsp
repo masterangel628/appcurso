@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="public/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- JQVMap -->
   <link rel="stylesheet" href="public/plugins/jqvmap/jqvmap.min.css">
+   <!-- BS Stepper -->
+  <link rel="stylesheet" href="public/plugins/bs-stepper/css/bs-stepper.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="public/dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->

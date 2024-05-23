@@ -67,7 +67,7 @@ public class UserController {
                     validacion.put("dni", "El campo DNI debe tener 8 caractéres");
                 } else {
                     if (personainter.existepersona(dni) == 1) {
-                        PersonaEntity d = personainter.getidpersona(dni);
+                        PersonaEntity d = personainter.getpersona(dni);
                         if (userinter.existeuser(String.valueOf(d.getIdpersona())) == 1) {
                             validacion.put("dni", "Ya existe un usuario con este DNI");
                         }
@@ -129,23 +129,27 @@ public class UserController {
             }
         }
         if (validacion.isEmpty()) {
-            PersonaEntity PersonaEntity = new PersonaEntity();
-            PersonaEntity.setApeper(ape);
-            PersonaEntity.setNomper(nom);
-            PersonaEntity.setDniper(dni);
-            PersonaEntity.setCelper(cel);
-            PersonaEntity.setDirper(dir);
-            PersonaEntity.setCorreoper(cor);
+            if (personainter.existepersona(dni) == 1) {
+                PersonaEntity d = personainter.getpersona(dni);
+                userinter.guardarusuario(user,passwordEncoder.encode(pass),"Activo",String.valueOf(d.getIdpersona()));
+            } else {
+                PersonaEntity PersonaEntity = new PersonaEntity();
+                PersonaEntity.setApeper(ape);
+                PersonaEntity.setNomper(nom);
+                PersonaEntity.setDniper(dni);
+                PersonaEntity.setCelper(cel);
+                PersonaEntity.setDirper(dir);
+                PersonaEntity.setCorreoper(cor);
 
-            UserEntity UserEntity = new UserEntity();
-            UserEntity.setPersona(PersonaEntity);
-            UserEntity.setUsername(user);
-            UserEntity.setPassword(passwordEncoder.encode(pass));
-            UserEntity.setEstado(EstadoEnum.ACTIVO);
+                UserEntity UserEntity = new UserEntity();
+                UserEntity.setPersona(PersonaEntity);
+                UserEntity.setUsername(user);
+                UserEntity.setPassword(passwordEncoder.encode(pass));
+                UserEntity.setEstado(EstadoEnum.ACTIVO);
 
-            UserEntity usu = userinter.saveUser(UserEntity);
-            userinter.saveRol(rol, usu.getId());
-
+                UserEntity usu = userinter.saveUser(UserEntity);
+                userinter.saveRol(rol, usu.getId());
+            }
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");
@@ -155,8 +159,8 @@ public class UserController {
 
     @PostMapping("usuario/editar")
     @ResponseBody
-    public Map Editar(@RequestParam(name = "idper") String idper,@RequestParam(name = "idusu") int idusu
-            , @RequestParam(name = "ape") String ape, @RequestParam(name = "usu") String user, @RequestParam(name = "nom") String nom,
+    public Map Editar(@RequestParam(name = "idper") String idper, @RequestParam(name = "idusu") int idusu,
+             @RequestParam(name = "ape") String ape, @RequestParam(name = "usu") String user, @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
             @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
 
@@ -177,11 +181,11 @@ public class UserController {
                 }
             }
         }
-        
-         if (!val.vacio(user)) {
+
+        if (!val.vacio(user)) {
             validacion.put("usu", "El campo Username es obligatorio");
         } else {
-            if (userinter.existeusernamedit(user,idusu) == 1) {
+            if (userinter.existeusernamedit(user, idusu) == 1) {
                 validacion.put("usu", "Ya existe un usuario con este Username");
             }
         }
@@ -235,8 +239,8 @@ public class UserController {
             PersonaEntity.setDirper(dir);
             PersonaEntity.setCorreoper(cor);
 
-            personainter.editPersona(PersonaEntity);
-            userinter.editusername(user, idusu); 
+//            personainter.editPersona(PersonaEntity);
+            userinter.editusername(user, idusu);
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");

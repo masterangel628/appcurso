@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author Asus
+ * @author Asu
  */
 @Repository
 public interface RolRepository extends JpaRepository<RoleEntity, Long> {

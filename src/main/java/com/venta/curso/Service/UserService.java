@@ -76,4 +76,10 @@ public class UserService implements UserInterface {
     public void editusername(String usu, int id) {
         userRepository.editusername(usu, id); 
     }
+
+    @Override
+    public void guardarusuario(String usu, String pass, String esta, String idper) {
+        userRepository.guardarusu(usu, pass, esta, idper);
+        
+    }
 }

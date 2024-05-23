@@ -36,6 +36,8 @@
 <script src="public/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="public/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- BS-Stepper -->
+<script src="public/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 <!-- Summernote -->
 <script src="public/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->

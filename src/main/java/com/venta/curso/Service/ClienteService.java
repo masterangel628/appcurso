@@ -22,18 +22,13 @@ private final ClienteRepository clienterepo;
     }
 
     @Override
-    public ClienteEntity saveCliente(ClienteEntity cli) {
-        return clienterepo.save(cli);
-    }
-
-    @Override
-    public ClienteEntity editCliente(ClienteEntity cli) {
-        return clienterepo.save(cli);
-    }
-
-    @Override
     public int existecliente(String idper) {
         return clienterepo.existedocente(idper);
+    }
+
+    @Override
+    public void guardarCliente(String idper) {
+        clienterepo.guardardcli(idper); 
     }
     
 }

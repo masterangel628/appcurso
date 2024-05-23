@@ -23,5 +23,10 @@ public interface DocenteRepository extends JpaRepository<DocenteEntity, Integer>
     @Query(value = "select exists(select * from docentes where fkidpersona=:idper)",nativeQuery = true)
     public int existedocente(@Param("idper") String idper);
     
+     @Modifying
+    @Transactional
+    @Query(value = "insert into docentes(estadodoc,fkidpersona)values(:esta,:idper)",nativeQuery = true)
+    public void guardardoc(@Param("esta") String esta,@Param("idper") String idper);
+    
     
 }

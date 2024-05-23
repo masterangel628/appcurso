@@ -84,6 +84,30 @@
                             </a>
                         </li>
                         </sec:authorize>
+                        <li class="nav-item">
+                            <a href="paquete" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Paquete</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="session" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sesión</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="procesoprospecto" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Proceso Prospecto</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="distribuircliente" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Distribuir Cliente</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

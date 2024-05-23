@@ -1,7 +1,7 @@
-
 package com.venta.curso.Controller;
 
 import com.venta.curso.Entity.ClienteEntity;
+import com.venta.curso.Entity.DistritoEntity;
 import com.venta.curso.Entity.DocenteEntity;
 import com.venta.curso.Entity.EstadoEnum;
 import com.venta.curso.Entity.PersonaEntity;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequiredArgsConstructor
 public class ClienteController {
+
     private final ClienteInterface clienteinter;
     private final PersonaInterface personainter;
 
@@ -42,11 +43,43 @@ public class ClienteController {
         return clienteinter.getCliente();
     }
 
+    @PostMapping("cliente/verificar")
+    @ResponseBody
+    public Map Verificar(@RequestParam(name = "dni") String dni) {
+        Map validacion = new HashMap();
+        String cliente, idcli;
+        if (!val.vacio(dni)) {
+            validacion.put("dni", "El campo DNI es obligatorio");
+        } else {
+            if (!val.soloenteros(dni)) {
+                validacion.put("dni", "El campo DNI debe tener numérico");
+            } else {
+                if (!val.logitud(dni, 8)) {
+                    validacion.put("dni", "El campo DNI debe tener 8 caractéres");
+                } else {
+                    if (personainter.existepersona(dni) == 1) {
+                        PersonaEntity d = personainter.getpersona(dni);
+                        if (clienteinter.existecliente(String.valueOf(d.getIdpersona())) == 1) {
+                            cliente = d.getDniper() + " - " + d.getApeper() + " " + d.getNomper();
+                            validacion.put("resp", "si");
+                            validacion.put("cli", cliente);
+                        } else {
+                            validacion.put("resp", "no");
+                        }
+                    }
+                }
+            }
+        }
+        return validacion;
+    }
+
     @PostMapping("cliente/guardar")
     @ResponseBody
     public Map Guardar(@RequestParam(name = "ape") String ape, @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
-            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
+            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor,
+            @RequestParam(name = "dep") String dep, @RequestParam(name = "prov") String prov,
+            @RequestParam(name = "dist") String dist) {
 
         Map validacion = new HashMap();
 
@@ -60,7 +93,7 @@ public class ClienteController {
                     validacion.put("dni", "El campo DNI debe tener 8 caractéres");
                 } else {
                     if (personainter.existepersona(dni) == 1) {
-                        PersonaEntity d = personainter.getidpersona(dni);
+                        PersonaEntity d = personainter.getpersona(dni);
                         if (clienteinter.existecliente(String.valueOf(d.getIdpersona())) == 1) {
                             validacion.put("dni", "Ya existe un cliente con este DNI");
                         }
@@ -100,7 +133,15 @@ public class ClienteController {
                 }
             }
         }
-
+        if (dep.equalsIgnoreCase("0")) {
+            validacion.put("dep", "Seleccione un departamento");
+        }
+        if (prov.equalsIgnoreCase("0")) {
+            validacion.put("prov", "Seleccione una provincia");
+        }
+        if (dist.equalsIgnoreCase("0")) {
+            validacion.put("dist", "Seleccione un distrito");
+        }
         if (!val.vacio(cor)) {
             validacion.put("cor", "El campo Correo es obligatorio");
         } else {
@@ -109,22 +150,24 @@ public class ClienteController {
             }
         }
         if (validacion.isEmpty()) {
-//            if (personainter.existepersona(dni) == 1) {
-//
-//            } else {
-//
-//            }
-            PersonaEntity PersonaEntity = new PersonaEntity();
-            PersonaEntity.setApeper(ape);
-            PersonaEntity.setNomper(nom);
-            PersonaEntity.setDniper(dni);
-            PersonaEntity.setCelper(cel);
-            PersonaEntity.setDirper(dir);
-            PersonaEntity.setCorreoper(cor);
-
-            ClienteEntity ClienteEntity = new ClienteEntity();
-            ClienteEntity.setPersona(PersonaEntity);
-            clienteinter.saveCliente(ClienteEntity);
+            if (personainter.existepersona(dni) == 1) {
+                PersonaEntity d = personainter.getpersona(dni);
+                clienteinter.guardarCliente(String.valueOf(d.getIdpersona()));
+            } else {
+                DistritoEntity DistritoEntity = new DistritoEntity();
+                DistritoEntity.setIddistrito(dist);
+                PersonaEntity PersonaEntity = new PersonaEntity();
+                PersonaEntity.setApeper(ape);
+                PersonaEntity.setNomper(nom);
+                PersonaEntity.setDniper(dni);
+                PersonaEntity.setCelper(cel);
+                PersonaEntity.setDirper(dir);
+                PersonaEntity.setCorreoper(cor);
+                PersonaEntity.setDistrito(DistritoEntity);
+                personainter.guardarpersona(PersonaEntity);
+                PersonaEntity d = personainter.getpersona(dni);
+                clienteinter.guardarCliente(String.valueOf(d.getIdpersona()));
+            }
 
             validacion.put("resp", "si");
         } else {
@@ -137,7 +180,9 @@ public class ClienteController {
     @ResponseBody
     public Map Editar(@RequestParam(name = "idper") String idper, @RequestParam(name = "ape") String ape, @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
-            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
+            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor,
+            @RequestParam(name = "dep") String dep, @RequestParam(name = "prov") String prov,
+            @RequestParam(name = "dist") String dist) {
 
         Map validacion = new HashMap();
 
@@ -173,6 +218,16 @@ public class ClienteController {
             }
         }
 
+        if (dep.equalsIgnoreCase("0")) {
+            validacion.put("dep", "Seleccione un departamento");
+        }
+        if (prov.equalsIgnoreCase("0")) {
+            validacion.put("prov", "Seleccione una provincia");
+        }
+        if (dist.equalsIgnoreCase("0")) {
+            validacion.put("dist", "Seleccione un distrito");
+        }
+
         if (!val.vacio(dir)) {
             validacion.put("dir", "El campo Dirección es obligatorio");
         }
@@ -197,6 +252,8 @@ public class ClienteController {
             }
         }
         if (validacion.isEmpty()) {
+            DistritoEntity DistritoEntity = new DistritoEntity();
+            DistritoEntity.setIddistrito(dist);
             PersonaEntity PersonaEntity = new PersonaEntity();
             PersonaEntity.setIdpersona(Integer.parseInt(idper));
             PersonaEntity.setApeper(ape);
@@ -205,8 +262,8 @@ public class ClienteController {
             PersonaEntity.setCelper(cel);
             PersonaEntity.setDirper(dir);
             PersonaEntity.setCorreoper(cor);
-
-            personainter.editPersona(PersonaEntity);
+            PersonaEntity.setDistrito(DistritoEntity);
+            personainter.editarpersona(PersonaEntity);
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");

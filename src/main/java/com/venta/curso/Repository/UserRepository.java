@@ -52,4 +52,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     public void editusername(@Param("usu") String usu, @Param("id") int id);
 
 
+    @Modifying
+    @Transactional
+    @Query(value = "insert into users(username,password,estado,fkidpersona)values(:usu,:pass,:esta,:idper)", nativeQuery = true)
+    public void guardarusu(@Param("usu") String usu, @Param("pass") String pass, @Param("esta") String esta, @Param("idper") String idper);
 }

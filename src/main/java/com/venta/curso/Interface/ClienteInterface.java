@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ClienteInterface {
     public List<ClienteEntity> getCliente();
-    public ClienteEntity saveCliente(ClienteEntity cli);
-    public ClienteEntity editCliente(ClienteEntity cli);
     public int existecliente(String idper);
+    
+    public void guardarCliente(String idper);
 }

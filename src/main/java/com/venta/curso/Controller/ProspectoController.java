@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.venta.curso.Controller;
 
 import com.venta.curso.Entity.EstadoAsEnum;
@@ -88,17 +84,19 @@ public class ProspectoController {
                 validacion.put("resp", "si");
             }
         } else {
-            validacion.put("file","No es un archivo excel");
+            validacion.put("file", "No es un archivo excel");
             validacion.put("resp", "no");
         }
 
         return validacion;
     }
 
-    @GetMapping("/prospecto/mprospecto")
+    @GetMapping("prospecto/mprospecto")
     @ResponseBody
     public List getProspecto() {
         return prospectointer.getProspecto();
     }
+
+
 
 }

@@ -107,7 +107,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>DNI</label>
-                                        <input type="text" id="txtdni" v-model="txtdni" class="form-control" autocomplete="off">
+                                        <input type="text" id="txtdni" v-model="txtdni" maxlength="8" @keyup="completar()" class="form-control" autocomplete="off">
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{msjdni}}</strong>
                                         </span>
@@ -330,6 +330,31 @@
                     this.getrol();
                 },
                 methods: {
+                     completar: function () {
+                        if (this.txtdni.length == 8) {
+                            axios.get('persona/consulta/' + this.txtdni).then(response => {
+                                if(response.data.msj=="bd"){
+                                    this.txtape = response.data.persona.apeper;
+                                    this.txtnom = response.data.persona.nomper;
+                                    this.txtdir = response.data.persona.dirper;
+                                    this.txtcel = response.data.persona.celper;
+                                    this.txtcor = response.data.persona.correoper;
+                                }
+                                 if(response.data.msj=="api"){
+                                     var p = JSON.parse(response.data.persona);
+                                    this.txtape = p.data.apellido_paterno+" "+p.data.apellido_materno;
+                                    this.txtnom = p.data.nombres;
+                                    this.txtdir = p.data.direccion;
+                                }
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        } else {
+                            this.txtape ="";
+                            this.txtnom = "";
+                            this.txtdir ="";
+                        }
+                    },
                     limpiar: function () {
                         this.txtdni = "";
                         this.txtape = "";

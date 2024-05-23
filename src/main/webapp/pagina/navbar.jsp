@@ -1,3 +1,6 @@
+<div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="public/dist/img/loader.png" alt="logofarma" height="128" width="128">
+</div>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-color: #ff1a1a;">
     <ul class="navbar-nav">
         <li class="nav-item">

@@ -15,31 +15,36 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DocenteService implements DocenteInterface {
 
-    private final DocenteRepository alumnorepo;
+    private final DocenteRepository docenterepo;
 
     @Override
     public List<DocenteEntity> getDocente() {
-        return alumnorepo.findAll();
+        return docenterepo.findAll();
     }
 
     @Override
     public DocenteEntity saveDocente(DocenteEntity alum) {
-        return alumnorepo.save(alum);
+        return docenterepo.save(alum);
     }
 
     @Override
     public DocenteEntity editDocente(DocenteEntity alum) {
-        return alumnorepo.save(alum);
+        return docenterepo.save(alum);
     }
 
     @Override
     public void CambiarEstado(String esta,String id) {
-        alumnorepo.CambiaEstado(esta,id);
+        docenterepo.CambiaEstado(esta,id);
     }
 
     @Override
     public int existedocente(String idper) {
-         return alumnorepo.existedocente(idper);
+         return docenterepo.existedocente(idper);
+    }
+
+    @Override
+    public void guardardoc(String idper, String esta) {
+        docenterepo.guardardoc(esta, idper);
     }
 
 }

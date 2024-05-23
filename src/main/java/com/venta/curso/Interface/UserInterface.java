@@ -30,4 +30,6 @@ public interface UserInterface {
     public int existeusernamedit(String usu,int id);
     
     public void editusername(String usu,int id);
+    
+    public void guardarusuario(String usu,String pass,String esta,String idper);
 }

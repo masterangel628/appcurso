@@ -77,7 +77,7 @@
                                                             <span class="badge badge-warning" v-if="cur.estado=='INACTIVO'">{{cur.estado}}</span>
                                                         </td>
                                                         <td>
-                                                            <sec:authorize access="hasAuthority('Editar Curso')"> access="hasAuthority('Registrar Curso')">
+                                                            <sec:authorize access="hasAuthority('Editar Curso')">
                                                                 <button class="btn btn-info btn-sm" title="Cambiar de estado"  @click="cambiar(cur)"><i class="fas fa-sync-alt"></i></button>
                                                                 </sec:authorize>
                                                                 <sec:authorize access="hasAuthority('Cambiar estado Curso')">

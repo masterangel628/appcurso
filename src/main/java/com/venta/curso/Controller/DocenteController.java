@@ -58,7 +58,7 @@ public class DocenteController {
                     validacion.put("dni", "El campo DNI debe tener 8 caractéres");
                 } else {
                     if (personainter.existepersona(dni) == 1) {
-                        PersonaEntity d = personainter.getidpersona(dni);
+                        PersonaEntity d = personainter.getpersona(dni);
                         if (docenteinter.existedocente(String.valueOf(d.getIdpersona())) == 1) {
                             validacion.put("dni", "Ya existe un docente con este DNI");
                         }
@@ -100,18 +100,23 @@ public class DocenteController {
         }
 
         if (validacion.isEmpty()) {
-            PersonaEntity PersonaEntity = new PersonaEntity();
-            PersonaEntity.setApeper(ape);
-            PersonaEntity.setNomper(nom);
-            PersonaEntity.setDniper(dni);
-            PersonaEntity.setCelper(cel);
-            PersonaEntity.setDirper(dir);
-            PersonaEntity.setCorreoper(cor);
+            if (personainter.existepersona(dni) == 1) {
+                PersonaEntity d = personainter.getpersona(dni);
+                 docenteinter.guardardoc(String.valueOf(d.getIdpersona()), "Activo"); 
+            } else {
+                PersonaEntity PersonaEntity = new PersonaEntity();
+                PersonaEntity.setApeper(ape);
+                PersonaEntity.setNomper(nom);
+                PersonaEntity.setDniper(dni);
+                PersonaEntity.setCelper(cel);
+                PersonaEntity.setDirper(dir);
+                PersonaEntity.setCorreoper(cor);
 
-            DocenteEntity DocenteEntity = new DocenteEntity();
-            DocenteEntity.setPersona(PersonaEntity);
-            DocenteEntity.setEstado(EstadoEnum.ACTIVO);
-            docenteinter.saveDocente(DocenteEntity);
+                DocenteEntity DocenteEntity = new DocenteEntity();
+                DocenteEntity.setPersona(PersonaEntity);
+                DocenteEntity.setEstado(EstadoEnum.ACTIVO);
+                docenteinter.saveDocente(DocenteEntity);
+            }
 
             validacion.put("resp", "si");
         } else {
@@ -185,7 +190,7 @@ public class DocenteController {
             PersonaEntity.setDirper(dir);
             PersonaEntity.setCorreoper(cor);
 
-            personainter.editPersona(PersonaEntity);
+//            personainter.editPersona(PersonaEntity);
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");
