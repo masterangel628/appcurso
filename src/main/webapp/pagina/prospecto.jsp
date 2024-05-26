@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             <center v-if="cenlod">
-                                <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+                                <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </center>
@@ -110,7 +110,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
-                            <h5 class="modal-title" id="staticBackdropLabel"> Importar archivo excel</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Actualizar clientes</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -205,6 +205,7 @@
                                     this.getprospecto();
                                     this.archivo = null;
                                     this.cenlod = false;
+                                    $('#mdistribuir').modal('toggle');
                                 } else {
                                     toastr.warning(response.data.file);
                                     this.cenlod = false;
@@ -229,7 +230,9 @@
                                 this.cenlodproc = true;
                                 axios.post('prospecto/estadotiempo').then(response => {
                                     if (response.data == "si") {
+                                        this.getprospecto();
                                         this.cenlodproc = false;
+                                        $('#mactualizar').modal('toggle');
                                     }
                                 }).catch(error => {
                                 })
@@ -250,7 +253,9 @@
                                 this.cenlodproc = true;
                                 axios.post('prospecto/limpiar').then(response => {
                                     if (response.data == "si") {
+                                        this.getprospecto();
                                         this.cenlodproc = false;
+                                        $('#mactualizar').modal('toggle');
                                     }
                                 }).catch(error => {
                                 })

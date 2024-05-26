@@ -156,7 +156,7 @@
                                 <label>Docente</label>
                                 <select v-model="cbodoc" id="cbodoc" class="form-control">
                                     <option value="0">Seleccione</option>
-                                    <option v-for="doc in docente" v-bind:value="doc.iddocente">{{doc.persona.nomper}} {{doc.persona.apeper}} - {{doc.persona.dniper}}</option>
+                                    <option v-for="doc in docente" v-bind:value="doc.iddocente">{{doc.nomper}} {{doc.apeper}} - {{doc.dniper}}</option>
                                 </select>
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{msjdoc}}</strong>
@@ -232,7 +232,7 @@
                                 <label>Docente</label>
                                 <select v-model="cbodoce" id="cbodoce" class="form-control">
                                     <option value="0">Seleccione</option>
-                                    <option v-for="doc in docente" v-bind:value="doc.iddocente">{{doc.persona.nomper}} {{doc.persona.apeper}} - {{doc.persona.dniper}}</option>
+                                    <option v-for="doc in docente" v-bind:value="doc.iddocente">{{doc.nomper}} {{doc.apeper}} - {{doc.dniper}}</option>
                                 </select>
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{msjdoce}}</strong>

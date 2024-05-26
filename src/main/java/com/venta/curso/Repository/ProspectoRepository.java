@@ -86,9 +86,13 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Query(value = "update detalleprospectos set estaverdetpros='VERIFICADO' where iddetalleprospecto=:id", nativeQuery = true)
     public void Actualizarpveri(@Param("id") String iddetpro);
 
+    @Modifying
+    @Transactional
     @Query(value = "call p_cambiarestado()", nativeQuery = true)
     public void Actualizarestadotiempo();
 
+    @Modifying
+    @Transactional
     @Query(value = "call p_prospectolimpiar()", nativeQuery = true)
     public void Actualizarnoasignado();
 

@@ -267,7 +267,7 @@ public class MatriculaController {
         // Configurar la respuesta HTTP
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "example_report.pdf");
+        headers.setContentDispositionFormData("attachment", "reportematricula.pdf");
 
         return new ResponseEntity<>(pdfOutputStream.toByteArray(), headers, HttpStatus.OK);
     }
