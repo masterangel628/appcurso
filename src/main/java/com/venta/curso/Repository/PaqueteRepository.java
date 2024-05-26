@@ -2,6 +2,7 @@ package com.venta.curso.Repository;
 
 import com.venta.curso.Entity.PaqueteEntity;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,7 +34,7 @@ public interface PaqueteRepository extends JpaRepository<PaqueteEntity, Integer>
     public void editpaquete(@Param("nom") String nom, @Param("id") String id);
 
     @Query(value = "select * from cursos where estacur='Activo'", nativeQuery = true)
-    public List getCursoAc();
+    public List<Map<String, Object>> getCursoAc();
 
     @Query(value = "select exists(select * from detallepaquetes where fkidcurso=:idcur and fkidpaquete=:idpaq)", nativeQuery = true)
     public int existecursopaq(@Param("idcur") String idcur, @Param("idpaq") String idpaq);
@@ -49,5 +50,8 @@ public interface PaqueteRepository extends JpaRepository<PaqueteEntity, Integer>
     public void eliminarcursopaq(@Param("id") String idcurpaq);
 
      @Query(value = "select * from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id ", nativeQuery = true)
-    public List getcursopaq(@Param("id") String idpaq);
+    public List<Map<String, Object>> getcursopaq(@Param("id") String idpaq);
+    
+    @Query(value = "select idpaquete, nompaq, estadopaq, f_sumpaquete(idpaquete) precio from paquetes", nativeQuery = true)
+    public List<Map<String, Object>> getPaquete();
 }

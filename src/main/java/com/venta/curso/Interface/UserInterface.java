@@ -2,6 +2,7 @@ package com.venta.curso.Interface;
 
 import com.venta.curso.Entity.UserEntity;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,11 +20,11 @@ public interface UserInterface {
 
     public int existeuser(String idper);
 
-    public UserEntity saveUser(UserEntity user);
-
     public void saveRol(int idrol, Long iduser);
+    
+    public void deleteRol(Long iduser);
 
-    public List getRoles();
+    public List<Map<String,Object>> getRoles();
 
     public int existeusername(String usu);
     
@@ -32,4 +33,6 @@ public interface UserInterface {
     public void editusername(String usu,int id);
     
     public void guardarusuario(String usu,String pass,String esta,String idper);
+    
+    public UserEntity getUsuario(String username);
 }

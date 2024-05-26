@@ -1,10 +1,10 @@
-
 package com.venta.curso.Service;
 
 import com.venta.curso.Entity.ClienteEntity;
 import com.venta.curso.Interface.ClienteInterface;
 import com.venta.curso.Repository.ClienteRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class ClienteService  implements ClienteInterface{
-private final ClienteRepository clienterepo;
+public class ClienteService implements ClienteInterface {
+
+    private final ClienteRepository clienterepo;
+
     @Override
     public List<ClienteEntity> getCliente() {
         return clienterepo.findAll();
@@ -28,7 +30,11 @@ private final ClienteRepository clienterepo;
 
     @Override
     public void guardarCliente(String idper) {
-        clienterepo.guardardcli(idper); 
+        clienterepo.guardardcli(idper);
     }
-    
+
+    @Override
+    public List<Map<String, Object>> getclientebuscar(String bus) {
+        return clienterepo.getclientebuscar(bus);
+    }
 }

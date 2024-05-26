@@ -28,8 +28,7 @@ public class BancoController {
     Validation val = new Validation();
 
     @GetMapping("/banco")
-    public String Docente(Model model) {
-        model.addAttribute("user", "El usuario va estar ahi");
+    public String Docente() {
         return "banco";
     }
 

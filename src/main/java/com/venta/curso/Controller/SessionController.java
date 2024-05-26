@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -50,11 +49,15 @@ public class SessionController {
         Map msj = new HashMap();
         UserEntity user = userInterface.getinfouser();
         String usu = String.valueOf(user.getId());
-        if (sessioninter.verificasession(usu) == 1) {
+        if (sessioninter.verificasessionabi(usu) == 1) {
             msj.put("resp", "existe");
         } else {
-            sessioninter.abrirsession(usu);
-            msj.put("resp", "si");
+            if (sessioninter.verificasession(usu) == 1) {
+                msj.put("resp", "yaexiste");
+            } else {
+                sessioninter.abrirsession(usu);
+                msj.put("resp", "si");
+            }
         }
         return msj;
     }

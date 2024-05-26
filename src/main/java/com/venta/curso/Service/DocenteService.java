@@ -4,6 +4,7 @@ import com.venta.curso.Entity.DocenteEntity;
 import com.venta.curso.Interface.DocenteInterface;
 import com.venta.curso.Repository.DocenteRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +24,6 @@ public class DocenteService implements DocenteInterface {
     }
 
     @Override
-    public DocenteEntity saveDocente(DocenteEntity alum) {
-        return docenterepo.save(alum);
-    }
-
-    @Override
-    public DocenteEntity editDocente(DocenteEntity alum) {
-        return docenterepo.save(alum);
-    }
-
-    @Override
     public void CambiarEstado(String esta,String id) {
         docenterepo.CambiaEstado(esta,id);
     }
@@ -45,6 +36,11 @@ public class DocenteService implements DocenteInterface {
     @Override
     public void guardardoc(String idper, String esta) {
         docenterepo.guardardoc(esta, idper);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDocenteActivo() {
+        return docenterepo.getDocenteActivo();
     }
 
 }

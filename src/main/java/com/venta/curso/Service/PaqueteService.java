@@ -4,6 +4,7 @@ import com.venta.curso.Entity.PaqueteEntity;
 import com.venta.curso.Interface.PaqueteInterface;
 import com.venta.curso.Repository.PaqueteRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,8 @@ public class PaqueteService implements PaqueteInterface {
     private final PaqueteRepository paqueterepo;
 
     @Override
-    public List<PaqueteEntity> getPaquete() {
-        return paqueterepo.findAll();
+    public List<Map<String, Object>> getPaquete() {
+        return paqueterepo.getPaquete();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class PaqueteService implements PaqueteInterface {
     }
 
     @Override
-    public List getCursoAc() {
+    public List<Map<String, Object>> getCursoAc() {
         return paqueterepo.getCursoAc();
     }
 
@@ -67,7 +68,7 @@ public class PaqueteService implements PaqueteInterface {
     }
 
     @Override
-    public List getcursopaq(String idpaq) {
+    public List<Map<String, Object>> getcursopaq(String idpaq) {
         return paqueterepo.getcursopaq(idpaq);
     }
 

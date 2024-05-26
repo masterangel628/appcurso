@@ -1,9 +1,7 @@
 package com.venta.curso.Controller;
 
-import com.venta.curso.Entity.EstadoEnum;
 import com.venta.curso.Interface.ProspectoInterface;
 import com.venta.curso.Validation.Validation;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

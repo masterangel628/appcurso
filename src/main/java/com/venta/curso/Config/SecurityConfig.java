@@ -46,7 +46,6 @@ public class SecurityConfig {
                     http.requestMatchers("/curso").hasAuthority("Ver Curso");
                     http.requestMatchers("/curso/mdocente").hasAuthority("Ver Curso");
                     http.requestMatchers("/curso/mcurso").hasAuthority("Ver Curso");
-
                     http.requestMatchers("/curso/guardar").hasAuthority("Registrar Curso");
                     http.requestMatchers("/curso/editar").hasAuthority("Editar Curso");
                     http.requestMatchers("/curso/cambiarestado").hasAuthority("Cambiar estado Curso");
@@ -74,6 +73,55 @@ public class SecurityConfig {
                     http.requestMatchers("/prospecto").hasAuthority("Ver Prospecto");
                     http.requestMatchers("/prospecto/mprospecto").hasAuthority("Ver Prospecto");
                     http.requestMatchers("/prospecto/upload").hasAuthority("Registrar Prospecto");
+                    http.requestMatchers("/prospecto/estadotiempo").hasAuthority("Ver Prospecto");
+                    http.requestMatchers("/prospecto/limpiar").hasAuthority("Ver Prospecto");
+
+                    http.requestMatchers("/distribuircliente").hasAuthority("Distribuir Clientes");
+                    http.requestMatchers("/distribuircliente/distribuir").hasAuthority("Distribuir Clientes");
+                    http.requestMatchers("/distribuircliente/musuario").hasAuthority("Distribuir Clientes");
+                    http.requestMatchers("/distribuircliente/infocliente").hasAuthority("Distribuir Clientes");
+                    http.requestMatchers("/distribuircliente/mestado").hasAuthority("Distribuir Clientes");
+                    http.requestMatchers("/distribuircliente/mcliente").hasAuthority("Distribuir Clientes");
+
+                    http.requestMatchers("/matricula").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/mmatricula").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/mcliente").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/mbanco").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/verificar").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/guardar").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/images").hasAuthority("Matricula");
+
+                    http.requestMatchers("/reportematricula").hasAuthority("Reporte Matricula");
+                    http.requestMatchers("/reportematricula/mmatricula").hasAuthority("Reporte Matricula");
+                    http.requestMatchers("/reportematricula/excel").hasAuthority("Reporte Matricula");
+                    http.requestMatchers("/reportematricula/pdf").hasAuthority("Reporte Matricula");
+                    http.requestMatchers("/reportematricula/images").hasAuthority("Reporte Matricula");
+
+                    http.requestMatchers("/paquete").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/mpaquete").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/mcurso").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/guardar").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/editar").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/cambiarestado").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/guardardetalle").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/mcursopaquete").hasAuthority("Paquete");
+                    http.requestMatchers("/paquete/eliminarcursopaq").hasAuthority("Paquete");
+
+                    http.requestMatchers("/procesoprospecto").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/verificasesion").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/mostrar").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/actualizarestado").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/mcurso").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/mpaquete").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/finalizar").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/comanda").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/eliminacomanda").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/paquetecurso").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/guardar").hasAuthority("Proceso Prospecto");
+
+                    http.requestMatchers("/session").hasAuthority("Sesion");
+                    http.requestMatchers("/session/cerrar").hasAuthority("Sesion");
+                    http.requestMatchers("/session/abrir").hasAuthority("Sesion");
 
                     http.anyRequest().authenticated();
                 })

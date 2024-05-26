@@ -1,7 +1,6 @@
 package com.venta.curso.Controller;
 
-import com.venta.curso.Entity.DocenteEntity;
-import com.venta.curso.Entity.EstadoEnum;
+import com.venta.curso.Entity.DistritoEntity;
 import com.venta.curso.Entity.PersonaEntity;
 import com.venta.curso.Interface.DocenteInterface;
 import com.venta.curso.Interface.PersonaInterface;
@@ -44,7 +43,9 @@ public class DocenteController {
     @ResponseBody
     public Map Guardar(@RequestParam(name = "ape") String ape, @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
-            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
+            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor,
+            @RequestParam(name = "dep") String dep, @RequestParam(name = "prov") String prov,
+            @RequestParam(name = "dist") String dist) {
 
         Map validacion = new HashMap();
 
@@ -66,6 +67,25 @@ public class DocenteController {
                 }
             }
         }
+        if (!val.vacio(cel)) {
+            validacion.put("cel", "El campo Celular es obligatorio");
+        } else {
+            if (!val.soloenteros(cel)) {
+                validacion.put("cel", "El campo Celular debe tener numérico");
+            } else {
+                if (!val.logitud(cel, 9)) {
+                    validacion.put("cel", "El campo Celular debe tener 9 caractéres");
+                }
+            }
+        }
+
+        if (!val.vacio(cor)) {
+            validacion.put("cor", "El campo Correo es obligatorio");
+        } else {
+            if (!val.correo(cor)) {
+                validacion.put("cor", "El campo Correo no es correcto");
+            }
+        }
 
         if (!val.vacio(ape)) {
             validacion.put("ape", "El campo Apellido es obligatorio");
@@ -82,28 +102,23 @@ public class DocenteController {
                 validacion.put("nom", "El campo Nombre no debe ser numérico");
             }
         }
-
-        if (val.vacio(cel)) {
-            if (!val.soloenteros(cel)) {
-                validacion.put("cel", "El campo Celular debe tener numérico");
-            } else {
-                if (!val.logitud(cel, 9)) {
-                    validacion.put("cel", "El campo Celular debe tener 9 caractéres");
-                }
-            }
+        if (dep.equalsIgnoreCase("0")) {
+            validacion.put("dep", "Seleccione un departamento");
         }
-
-        if (val.vacio(cor)) {
-            if (!val.correo(cor)) {
-                validacion.put("cor", "El campo Correo no es correcto");
-            }
+        if (prov.equalsIgnoreCase("0")) {
+            validacion.put("prov", "Seleccione una provincia");
+        }
+        if (dist.equalsIgnoreCase("0")) {
+            validacion.put("dist", "Seleccione un distrito");
         }
 
         if (validacion.isEmpty()) {
             if (personainter.existepersona(dni) == 1) {
                 PersonaEntity d = personainter.getpersona(dni);
-                 docenteinter.guardardoc(String.valueOf(d.getIdpersona()), "Activo"); 
+                docenteinter.guardardoc(String.valueOf(d.getIdpersona()), "Activo");
             } else {
+                DistritoEntity DistritoEntity = new DistritoEntity();
+                DistritoEntity.setIddistrito(dist);
                 PersonaEntity PersonaEntity = new PersonaEntity();
                 PersonaEntity.setApeper(ape);
                 PersonaEntity.setNomper(nom);
@@ -111,11 +126,10 @@ public class DocenteController {
                 PersonaEntity.setCelper(cel);
                 PersonaEntity.setDirper(dir);
                 PersonaEntity.setCorreoper(cor);
-
-                DocenteEntity DocenteEntity = new DocenteEntity();
-                DocenteEntity.setPersona(PersonaEntity);
-                DocenteEntity.setEstado(EstadoEnum.ACTIVO);
-                docenteinter.saveDocente(DocenteEntity);
+                PersonaEntity.setDistrito(DistritoEntity);
+                personainter.guardarpersona(PersonaEntity);
+                PersonaEntity d = personainter.getpersona(dni);
+                docenteinter.guardardoc(String.valueOf(d.getIdpersona()), "Activo");
             }
 
             validacion.put("resp", "si");
@@ -129,7 +143,9 @@ public class DocenteController {
     @ResponseBody
     public Map Editar(@RequestParam(name = "idper") String idper, @RequestParam(name = "ape") String ape, @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
-            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
+            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor,
+            @RequestParam(name = "dep") String dep, @RequestParam(name = "prov") String prov,
+            @RequestParam(name = "dist") String dist) {
 
         Map validacion = new HashMap();
 
@@ -164,8 +180,18 @@ public class DocenteController {
                 validacion.put("nom", "El campo Nombre no debe ser numérico");
             }
         }
-
-        if (val.vacio(cel)) {
+        if (dep.equalsIgnoreCase("0")) {
+            validacion.put("dep", "Seleccione un departamento");
+        }
+        if (prov.equalsIgnoreCase("0")) {
+            validacion.put("prov", "Seleccione una provincia");
+        }
+        if (dist.equalsIgnoreCase("0")) {
+            validacion.put("dist", "Seleccione un distrito");
+        }
+        if (!val.vacio(cel)) {
+            validacion.put("cel", "El campo Celular es obligatorio");
+        } else {
             if (!val.soloenteros(cel)) {
                 validacion.put("cel", "El campo Celular debe tener numérico");
             } else {
@@ -175,12 +201,16 @@ public class DocenteController {
             }
         }
 
-        if (val.vacio(cor)) {
+        if (!val.vacio(cor)) {
+            validacion.put("cor", "El campo Correo es obligatorio");
+        } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
             }
         }
         if (validacion.isEmpty()) {
+            DistritoEntity DistritoEntity = new DistritoEntity();
+            DistritoEntity.setIddistrito(dist);
             PersonaEntity PersonaEntity = new PersonaEntity();
             PersonaEntity.setIdpersona(Integer.parseInt(idper));
             PersonaEntity.setApeper(ape);
@@ -189,8 +219,8 @@ public class DocenteController {
             PersonaEntity.setCelper(cel);
             PersonaEntity.setDirper(dir);
             PersonaEntity.setCorreoper(cor);
-
-//            personainter.editPersona(PersonaEntity);
+            PersonaEntity.setDistrito(DistritoEntity);
+            personainter.editarpersona(PersonaEntity);
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");

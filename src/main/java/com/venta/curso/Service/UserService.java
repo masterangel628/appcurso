@@ -4,6 +4,7 @@ import com.venta.curso.Entity.UserEntity;
 import com.venta.curso.Interface.UserInterface;
 import com.venta.curso.Repository.UserRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,11 +34,6 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public UserEntity saveUser(UserEntity user) {
-        return userRepository.save(user);
-    }
-
-    @Override
     public void editUser(UserEntity user) {
         userRepository.save(user);
     }
@@ -56,9 +52,14 @@ public class UserService implements UserInterface {
     public void saveRol(int idrol, Long iduser) {
        userRepository.saveRol(idrol, iduser);
     }
+    
+    @Override
+    public void deleteRol( Long iduser) {
+       userRepository.deleteRol(iduser);
+    }
 
     @Override
-    public List getRoles() {
+    public List<Map<String,Object>> getRoles() {
         return userRepository.getRoles();
     }
 
@@ -81,5 +82,10 @@ public class UserService implements UserInterface {
     public void guardarusuario(String usu, String pass, String esta, String idper) {
         userRepository.guardarusu(usu, pass, esta, idper);
         
+    }
+
+    @Override
+    public UserEntity getUsuario(String username) {
+        return userRepository.getUsuario(username);
     }
 }

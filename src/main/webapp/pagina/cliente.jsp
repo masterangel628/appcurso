@@ -85,6 +85,7 @@
                     </div>
                 </section>
             </div>
+            
             <div class="modal fade" id="mcliente" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
@@ -726,7 +727,6 @@
                         });
                     },
                     seleccionar: function (cli) {
-                        console.log(cli);
                         this.txtdnie = cli.persona.dniper;
                         this.txtapee = cli.persona.apeper;
                         this.txtnome = cli.persona.nomper;

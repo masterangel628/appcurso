@@ -1,6 +1,6 @@
 package com.venta.curso.Controller;
 
-import com.venta.curso.Entity.EstadoEnum;
+import com.venta.curso.Entity.DistritoEntity;
 import com.venta.curso.Entity.PersonaEntity;
 import com.venta.curso.Entity.UserEntity;
 import com.venta.curso.Interface.PersonaInterface;
@@ -53,7 +53,9 @@ public class UserController {
             @RequestParam(name = "pass") String pass, @RequestParam(name = "ape") String ape,
             @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
-            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
+            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor,
+            @RequestParam(name = "dep") String dep, @RequestParam(name = "prov") String prov,
+            @RequestParam(name = "dist") String dist) {
 
         Map validacion = new HashMap();
 
@@ -110,6 +112,15 @@ public class UserController {
         if (rol == 0) {
             validacion.put("rol", "Seleccione un rol");
         }
+        if (dep.equalsIgnoreCase("0")) {
+            validacion.put("dep", "Seleccione un departamento");
+        }
+        if (prov.equalsIgnoreCase("0")) {
+            validacion.put("prov", "Seleccione una provincia");
+        }
+        if (dist.equalsIgnoreCase("0")) {
+            validacion.put("dist", "Seleccione un distrito");
+        }
         if (!val.vacio(user)) {
             validacion.put("usu", "El campo Username es obligatorio");
         } else {
@@ -131,8 +142,10 @@ public class UserController {
         if (validacion.isEmpty()) {
             if (personainter.existepersona(dni) == 1) {
                 PersonaEntity d = personainter.getpersona(dni);
-                userinter.guardarusuario(user,passwordEncoder.encode(pass),"Activo",String.valueOf(d.getIdpersona()));
+                userinter.guardarusuario(user, passwordEncoder.encode(pass), "Activo", String.valueOf(d.getIdpersona()));
             } else {
+                DistritoEntity DistritoEntity = new DistritoEntity();
+                DistritoEntity.setIddistrito(dist);
                 PersonaEntity PersonaEntity = new PersonaEntity();
                 PersonaEntity.setApeper(ape);
                 PersonaEntity.setNomper(nom);
@@ -140,14 +153,11 @@ public class UserController {
                 PersonaEntity.setCelper(cel);
                 PersonaEntity.setDirper(dir);
                 PersonaEntity.setCorreoper(cor);
-
-                UserEntity UserEntity = new UserEntity();
-                UserEntity.setPersona(PersonaEntity);
-                UserEntity.setUsername(user);
-                UserEntity.setPassword(passwordEncoder.encode(pass));
-                UserEntity.setEstado(EstadoEnum.ACTIVO);
-
-                UserEntity usu = userinter.saveUser(UserEntity);
+                PersonaEntity.setDistrito(DistritoEntity);
+                personainter.guardarpersona(PersonaEntity);
+                PersonaEntity d = personainter.getpersona(dni);
+                userinter.guardarusuario(user, passwordEncoder.encode(pass), "Activo", String.valueOf(d.getIdpersona()));
+                UserEntity usu = userinter.getUsuario(user);
                 userinter.saveRol(rol, usu.getId());
             }
             validacion.put("resp", "si");
@@ -160,9 +170,11 @@ public class UserController {
     @PostMapping("usuario/editar")
     @ResponseBody
     public Map Editar(@RequestParam(name = "idper") String idper, @RequestParam(name = "idusu") int idusu,
-             @RequestParam(name = "ape") String ape, @RequestParam(name = "usu") String user, @RequestParam(name = "nom") String nom,
+            @RequestParam(name = "ape") String ape, @RequestParam(name = "usu") String user, @RequestParam(name = "nom") String nom,
             @RequestParam(name = "dni") String dni, @RequestParam(name = "dir") String dir,
-            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor) {
+            @RequestParam(name = "cel") String cel, @RequestParam(name = "cor") String cor,
+            @RequestParam(name = "dep") String dep, @RequestParam(name = "prov") String prov,
+            @RequestParam(name = "dist") String dist, @RequestParam(name = "rol") int rol) {
 
         Map validacion = new HashMap();
 
@@ -188,6 +200,15 @@ public class UserController {
             if (userinter.existeusernamedit(user, idusu) == 1) {
                 validacion.put("usu", "Ya existe un usuario con este Username");
             }
+        }
+        if (dep.equalsIgnoreCase("0")) {
+            validacion.put("dep", "Seleccione un departamento");
+        }
+        if (prov.equalsIgnoreCase("0")) {
+            validacion.put("prov", "Seleccione una provincia");
+        }
+        if (dist.equalsIgnoreCase("0")) {
+            validacion.put("dist", "Seleccione un distrito");
         }
 
         if (!val.vacio(ape)) {
@@ -221,6 +242,9 @@ public class UserController {
                 }
             }
         }
+        if (rol == 0) {
+            validacion.put("rol", "Seleccione un rol");
+        }
 
         if (!val.vacio(cor)) {
             validacion.put("cor", "El campo Correo es obligatorio");
@@ -230,6 +254,8 @@ public class UserController {
             }
         }
         if (validacion.isEmpty()) {
+            DistritoEntity DistritoEntity = new DistritoEntity();
+            DistritoEntity.setIddistrito(dist);
             PersonaEntity PersonaEntity = new PersonaEntity();
             PersonaEntity.setIdpersona(Integer.parseInt(idper));
             PersonaEntity.setApeper(ape);
@@ -238,9 +264,12 @@ public class UserController {
             PersonaEntity.setCelper(cel);
             PersonaEntity.setDirper(dir);
             PersonaEntity.setCorreoper(cor);
-
-//            personainter.editPersona(PersonaEntity);
+            PersonaEntity.setDistrito(DistritoEntity);
+            personainter.editarpersona(PersonaEntity);
             userinter.editusername(user, idusu);
+            UserEntity usu = userinter.getUsuario(user);
+            userinter.deleteRol(usu.getId());
+            userinter.saveRol(rol, usu.getId());
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");

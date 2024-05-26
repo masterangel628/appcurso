@@ -43,34 +43,10 @@ public class ClienteController {
         return clienteinter.getCliente();
     }
 
-    @PostMapping("cliente/verificar")
+    @GetMapping("cliente/buscar")
     @ResponseBody
-    public Map Verificar(@RequestParam(name = "dni") String dni) {
-        Map validacion = new HashMap();
-        String cliente, idcli;
-        if (!val.vacio(dni)) {
-            validacion.put("dni", "El campo DNI es obligatorio");
-        } else {
-            if (!val.soloenteros(dni)) {
-                validacion.put("dni", "El campo DNI debe tener numérico");
-            } else {
-                if (!val.logitud(dni, 8)) {
-                    validacion.put("dni", "El campo DNI debe tener 8 caractéres");
-                } else {
-                    if (personainter.existepersona(dni) == 1) {
-                        PersonaEntity d = personainter.getpersona(dni);
-                        if (clienteinter.existecliente(String.valueOf(d.getIdpersona())) == 1) {
-                            cliente = d.getDniper() + " - " + d.getApeper() + " " + d.getNomper();
-                            validacion.put("resp", "si");
-                            validacion.put("cli", cliente);
-                        } else {
-                            validacion.put("resp", "no");
-                        }
-                    }
-                }
-            }
-        }
-        return validacion;
+    public List Buscarcliente(@RequestParam(name = "bus") String bus) {
+        return clienteinter.getclientebuscar(bus);
     }
 
     @PostMapping("cliente/guardar")

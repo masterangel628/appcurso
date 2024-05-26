@@ -1,8 +1,8 @@
  <footer class="main-footer">
-    <strong></strong>
+    <strong>Gestión de cursos</strong>
     
     <div class="float-right d-none d-sm-inline-block">
-      <b>|</b>
+      <b>Versión 1.0</b>
     </div>
   </footer>
 

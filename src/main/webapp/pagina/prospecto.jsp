@@ -44,6 +44,9 @@
                                 <h3 class="card-title">
                                     Cartera de clientes
                                 </h3>
+                                <div class="card-tools">
+                                    <button class="btn btn-danger" data-toggle="modal" data-target="#mactualizar" title="Proceso de actualización">Actualizar</button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -76,7 +79,7 @@
                     <div class="modal-content">
                         <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
                             <h5 class="modal-title" id="staticBackdropLabel"> Importar archivo excel</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiar()">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -94,14 +97,35 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <span class="loader"></span>
-                            </div>
                             <center v-if="cenlod">
                                 <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="mactualizar" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
+                            <h5 class="modal-title" id="staticBackdropLabel"> Importar archivo excel</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span>Proceso de actualización</span>
+                            <center v-if="cenlodproc">
+                                <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" @click="actualizarestado()">Actualizar estado</button>
+                            <button class="btn btn-info" @click="cambiarnoasig()">Actualizar asignación</button>
                         </div>
                     </div>
                 </div>
@@ -116,6 +140,7 @@
                     prospecto: [],
                     archivo: null,
                     cenlod: false,
+                    cenlodproc: false,
                 },
                 mounted: function () {
                     this.getprospecto();
@@ -189,6 +214,48 @@
                             }).catch(error => {
                             })
                         }
+                    },
+                    actualizarestado: function () {
+                        Swal.fire({
+                            title: "Mensaje del Sistema",
+                            text: "¿Desea cambiar el estado de tiempo de los clientes?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Si, Cambiar"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.cenlodproc = true;
+                                axios.post('prospecto/estadotiempo').then(response => {
+                                    if (response.data == "si") {
+                                        this.cenlodproc = false;
+                                    }
+                                }).catch(error => {
+                                })
+                            }
+                        });
+                    },
+                    cambiarnoasig: function () {
+                        Swal.fire({
+                            title: "Mensaje del Sistema",
+                            text: "¿Este proceso se debe de ejecutar al finalizar el dia despues que todos los usuarios cierren sesión?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Si, Cambiar"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.cenlodproc = true;
+                                axios.post('prospecto/limpiar').then(response => {
+                                    if (response.data == "si") {
+                                        this.cenlodproc = false;
+                                    }
+                                }).catch(error => {
+                                })
+                            }
+                        });
                     },
                 },
             });

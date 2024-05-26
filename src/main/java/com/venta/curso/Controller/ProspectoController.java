@@ -3,7 +3,9 @@ package com.venta.curso.Controller;
 import com.venta.curso.Entity.EstadoAsEnum;
 import com.venta.curso.Entity.EstadoTimEnum;
 import com.venta.curso.Entity.ProspectoEntity;
+import com.venta.curso.Entity.UserEntity;
 import com.venta.curso.Interface.ProspectoInterface;
+import com.venta.curso.Interface.UserInterface;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ProspectoController {
 
     private final ProspectoInterface prospectointer;
+    private final UserInterface userinter;
 
     @GetMapping("/prospecto")
     public String Prospecto() {
@@ -97,6 +100,31 @@ public class ProspectoController {
         return prospectointer.getProspecto();
     }
 
+    @PostMapping("prospecto/estadotiempo")
+    @ResponseBody
+    public String actualizarestadotiempo() {
+        prospectointer.Actualizarestadotiempo();
+        return "si";
+    }
 
+    @PostMapping("prospecto/limpiar")
+    @ResponseBody
+    public String actualizarnoasignado() {
+        prospectointer.Actualizarnoasignado();
+        return "si";
+    }
+    
+    @GetMapping("inicio/info")
+    @ResponseBody
+    public Map info() {
+        Map data=new HashMap();
+        UserEntity usu = userinter.getinfouser();
+        String idusu=String.valueOf(usu.getId());
+        data.put("cantcliveri", prospectointer.cantclienteverificado(idusu));
+        data.put("cantclinoveri", prospectointer.cantclientenoverificado(idusu));
+        data.put("cantcliasig", prospectointer.cantclienteasignado(idusu));
+        data.put("cantclimat", prospectointer.cantclientematriculado(idusu));
+        return data;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.venta.curso.Interface;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -9,18 +10,22 @@ import java.util.Map;
  */
 public interface MatriculaInterface {
 
+    public List<Map<String, Object>> getPrematricula();
+
     public List<Map<String, Object>> getMatricula();
 
-    public void guardarmatricula(String vau, String fec, String cli, String usu, String ban);
-
-    public String fecactual();
-
-    public void guardardetmat(String mat, String paq);
-
-    public List<Map<String, Object>> getPaqueteActivo();
-
-    public List<Map<String, Object>> getdetpaquete(String idpaq);
+    public void actualizarpago(String idmat, String vau, String ban);
 
     public List<Map<String, Object>> getbanco();
+
+    public void verificar(String idmat);
+
+    public List<Map<String, Object>> getMatriculareport(String fecdes,String fechas);
+
+    public List<Map<String, Object>> getDetallematreport(String idmat,String esta);
+
+    public List<Map<String, Object>> getPaqueteoCurso(String idmat);
+
+    public List<Map<String, Object>> getCursoPaquete(String idpaq);
 
 }

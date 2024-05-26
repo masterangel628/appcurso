@@ -36,7 +36,7 @@ public class CursoController {
     @GetMapping("curso/mdocente")
     @ResponseBody
     public List getDocente() {
-        return docenteinter.getDocente();
+        return docenteinter.getDocenteActivo();
     }
 
     @GetMapping("curso/mcurso")
@@ -63,6 +63,9 @@ public class CursoController {
         if (!val.vacio(nom)) {
             validacion.put("nom", "El campo Nombre es obligatorio");
         }
+        if (!val.vacio(dura)) {
+            validacion.put("dura", "El campo Duración es obligatorio");
+        }
 
         if (!val.vacio(prec)) {
             validacion.put("prec", "El campo Precio es obligatorio");
@@ -75,7 +78,7 @@ public class CursoController {
             validacion.put("iddoc", "Seleccione un docente");
         }
         if (validacion.isEmpty()) {
-            cursointer.saveCurso(cod, nom, dura, hora, new BigDecimal(prec) , EstadoEnum.ACTIVO.toString(), iddoc);
+            cursointer.saveCurso(cod, nom, dura, hora, new BigDecimal(prec), EstadoEnum.ACTIVO.toString(), iddoc);
             validacion.put("resp", "si");
         } else {
             validacion.put("resp", "no");
@@ -108,6 +111,9 @@ public class CursoController {
             if (!val.solodecimalentero(prec)) {
                 validacion.put("prec", "El campo Precio debe tener numérico");
             }
+        }
+        if (!val.vacio(dura)) {
+            validacion.put("dura", "El campo Duración es obligatorio");
         }
         if (iddoc == 0) {
             validacion.put("iddoc", "Seleccione un docente");

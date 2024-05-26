@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,12 +31,21 @@ public class ComandaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idcomanda;
 
-    @Column(name = "fkidusuario", length = 20, nullable = false)
-    private String fkidusuario;
+    @Column(name = "fkidsession", length = 20, nullable = false)
+    private String fkidsession;
 
-    @Column(name = "curpaq", length = 80, nullable = false)
-    private String curpaq;
-    
+    @Column(name = "cur", length = 80)
+    private String cur;
+
+    @Column(name = "paq", length = 80)
+    private String paq;
+
+    @Column(name = "detpros", length = 80)
+    private String detpros;
+
     @Column(name = "tipocurpaq", length = 80, nullable = false)
     private String tipocurpaq;
+
+    @Column(name = "montocom", precision = 9, scale = 2, nullable = false)
+    private BigDecimal montocom;
 }

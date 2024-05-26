@@ -54,6 +54,7 @@
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>Nombre</th>
+                                                         <th>Precio</th>
                                                         <th>Estado</th>
                                                         <th>Acción</th>
                                                     </tr>
@@ -61,9 +62,10 @@
                                                 <tbody>
                                                     <tr v-for="paq ,key in paquete">
                                                         <td>{{paq.nompaq}}</td>
+                                                        <td>{{paq.precio}}</td>
                                                         <td>
-                                                            <span class="badge badge-success" v-if="paq.estado=='ACTIVO'">{{paq.estado}}</span>
-                                                            <span class="badge badge-warning" v-if="paq.estado=='INACTIVO'">{{paq.estado}}</span>
+                                                            <span class="badge badge-success" v-if="paq.estadopaq=='ACTIVO'">{{paq.estadopaq}}</span>
+                                                            <span class="badge badge-warning" v-if="paq.estadopaq=='INACTIVO'">{{paq.estadopaq}}</span>
                                                         </td>
                                                         <td>
                                                             <button title="Ver detalle" data-toggle="modal" data-target="#mdetver" @click="getcursopaq(paq)" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
@@ -107,16 +109,16 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="cp ,key in curpaq">
-                                            <td>{{cp[10]}}</td>
-                                            <td>{{cp[3]}}</td>
-                                            <td>{{cp[8]}}</td>
-                                            <td>{{cp[9]}}</td>
+                                            <td>{{cp.nomcur}}</td>
+                                            <td>{{cp.precpaq}}</td>
+                                            <td>{{cp.duracur}}</td>
+                                            <td>{{cp.horacur}}</td>
                                             <td>
-                                                <span class="badge badge-success" v-if="cp[11]=='ACTIVO'">{{cp[11]}}</span>
-                                                <span class="badge badge-warning" v-if="cp[11]=='INACTIVO'">{{cp[11]}}</span>
+                                                <span class="badge badge-success" v-if="cp.estacur=='ACTIVO'">{{cp.estacur}}</span>
+                                                <span class="badge badge-warning" v-if="cp.estacur=='INACTIVO'">{{cp.estacur}}</span>
                                             </td>
                                             <td>
-                                                <button title="Eliminar"  @click="eliminar(cp)" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
+                                                <button title="Eliminar"  @click="eliminar(cp)" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -144,7 +146,7 @@
                                 <label>Curso</label>
                                 <select v-model="cbocur" id="cbocur" class="form-control">
                                     <option value="0">Seleccione</option>
-                                    <option v-for="cur in curso" v-bind:value="cur[1]">{{cur[6]}}</option>
+                                    <option v-for="cur in curso" v-bind:value="cur.idcurso">{{cur.nomcur}} - {{cur.precrcur}} soles</option>
                                 </select>
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{msjcur}}</strong>
@@ -318,7 +320,7 @@
                             if (result.isConfirmed) {
                                 var data = new FormData();
                                 data.append('idpaq', paq.idpaquete);
-                                data.append('esta', paq.estado);
+                                data.append('esta', paq.estadopaq);
                                 axios.post('paquete/cambiarestado', data).then(response => {
                                     this.getpaquete();
                                 }).catch(function (error) {
@@ -347,6 +349,7 @@
                                 $('#cbocur').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#mdetagregar').modal('toggle');
                                 this.limpiardetalle();
+                                this.getpaquete();
                             } else {
                                 if (response.data.cur != undefined) {
                                     this.msjcur = response.data.cur;
@@ -386,9 +389,10 @@
                     
                       eliminar: function (curp) {
                         var data = new FormData();
-                        data.append('cur', curp[2]);
+                        data.append('cur', curp.iddetallepaquete);
                         axios.post('paquete/eliminarcursopaq', data).then(response => {
                              $('#mdetver').modal('toggle');
+                             this.getpaquete();
                         }).catch(function (error) {
                             console.log(error);
                         });

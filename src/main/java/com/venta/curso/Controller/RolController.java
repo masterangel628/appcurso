@@ -51,9 +51,8 @@ public class RolController {
     }
     @PostMapping("rol/quitarpermiso")
     @ResponseBody
-    public String quitarpermiso(@RequestParam("rol") String rol,@RequestParam("per") String per) {
+    public void quitarpermiso(@RequestParam("rol") String rol,@RequestParam("per") String per) {
          rolinterface.QuitarPermiso(rol, per);
-         return "rol: " +rol+" per: "+per;
     }
 
 }

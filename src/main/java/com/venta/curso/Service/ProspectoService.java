@@ -77,4 +77,79 @@ public class ProspectoService implements ProspectoInterface{
     public void cambiarestatiempo(String id, String esta) {
         prospectorepo.cambiarestadotiempo(esta, id); 
     }
+
+    @Override
+    public List<Map<String, Object>> getCurso() {
+        return prospectorepo.getCurso();
+    }
+
+    @Override
+    public List<Map<String, Object>> getPaquete() {
+        return prospectorepo.getPaquete();
+    }
+
+    @Override
+    public List<Map<String, Object>> procesoprematricula(String curpaq, String tipo, String usu,String detpro) {
+        return prospectorepo.procesoprematricula(curpaq, tipo, usu,detpro); 
+    }
+
+    @Override
+    public List<Map<String, Object>> getComanda(String idses, String detpro) {
+        return prospectorepo.getComanda(idses, detpro);
+    }
+
+    @Override
+    public void eliminarcomanda(String ico) {
+         prospectorepo.eliminarcomanda(ico);
+    }
+
+    @Override
+    public void prematricula(String cli, String ses, String tip, String detpro) {
+        prospectorepo.prematricula(cli, ses, tip, detpro);
+    }
+
+    @Override
+    public List<Map<String, Object>> getPaquetecurso(String idpaq) {
+        return prospectorepo.getPaquetecurso(idpaq);
+    }
+
+    @Override
+    public List<Map<String, Object>> getProspectoasesorverificado(String usu) {
+        return prospectorepo.getProspectoasesorverificado(usu);
+    }
+
+    @Override
+    public void Actualizarpveri(String iddetpros) {
+        prospectorepo.Actualizarpveri(iddetpros);
+    }
+
+    @Override
+    public void Actualizarestadotiempo() {
+        prospectorepo.Actualizarestadotiempo();
+    }
+
+    @Override
+    public void Actualizarnoasignado() {
+        prospectorepo.Actualizarnoasignado();
+    }
+
+    @Override
+    public int cantclienteasignado(String usu) {
+        return prospectorepo.cantclienteasignado(usu);
+    }
+
+    @Override
+    public int cantclienteverificado(String usu) {
+        return prospectorepo.cantclienteverificado(usu);
+    }
+
+    @Override
+    public int cantclientenoverificado(String usu) {
+        return prospectorepo.cantclientenoverificado(usu);
+    }
+
+    @Override
+    public int cantclientematriculado(String usu) {
+        return prospectorepo.cantclientematriculado(usu);
+    }
 }

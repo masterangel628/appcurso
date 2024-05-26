@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.venta.curso.Service;
 
 import com.venta.curso.Interface.MatriculaInterface;
@@ -25,35 +22,48 @@ public class MatriculaService implements MatriculaInterface{
         return matricularepo.getMatricula();
     }
 
-    @Override
-    public void guardarmatricula(String vau, String fec, String cli, String usu, String ban) {
-        matricularepo.guardarmatricula(vau, fec, cli, usu, ban); 
-    }
-
-    @Override
-    public String fecactual() {
-        return matricularepo.getfecactual();
-    }
-
-    @Override
-    public void guardardetmat(String mat, String paq) {
-        matricularepo.guardardetmat(mat, paq); 
-    }
-
-    @Override
-    public List<Map<String, Object>> getPaqueteActivo() {
-       return  matricularepo.getpaqueteactivo();
-    }
-
-    @Override
-    public List<Map<String, Object>> getdetpaquete(String idpaq) {
-         return  matricularepo.getdetpaquete(idpaq);
-    }
 
     @Override
     public List<Map<String, Object>> getbanco() {
         return  matricularepo.getbanco();
     }
+
+    @Override
+    public List<Map<String, Object>> getPrematricula() {
+        return  matricularepo.getPrematricula();
+    }
+
+    @Override
+    public void actualizarpago(String idmat, String vau, String ban) {
+        matricularepo.actualizarpago(vau, ban, idmat); 
+    }
+
+    @Override
+    public void verificar(String idmat) {
+        matricularepo.verificar(idmat); 
+    }
+
+    @Override
+    public List<Map<String, Object>> getMatriculareport(String fecdes,String fechas) {
+        return matricularepo.getMatriculareport(fecdes, fechas);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDetallematreport(String idmat,String esta) {
+        return matricularepo.getDetallematreport(idmat,esta);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getPaqueteoCurso(String idmat) {
+        return matricularepo.getPaqueteoCurso(idmat);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getCursoPaquete(String idpaq) {
+        return matricularepo.getCursoPaquete(idpaq);
+    }
+    
+   
 
     
     

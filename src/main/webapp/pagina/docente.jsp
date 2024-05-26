@@ -146,12 +146,54 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Correo</label>
-                                <input type="text" id="txtcor" v-model="txtcor" class="form-control" autocomplete="off">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{msjcor}}</strong>
-                                </span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Correo</label>
+                                        <input type="text" id="txtcor" v-model="txtcor" class="form-control" autocomplete="off">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjcor}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Departamento</label>
+                                        <select v-model="cbodep" id="cbodep" class="form-control" @change="getprovincia">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="dep in departamento" v-bind:value="dep.iddepartamento">{{dep.nom_dep}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjdep}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <select v-model="cboprov" id="cboprov" class="form-control" @change="getdistrito">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="prov in provincia" v-bind:value="prov.idprovincia">{{prov.nom_prov}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjprov}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Distrito</label>
+                                        <select v-model="cbodist" id="cbodist" class="form-control">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="dist in distrito" v-bind:value="dist.iddistrito">{{dist.nom_dist}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjdist}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Dirección</label>
@@ -219,12 +261,54 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Correo</label>
-                                <input type="text" id="txtcore" v-model="txtcore" class="form-control" autocomplete="off">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{msjcore}}</strong>
-                                </span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Correo</label>
+                                        <input type="text" id="txtcore" v-model="txtcore" class="form-control" autocomplete="off">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjcore}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Departamento</label>
+                                        <select v-model="cbodepe" id="cbodepe" class="form-control" @change="getprovinciae">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="dep in departamento" v-bind:value="dep.iddepartamento">{{dep.nom_dep}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjdepe}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <select v-model="cboprove" id="cboprove" class="form-control" @change="getdistritoe">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="prov in provincia" v-bind:value="prov.idprovincia">{{prov.nom_prov}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjprove}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Distrito</label>
+                                        <select v-model="cbodiste" id="cbodiste" class="form-control">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="dist in distrito" v-bind:value="dist.iddistrito">{{dist.nom_dist}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjdiste}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Dirección</label>
@@ -251,12 +335,19 @@
                 data: {
                     docente: [],
 
+                    departamento: [],
+                    provincia: [],
+                    distrito: [],
+
                     txtdni: "",
                     txtape: "",
                     txtnom: "",
                     txtcel: "",
                     txtdir: "",
                     txtcor: "",
+                    cbodep: 0,
+                    cboprov: 0,
+                    cbodist: 0,
 
                     msjdni: "",
                     msjape: "",
@@ -264,6 +355,9 @@
                     msjcel: "",
                     msjdir: "",
                     msjcor: "",
+                    msjdep: "",
+                    msjprov: "",
+                    msjdist: "",
 
                     txtdnie: "",
                     txtapee: "",
@@ -271,6 +365,9 @@
                     txtcele: "",
                     txtdire: "",
                     txtcore: "",
+                    cbodepe: 0,
+                    cboprove: 0,
+                    cbodiste: 0,
 
                     msjdnie: "",
                     msjapee: "",
@@ -278,37 +375,107 @@
                     msjcele: "",
                     msjdire: "",
                     msjcore: "",
+                    msjdepe: "",
+                    msjprove: "",
+                    msjdiste: "",
 
                     idper: "",
                 },
                 mounted: function () {
                     this.getdocente();
+                    this.getdepartamento();
                 },
-                
+
                 methods: {
+                    suportprovincia: function (dep) {
+                        axios.get('persona/provincia/' + dep).then(response => {
+                            this.provincia = response.data;
+                        });
+                    },
+                    suportdistrito: function (prov) {
+                        axios.get('persona/distrito/' + prov).then(response => {
+                            this.distrito = response.data;
+                        });
+                    },
+                    getdepartamento: function () {
+                        var url = 'persona/departamento';
+                        axios.get(url).then(response => {
+                            this.departamento = response.data;
+                        })
+                    },
+                    getprovinciae: function () {
+                        var url = 'persona/provincia/' + this.cbodepe;
+                        axios.get(url).then(response => {
+                            this.cboprove = 0;
+                            this.provincia = response.data;
+                            this.cbodiste = 0;
+                            this.distrito = [];
+                        })
+                    },
+                    getprovincia: function () {
+                        var url = 'persona/provincia/' + this.cbodep;
+                        axios.get(url).then(response => {
+                            this.cboprov = 0;
+                            this.provincia = response.data;
+                            this.cbodist = 0;
+                            this.distrito = [];
+                        })
+                    },
+                    getdistrito: function () {
+                        var url = 'persona/distrito/' + this.cboprov;
+                        axios.get(url).then(response => {
+                            this.cbodist = 0;
+                            this.distrito = response.data;
+                        })
+                    },
+                    getdistritoe: function () {
+                        var url = 'persona/distrito/' + this.cboprove;
+                        axios.get(url).then(response => {
+                            this.cbodiste = 0;
+                            this.distrito = response.data;
+                        })
+                    },
                     completar: function () {
                         if (this.txtdni.length == 8) {
                             axios.get('persona/consulta/' + this.txtdni).then(response => {
-                                if(response.data.msj=="bd"){
+                                if (response.data.msj == "bd") {
                                     this.txtape = response.data.persona.apeper;
                                     this.txtnom = response.data.persona.nomper;
                                     this.txtdir = response.data.persona.dirper;
                                     this.txtcel = response.data.persona.celper;
                                     this.txtcor = response.data.persona.correoper;
+                                    this.cbodep = response.data.persona.distrito.provincia.departamento.iddepartamento;
+                                    this.suportprovincia(this.cbodep);
+                                    this.cboprov = response.data.persona.distrito.provincia.idprovincia;
+                                    this.suportdistrito(this.cboprov);
+                                    this.cbodist = response.data.persona.distrito.iddistrito;
                                 }
-                                 if(response.data.msj=="api"){
-                                     var p = JSON.parse(response.data.persona);
-                                    this.txtape = p.data.apellido_paterno+" "+p.data.apellido_materno;
+                                if (response.data.msj == "api") {
+                                    var p = JSON.parse(response.data.persona);
+                                    console.log(p.data.ubigeo[0]);
+                                    this.txtape = p.data.apellido_paterno + " " + p.data.apellido_materno;
                                     this.txtnom = p.data.nombres;
                                     this.txtdir = p.data.direccion;
+                                    this.cbodep = p.data.ubigeo[0];
+                                    this.suportprovincia(this.cbodep);
+                                    this.cboprov = p.data.ubigeo[1];
+                                    this.suportdistrito(this.cboprov);
+                                    this.cbodist = p.data.ubigeo[2];
                                 }
                             }).catch(function (error) {
                                 console.log(error);
                             });
                         } else {
-                            this.txtape ="";
+                            this.txtape = "";
                             this.txtnom = "";
-                            this.txtdir ="";
+                            this.txtdir = "";
+                            this.txtcor = "";
+                            this.txtcel = "";
+                            this.cboprov = 0;
+                            this.cbodist = 0;
+                            this.cbodep = 0;
+                            this.distrito = [];
+                            this.provincia = [];
                         }
                     },
                     limpiar: function () {
@@ -318,6 +485,9 @@
                         this.txtcel = "";
                         this.txtdir = "";
                         this.txtcor = "";
+                        this.cbodep = 0;
+                        this.cboprov = 0;
+                        this.cbodist = 0;
 
                         $('#txtdni').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtape').removeClass('form-control is-valid is-invalid').addClass('form-control');
@@ -325,6 +495,9 @@
                         $('#txtcel').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtdir').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtcor').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbodep').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cboprov').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbodist').removeClass('form-control is-valid is-invalid').addClass('form-control');
 
                         this.msjdni = "";
                         this.msjape = "";
@@ -332,6 +505,9 @@
                         this.msjcel = "";
                         this.msjdir = "";
                         this.msjcor = "";
+                        this.msjdep = "";
+                        this.msjprov = "";
+                        this.msjdist = "";
 
                         this.txtdnie = "";
                         this.txtapee = "";
@@ -339,6 +515,9 @@
                         this.txtcele = "";
                         this.txtdire = "";
                         this.txtcore = "";
+                        this.cbodepe = 0;
+                        this.cboprove = 0;
+                        this.cbodiste = 0;
 
                         $('#txtdnie').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtapee').removeClass('form-control is-valid is-invalid').addClass('form-control');
@@ -346,6 +525,9 @@
                         $('#txtcele').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtdire').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtcore').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbodepe').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cboprove').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbodiste').removeClass('form-control is-valid is-invalid').addClass('form-control');
 
                         this.msjdnie = "";
                         this.msjapee = "";
@@ -353,6 +535,9 @@
                         this.msjcele = "";
                         this.msjdire = "";
                         this.msjcore = "";
+                        this.msjdepe = "";
+                        this.msjprove = "";
+                        this.msjdiste = "";
                     },
                     getdocente: function () {
                         axios.get('docente/mdocente').then(response => {
@@ -369,6 +554,9 @@
                         data.append('cel', this.txtcel);
                         data.append('dir', this.txtdir);
                         data.append('cor', this.txtcor);
+                        data.append('dep', this.cbodep);
+                        data.append('prov', this.cboprov);
+                        data.append('dist', this.cbodist);
                         axios.post('docente/guardar', data).then(response => {
                             if (response.data.resp == 'si') {
                                 $('#txtdni').removeClass('form-control is-invalid').addClass('form-control is-valid');
@@ -377,6 +565,9 @@
                                 $('#txtcel').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#txtdir').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#txtcor').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cbodep').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cboprov').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cbodist').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#mdocente').modal('toggle');
                                 this.getdocente();
                                 this.limpiar();
@@ -423,6 +614,27 @@
                                     this.msjcel = '';
                                     $('#txtcel').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 }
+                                if (response.data.dep != undefined) {
+                                    this.msjdep = response.data.dep;
+                                    $('#cbodep').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdep = '';
+                                    $('#cbodep').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.prov != undefined) {
+                                    this.msjprov = response.data.prov;
+                                    $('#cboprov').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjprov = '';
+                                    $('#cboprov').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.dist != undefined) {
+                                    this.msjdist = response.data.dist;
+                                    $('#cbodist').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdist = '';
+                                    $('#cbodist').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
                             }
 
 
@@ -438,6 +650,9 @@
                         data.append('cel', this.txtcele);
                         data.append('dir', this.txtdire);
                         data.append('cor', this.txtcore);
+                        data.append('dep', this.cbodepe);
+                        data.append('prov', this.cboprove);
+                        data.append('dist', this.cbodiste);
                         data.append('idper', this.idper);
                         axios.post('docente/editar', data).then(response => {
                             if (response.data.resp == 'si') {
@@ -447,6 +662,9 @@
                                 $('#txtcele').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#txtdire').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#txtcore').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cbodepe').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cboprove').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cbodiste').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#mdocentee').modal('toggle');
                                 this.getdocente();
                                 this.limpiar();
@@ -493,6 +711,27 @@
                                     this.msjcele = '';
                                     $('#txtcele').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 }
+                                if (response.data.dep != undefined) {
+                                    this.msjdepe = response.data.dep;
+                                    $('#cbodepe').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdepe = '';
+                                    $('#cbodepe').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.prov != undefined) {
+                                    this.msjprove = response.data.prov;
+                                    $('#cboprove').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjprove = '';
+                                    $('#cboprove').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.dist != undefined) {
+                                    this.msjdiste = response.data.dist;
+                                    $('#cbodiste').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdiste = '';
+                                    $('#cbodiste').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
                             }
 
                         }).catch(function (error) {
@@ -507,6 +746,11 @@
                         this.txtdire = doc.persona.dirper;
                         this.txtcore = doc.persona.correoper;
                         this.idper = doc.persona.idpersona;
+                        this.cbodepe = doc.persona.distrito.provincia.departamento.iddepartamento;
+                        this.suportprovincia(this.cbodepe);
+                        this.cboprove = doc.persona.distrito.provincia.idprovincia;
+                        this.suportdistrito(this.cboprove);
+                        this.cbodiste = doc.persona.distrito.iddistrito;
                     },
                     cambiar: function (doc) {
                         Swal.fire({

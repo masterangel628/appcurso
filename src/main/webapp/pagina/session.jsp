@@ -111,6 +111,9 @@
                                 toastr.success("La sesión se abrió correctamente");
                             }
                             if(response.data.resp=="existe"){
+                                toastr.warning("Hay una sesión abierta");
+                            }
+                            if(response.data.resp=="yaexiste"){
                                 toastr.warning("Solo se permite una sesión por día");
                             }
                         }).catch(function (error) {

@@ -1,8 +1,8 @@
-
 package com.venta.curso.Interface;
 
 import com.venta.curso.Entity.PaqueteEntity;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface PaqueteInterface {
 
-    public List<PaqueteEntity> getPaquete();
+    public List<Map<String, Object>> getPaquete();
 
     public PaqueteEntity savePaquete(PaqueteEntity paq);
 
@@ -22,7 +22,7 @@ public interface PaqueteInterface {
 
     public int existepaqueteedit(String nom, String idpaq);
 
-    public List getCursoAc();
+    public List<Map<String, Object>> getCursoAc();
 
     public int existecursopaq(String idcur, String idpaq);
 
@@ -30,5 +30,5 @@ public interface PaqueteInterface {
 
     public void eliminarcursopaq(String idcurpaq);
 
-    public List getcursopaq(String idpaq);
+    public List<Map<String, Object>> getcursopaq(String idpaq);
 }
