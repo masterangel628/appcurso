@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportdetalleventa" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f0a262f-7dad-426c-b8ca-fd507185ac08">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="feci" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecf" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idus" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from v_reportdetventa where fecmat between $P{feci} and $P{fecf} and idusu=$P{idus};]]>
+	</queryString>
+	<field name="fecmat" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="montomat" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nummat" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dnicli" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomcli" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dniusu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomusu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idmatricula" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idusu" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="curpa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="montomat_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{montomat}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<rectangle>
+				<reportElement x="355" y="0" width="100" height="25" forecolor="#000000" backcolor="#FF1A1A" uuid="76c3fef7-3c21-4b32-8cce-94357b419415"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="200" height="25" forecolor="#000000" backcolor="#FF1A1A" uuid="6d6fbfd8-7a7a-4e9f-8960-4b06c13e755f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="455" y="0" width="50" height="25" forecolor="#000000" backcolor="#FF1A1A" uuid="97669183-b258-494b-845b-4ced4c06790c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="200" y="0" width="155" height="25" forecolor="#000000" backcolor="#FF1A1A" uuid="34c3ee21-9b7b-4c62-8609-9d627f152691"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="200" height="25" forecolor="#FFFFFF" uuid="d708472f-251d-4f44-863e-8efadb9b8796"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="50" height="25" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="fe3ceb89-3630-4d20-b880-38a032dab5a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="0" width="100" height="25" forecolor="#FFFFFF" uuid="067407f9-0ee2-42cb-ba5f-d41d9356e4c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="155" height="25" forecolor="#FFFFFF" uuid="5406499a-ab6a-4d1e-bb81-9128988b8fc8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Curso]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<rectangle>
+				<reportElement x="455" y="0" width="50" height="25" uuid="74c665a8-da51-4139-b879-7fd8fe65d648"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="200" height="25" uuid="95c38028-422f-4acb-8e34-c77218ae218e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="355" y="0" width="100" height="25" uuid="56e82ddb-9db0-4a1a-9f5e-875775b45405"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="200" y="0" width="155" height="25" uuid="71c8a49c-0e0f-4ada-ab36-b42d266f8d94"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="200" height="25" uuid="80493cfa-0984-437d-ae04-ba9dc102a7be"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomcli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="155" height="25" uuid="98bdbc36-4423-46b3-b527-b2f30185adb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{curpa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="355" y="0" width="100" height="25" uuid="ed032fbb-2869-4445-9d58-d7d13cbbc836"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecmat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="50" height="25" uuid="877ecc77-c26a-4824-942d-a0904b3a8e9b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montomat}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<rectangle>
+				<reportElement x="455" y="0" width="50" height="25" uuid="86f5e26a-dcc7-4bbc-9f9d-1f3fa3014e03"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="455" height="25" uuid="cfdd990a-118e-4076-8d65-4dc905b9f8ec"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="455" height="25" uuid="bb437bf0-f630-4eb9-92ac-1ce021fcbb29"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="455" y="0" width="50" height="25" uuid="cd96314e-f1cc-4795-8506-d58e771c47be"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{montomat_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -22,20 +22,9 @@ public class MatriculaService implements MatriculaInterface{
         return matricularepo.getMatricula();
     }
 
-
-    @Override
-    public List<Map<String, Object>> getbanco() {
-        return  matricularepo.getbanco();
-    }
-
     @Override
     public List<Map<String, Object>> getPrematricula() {
         return  matricularepo.getPrematricula();
-    }
-
-    @Override
-    public void actualizarpago(String idmat, String vau, String ban) {
-        matricularepo.actualizarpago(vau, ban, idmat); 
     }
 
     @Override
@@ -62,9 +51,11 @@ public class MatriculaService implements MatriculaInterface{
     public List<Map<String, Object>> getCursoPaquete(String idpaq) {
         return matricularepo.getCursoPaquete(idpaq);
     }
-    
-   
 
+    @Override
+    public String getMontofec(String fecdes, String fechas) {
+        return matricularepo.getMontofec(fecdes, fechas);
+    }
     
     
 }

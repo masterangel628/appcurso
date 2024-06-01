@@ -41,6 +41,20 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
     @Modifying
     @Transactional
     @Query(value = "update personas set dniper=:dni, celper=:cel, fkiddistrito=:dist, apeper=:ape, nomper=:nom, correoper=:cor, dirper=:dir where idpersona=:id", nativeQuery = true)
-    public void editarpersona(@Param("dni") String dni, @Param("nom") String nom, @Param("ape") String ape, @Param("dir") String dir, @Param("cel") String cel, @Param("cor") String cor, @Param("dist") String dist,@Param("id") String id);
+    public void editarpersona(@Param("dni") String dni, @Param("nom") String nom, @Param("ape") String ape, @Param("dir") String dir, @Param("cel") String cel, @Param("cor") String cor, @Param("dist") String dist, @Param("id") String id);
+
+    @Query(value = "select exists(select * from personas where correoper=:cor limit 1)", nativeQuery = true)
+    public int existecorreo(@Param("cor") String cor);
+
+    @Query(value = "select exists(select * from personas where correoper=:cor and idpersona<>:id)", nativeQuery = true)
+    public int existecorreoedit(@Param("cor") String cor, @Param("id") int id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update personas set  celper=:cel, dirper=:dir where idpersona=:id", nativeQuery = true)
+    public void editarceldir(@Param("cel") String cel, @Param("dir") String dir, @Param("id") String id);
+
+    @Query(value = "select * from personas where idpersona=:id", nativeQuery = true)
+    public Map<String, Object> getperson(@Param("id") String id);
 
 }

@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.Cell;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,6 +51,7 @@ import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -83,49 +85,10 @@ public class MatriculaController {
         return clienteinter.getCliente();
     }
 
-    @GetMapping("matricula/mbanco")
-    @ResponseBody
-    public List getBanco() {
-        return matriculainter.getbanco();
-    }
-
     @PostMapping("matricula/verificar")
     @ResponseBody
     public void Verificar(@RequestParam(name = "mat") String mat) {
         matriculainter.verificar(mat);
-    }
-
-    @PostMapping("matricula/guardar")
-    @ResponseBody
-    public Map Guardar(@RequestParam(name = "vau") MultipartFile file, @RequestParam(name = "ban") String ban, @RequestParam(name = "mat") String mat) {
-        Map validacion = new HashMap();
-
-        String ext = file.getOriginalFilename().toLowerCase();
-        if (!ext.endsWith("png") && !ext.endsWith(".png") && !ext.endsWith(".png")) {
-            validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
-        }
-
-        if (ban.equalsIgnoreCase("0")) {
-            validacion.put("ban", "Seleccione un banco");
-        }
-        if (validacion.isEmpty()) {
-            try {
-                String rootDirectory = servletContext.getRealPath("/");
-                File uploadDir = new File(rootDirectory + "uploads");
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                String filePath = uploadDir.getAbsolutePath() + File.separator + uniqueFilename;
-                file.transferTo(new File(filePath));
-                matriculainter.actualizarpago(mat, uniqueFilename, ban);
-            } catch (IOException e) {
-            }
-            validacion.put("resp", "si");
-        } else {
-            validacion.put("resp", "no");
-        }
-        return validacion;
     }
 
     @GetMapping("matricula/images/{filename:.+}")
@@ -242,34 +205,24 @@ public class MatriculaController {
 
     @GetMapping("reportematricula/pdf")
     @ResponseBody
-    public ResponseEntity<byte[]> generateReport(@RequestParam(name = "fecdes") String fecdes, @RequestParam(name = "fechas") String fechas) throws JRException, IOException, SQLException {
-        // Cargar y compilar el archivo .jrxml
-        ClassPathResource reportResource = new ClassPathResource("reports/reportmatricula.jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(reportResource.getInputStream());
+    public void generateReport(@RequestParam(name = "fecdes") String fecdes, @RequestParam(name = "fechas") String fechas, HttpServletResponse response) throws JRException, IOException, SQLException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=reportventa.pdf");
 
+        ClassPathResource reportResource = new ClassPathResource("reports/reportventa.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(reportResource.getInputStream());
+        String sub=reportResource.getFile().getParentFile().getAbsolutePath()+"/";
         Connection connection = dataSource.getConnection();
-        // Parámetros del reporte
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("fecdes", fecdes);
         parameters.put("fechas", fechas);
-
-        // Llenar el reporte
+        parameters.put("SUBREPORT_DIR", sub);
+        parameters.put("monto", "Monto Total: "+matriculainter.getMontofec(fecdes, fechas)+" Soles"); 
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
 
-        // Exportar a PDF
-        ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
-        JRPdfExporter exporter = new JRPdfExporter();
-        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfOutputStream));
-        exporter.setConfiguration(new SimplePdfExporterConfiguration());
-        exporter.exportReport();
-
-        // Configurar la respuesta HTTP
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "reportematricula.pdf");
-
-        return new ResponseEntity<>(pdfOutputStream.toByteArray(), headers, HttpStatus.OK);
+        try (OutputStream out = response.getOutputStream()) {
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+        }
     }
 
     @GetMapping("reportematricula/images/{filename:.+}")

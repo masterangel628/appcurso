@@ -53,7 +53,7 @@
                                     <div class="card-body">
 
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>Nombre</th>
@@ -68,11 +68,11 @@
                                                 <tbody>
                                                     <tr v-for="cur ,key in curso">
                                                         <td>{{cur.nomcur}}</td>
-                                                        <td>{{cur.precrcur}}</td>
-                                                        <td>{{cur.duracur}}</td>
-                                                        <td>{{cur.horacur}}</td>
+                                                        <td width="10%">{{cur.precrcur}}</td>
+                                                        <td width="10%">{{cur.duracur}}</td>
+                                                        <td width="18%">{{cur.horacur}}</td>
                                                         <td>{{cur.docente.persona.nomper}} {{cur.docente.persona.apeper}}</td>
-                                                        <td>
+                                                        <td width="10%">
                                                             <span class="badge badge-success" v-if="cur.estado=='ACTIVO'">{{cur.estado}}</span>
                                                             <span class="badge badge-warning" v-if="cur.estado=='INACTIVO'">{{cur.estado}}</span>
                                                         </td>
@@ -290,6 +290,38 @@
                     this.getdocente();
                 },
                 methods: {
+                    tabla: function () {
+                        this.$nextTick(() => {
+                            $('#tabdatos').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                     config: function () {
+                        $("#tabdatos").DataTable().destroy();
+                        this.tabla();
+                    },
                     limpiar: function () {
                         this.txtcod = "";
                         this.txtnom = "";
@@ -322,6 +354,7 @@
                     getcurso: function () {
                         axios.get('curso/mcurso').then(response => {
                             this.curso = response.data;
+                            this.config();
                         }).catch(function (error) {
                             console.log(error);
                         });

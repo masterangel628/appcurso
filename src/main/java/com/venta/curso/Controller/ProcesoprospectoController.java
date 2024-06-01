@@ -5,15 +5,20 @@ import com.venta.curso.Interface.ProspectoInterface;
 import com.venta.curso.Interface.SessionInterface;
 import com.venta.curso.Interface.UserInterface;
 import com.venta.curso.Validation.Validation;
+import jakarta.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -26,6 +31,7 @@ public class ProcesoprospectoController {
     private final ProspectoInterface prospectointer;
     private final UserInterface userInterface;
     private final SessionInterface sesInterface;
+    private final ServletContext servletContext;
 
     Validation val = new Validation();
 
@@ -49,16 +55,28 @@ public class ProcesoprospectoController {
 
     @GetMapping("procesoprospecto/mostrar")
     @ResponseBody
-    public List Prospectomostrar() {
+    public List Prospectonovmostrar() {
+        UserEntity user = userInterface.getinfouser();
+        return prospectointer.getProspectoasesornoverificado(String.valueOf(user.getId()));
+    }
+    
+     @GetMapping("procesoprospecto/mostrarver")
+    @ResponseBody
+    public List Prospectovermostrar() {
         UserEntity user = userInterface.getinfouser();
         return prospectointer.getProspectoasesorverificado(String.valueOf(user.getId()));
     }
-
+    
     @PostMapping("procesoprospecto/actualizarestado")
     @ResponseBody
     public void Prospectomostrar(@RequestParam("esta") String esta, @RequestParam("idpro") String idpro, @RequestParam("iddetpro") String iddetpro) {
-        prospectointer.Actualizarpveri(iddetpro); 
-        prospectointer.cambiarestatiempo(idpro, esta);
+        prospectointer.Actualizarpveri(iddetpro);
+    }
+
+    @PostMapping("procesoprospecto/actualizar")
+    @ResponseBody
+    public void Prospectoactualizar(@RequestParam("iddetpro") String iddetpro) {
+        prospectointer.Actualizarpnoveri(iddetpro);
     }
 
     @GetMapping("procesoprospecto/mcurso")
@@ -97,10 +115,26 @@ public class ProcesoprospectoController {
         return validacion;
     }
 
+    @GetMapping("procesoprospecto/mbanco")
+    @ResponseBody
+    public List getBanco() {
+        return prospectointer.getbanco();
+    }
+
     @PostMapping("procesoprospecto/finalizar")
     @ResponseBody
-    public Map prematricula(@RequestParam("cli") String cli, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro) {
+    public Map prematricula(@RequestParam("cli") String cli, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
+             @RequestParam(name = "vau") MultipartFile file, @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
+
+        String ext = file.getOriginalFilename().toLowerCase();
+        if (!ext.endsWith("png") && !ext.endsWith(".png") && !ext.endsWith(".png")) {
+            validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
+        }
+
+        if (ban.equalsIgnoreCase("0")) {
+            validacion.put("ban", "Seleccione un banco");
+        }
         if (!val.vacio(cli)) {
             validacion.put("cli", "El campo Cliente es obligatorio");
         }
@@ -108,10 +142,21 @@ public class ProcesoprospectoController {
             validacion.put("tip", "Seleccione un tipo de matrícula");
         }
         if (validacion.isEmpty()) {
-            UserEntity usu = userInterface.getinfouser();
-            int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
-            prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro);
-            validacion.put("resp", "si");
+            try {
+                String rootDirectory = servletContext.getRealPath("/");
+                File uploadDir = new File(rootDirectory + "uploads");
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                String filePath = uploadDir.getAbsolutePath() + File.separator + uniqueFilename;
+                file.transferTo(new File(filePath));
+                UserEntity usu = userInterface.getinfouser();
+                int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
+                prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro,ban,uniqueFilename);
+                validacion.put("resp", "si");
+            } catch (IOException e) {
+            }
         } else {
             validacion.put("resp", "no");
         }

@@ -26,13 +26,6 @@
                             <div class="col-sm-6">
                                 <h1>Gestión de Matricula</h1>
                             </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mreporte">
-                                        Reporte
-                                    </button> 
-                                </ol>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,24 +39,31 @@
                                         <h3 class="card-title">
                                             Lista de matrícula verificada
                                         </h3>
+                                        <div class="card-tools">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button class="btn btn-danger btn-sm" title="Generar archivo excel" data-toggle="modal" data-target="#mexcel"><i class="fas fa-file-excel"></i></button>
+                                                <button class="btn btn-danger btn-sm"  title="Generar archivo pdf" data-toggle="modal" data-target="#mpdf"><i class="fas fa-file-pdf"></i></button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
-                                                        <th>Número</th>
+                                                        <th width="15%">Número</th>
                                                         <th>Cliente</th>
-                                                        <th>Grupo</th>
-                                                        <th>Fecha</th>
-                                                        <th>Acción</th>
+                                                        <th width="10%">Monto</th>
+                                                        <th width="10%">Grupo</th>
+                                                        <th width="10%">Fecha</th>
+                                                        <th width="5%">Acción</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="mat in matricula">
                                                         <td>{{mat.nummat}}</td>
                                                         <td>{{mat.dniper}} - {{mat.apeper}} {{mat.nomper}}</td>
+                                                        <td>{{mat.montomat}}</td> 
                                                         <td>{{mat.grupomat}}</td>
                                                         <td>{{mat.fecmat}}</td>
                                                         <td>
@@ -81,11 +81,11 @@
                 </section>
             </div>
 
-            <div class="modal fade" id="mreporte" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="mpdf" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
-                            <h5 class="modal-title" id="staticBackdropLabel">Reporte</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Reporte venta diaria</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiar()">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -93,18 +93,46 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Desde</label>
+                                    <label>Fecha inicio</label>
                                     <input type="date" v-model="txtfecdes" id="txtfecdes" autocomplete="off" class="form-control">
                                 </div>
                                 <div class="col-md-6">
-                                    <label>Hasta</label>
+                                    <label>Fecha fin</label>
                                     <input type="date" v-model="txtfechas"id="txtfechas" autocomplete="off" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary" @click="reportexcel()">Excel</button>
-                            <button class="btn btn-info" @click="reportpdf()">PDF</button>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal"  @click="limpiar()">Cancelar</button>
+                            <button class="btn btn-info" @click="reportpdf()">Generar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="mexcel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
+                            <h5 class="modal-title" id="staticBackdropLabel">Reporte de matriculados</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiar()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Fecha inicio</label>
+                                    <input type="date" v-model="txtfecdes" id="txtfecdes" autocomplete="off" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Fecha fin</label>
+                                    <input type="date" v-model="txtfechas"id="txtfechas" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal" @click="limpiar()">Cancelar</button>
+                            <button class="btn btn-info" @click="reportexcel()">Generar</button>
                         </div>
                     </div>
                 </div>
@@ -115,7 +143,7 @@
                     <div class="modal-content">
                         <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
                             <h5 class="modal-title" id="staticBackdropLabel">Ver Váucher</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiar()">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -150,10 +178,47 @@
                     this.getmatricula();
                 },
                 methods: {
+                    tabla: function () {
+                        this.$nextTick(() => {
+                            $('#tabdatos').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                     config: function () {
+                        $("#tabdatos").DataTable().destroy();
+                        this.tabla();
+                    },
+                    limpiar: function () {
+                        this.txtfechas = "";
+                        this.txtfecdes = "";
+                    },
                     reportexcel: function () {
                         if (this.txtfecdes != "" && this.txtfechas != "") {
                             window.open('reportematricula/excel?fecdes=' + this.txtfecdes + '&fechas=' + this.txtfechas, ' _blank');
-                            $('#mreporte').modal('toggle');
+                            $('#mexcel').modal('toggle');
+                            this.limpiar();
                         } else {
                             toastr.warning("Seleccione las fechas");
                         }
@@ -163,7 +228,8 @@
 
                         if (this.txtfecdes != "" && this.txtfechas != "") {
                             window.open('reportematricula/pdf?fecdes=' + this.txtfecdes + '&fechas=' + this.txtfechas, ' _blank');
-                            $('#mreporte').modal('toggle');
+                            $('#mpdf').modal('toggle');
+                            this.limpiar();
                         } else {
                             toastr.warning("Seleccione las fechas");
                         }
@@ -171,6 +237,7 @@
                     getmatricula: function () {
                         axios.get('reportematricula/mmatricula').then(response => {
                             this.matricula = response.data;
+                            this.config();
                         }).catch(function (error) {
                             console.log(error);
                         });

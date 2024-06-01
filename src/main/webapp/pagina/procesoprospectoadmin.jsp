@@ -31,6 +31,21 @@
                 </div>
                 <section class="content">
                     <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Usuario</label>
+                                            <select class="form-control" v-model="cbousu" @change="cambiauser()">
+                                                <option value="0">Seleccione</option>
+                                                <option v-for="usu in usuario" v-bind:value="usu.id">{{usu.usuario}} - {{usu.cliente}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row" v-if="divmen">
                             <div class="col-md-12">
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -48,10 +63,13 @@
                                         <h3 class="card-title">
                                             Cartera de clientes
                                         </h3>
+                                        <div class="card-tools">
+                                            <button class="btn btn-danger btn-sm" @click="getclientever()" title="Ver clientes verificados" data-toggle="modal" data-target="#mcverificado">Ver</button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover" id="tabprospecto">
+                                            <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>Nombre</th>
@@ -62,10 +80,10 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="cli in cliente">
-                                                        <td width="40%">{{cli.nompros}}</td>
-                                                        <td>{{cli.celpros}}</td>
-                                                        <td>{{cli.estatimpros}}</td>
-                                                        <td>
+                                                        <td>{{cli.nompros}}</td>
+                                                        <td width="15%">{{cli.celpros}}</td>
+                                                        <td width="20%">{{cli.estatimpros}}</td>
+                                                        <td width="20%">
                                                             <button class="btn btn-warning btn-sm" v-if="cli.estatimpros!='CALIENTE'" @click="cambiarcal(cli)" title="Cambiar a estado Caliente">
                                                                 Caliente
                                                             </button>
@@ -188,25 +206,60 @@
                                         <button class="btn btn-primary" @click="siguiente()">Siguiente</button>
                                     </div>
                                     <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
-                                        <div class="form-group">
-                                            <label>Cliente</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="txtcliente" @keyup="buscarcliente" autocomplete="off">
-                                                <input type="hidden" id="txtidcliente">
-                                                <div id="listacliente" class="dropdown-menu"></div>
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" data-toggle="modal" data-target="#mcliente" title="Agregar Cliente"><i class="fas fa-plus"></i>
-                                                    </button>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Cliente</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="txtcliente" @keyup="buscarcliente" autocomplete="off">
+                                                        <input type="hidden" id="txtidcliente">
+                                                        <div id="listacliente" class="dropdown-menu"></div>
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-primary" data-toggle="modal" data-target="#mcliente" title="Agregar Cliente"><i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{msjcliente}}</strong>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Tipo matrícula</label>
+                                                    <select class="form-control" v-model="cbotipomat" id="cbotipomat">
+                                                        <option value="0">Seleccione</option>
+                                                        <option value="REGULAR">Regular</option>
+                                                        <option value="ACELERADO">Acelerado</option>
+                                                    </select>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{msjtipomat}}</strong>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Tipo matrícula</label>
-                                            <select class="form-control" v-model="cbotipomat" id="cbotipomat">
-                                                <option value="0">Seleccione</option>
-                                                <option value="REGULAR">Regular</option>
-                                                <option value="ACELERADO">Acelerado</option>
-                                            </select>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Banco</label>
+                                                    <select v-model="cboban" id="cboban" class="form-control">
+                                                        <option value="0">Seleccione</option>
+                                                        <option v-for="ban in banco" v-bind:value="ban.idbanco">{{ban.nomban}}</option>
+                                                    </select>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{msjban}}</strong>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Váucher</label>
+                                                    <input type="file" id="txtvau" @change="getArchivo" accept=".png,.jpg,.jpeg" class="form-control" autocomplete="off">
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{msjvau}}</strong>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <button class="btn btn-danger" onclick="stepper.previous()">Anterior</button>
                                         <button type="button" class="btn btn-primary" @click="finalizar()">Guardar</button>
@@ -217,8 +270,7 @@
                     </div>
                 </div>
             </div>
-            
-            
+
             <div class="modal fade" id="mcliente" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
@@ -334,6 +386,45 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="mcverificado" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
+                            <h5 class="modal-title" id="staticBackdropLabel">Clientes verificados</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="actualizartabla()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover"  id="tabdato">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Celular</th>
+                                            <th>Estado de Tiempo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="cli in clientever">
+                                            <td >{{cli.nompros}}</td>
+                                            <td width="15%">{{cli.celpros}}</td>
+                                            <td width="25%">{{cli.estatimpros}}</td>
+                                            <td width="10%">
+                                                <button class="btn btn-warning btn-sm" @click="cambiarnover(cli)" title="Cambiar a estado No Verificado">
+                                                    Cambiar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <%@include file="scrip.jsp" %>
         <script>
@@ -344,7 +435,20 @@
             let app = new Vue({
                 el: '#app',
                 data: {
-                     departamento: [],
+                    usuario: [],
+                    cbousu: 0,
+
+                    archivo: null,
+                    banco: [],
+                    cboban: 0,
+                    vaumat: "",
+                    msjvau: "",
+                    msjban: "",
+
+                    msjcliente: "",
+                    msjtipomat: "",
+
+                    departamento: [],
                     provincia: [],
                     distrito: [],
 
@@ -367,9 +471,10 @@
                     msjdep: "",
                     msjprov: "",
                     msjdist: "",
-                    
+
                     paquetecurso: [],
                     cliente: [],
+                    clientever: [],
                     comanda: [],
                     curso: [],
                     paquete: [],
@@ -386,11 +491,81 @@
                     msj: "",
                 },
                 mounted: function () {
-                    this.verificarsesion();
-                    this.getcliente();
-                    this.getdepartamento();
+                    this.getusuario();
                 },
                 methods: {
+                    actualizartabla: function () {
+                        this.getcliente();
+                    },
+                    cambiarnover: function (cli) {
+                        var data = new FormData();
+                        data.append('iddetpro', cli.iddetalleprospecto);
+                        axios.post('procesoprospectoadmin/actualizar', data).then(response => {
+                            this.getclientever();
+                        }).catch(error => {
+                        })
+                    },
+                    tabla: function (tab) {
+                        this.$nextTick(() => {
+                            $('#' + tab).DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                    config: function (tab) {
+                        $("#" + tab).DataTable().destroy();
+                        this.tabla(tab);
+                    },
+                    cambiauser: function () {
+                        if (this.cbousu != 0) {
+                            this.verificarsesion();
+                            this.getcliente();
+                            this.getdepartamento();
+                            this.getbanco();
+                        }
+                    },
+                    getbanco: function () {
+                        axios.get('procesoprospectoadmin/mbanco').then(response => {
+                            this.banco = response.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getusuario: function () {
+                        axios.get('procesoprospectoadmin/musuario').then(response => {
+                            this.usuario = response.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getArchivo(event) {
+                        if (!event.target.files.length) {
+                            this.archivo = null;
+                        } else {
+                            this.archivo = event.target.files[0];
+                        }
+                    },
                     suportprovincia: function (dep) {
                         axios.get('persona/provincia/' + dep).then(response => {
                             this.provincia = response.data;
@@ -467,7 +642,7 @@
                         }
                     },
                     verificarsesion: function () {
-                        axios.get('procesoprospecto/verificasesion').then(response => {
+                        axios.get('procesoprospectoadmin/verificasesion?usu=' + this.cbousu).then(response => {
                             if (response.data.resp == "si") {
                                 this.divconte = true;
                                 this.divmen = false;
@@ -511,7 +686,7 @@
                         this.msjprov = "";
                         this.msjdist = "";
 
-                        
+
                     },
                     buscarcliente: function () {
                         var lista = $("#listacliente");
@@ -537,27 +712,60 @@
                         }
                     },
                     finalizar: function () {
-                        var data = new FormData();
-                        data.append('tip', this.cbotipomat);
-                        data.append('detpro', this.iddetpros);
-                        data.append('cli', $("#txtidcliente").val());
-                        axios.post('procesoprospecto/finalizar', data).then(response => {
-                            if (response.data.resp == 'si') {
-                                $('#mprematricula').modal('toggle');
-                                this.limpiar();
-                                this.getcliente();
-                                toastr.success("La prematrícula se registró correctamente");
-                            } else {
-                                if (response.data.cli != undefined) {
-                                    toastr.warning(response.data.cli);
+                        if (this.archivo == null) {
+                            toastr.warning("Seleccione un archivo");
+                        } else {
+                            var data = new FormData();
+                            data.append('tip', this.cbotipomat);
+                            data.append('detpro', this.iddetpros);
+                            data.append('cli', $("#txtidcliente").val());
+                            data.append('vau', this.archivo);
+                            data.append('ban', this.cboban);
+                            data.append('usu', this.cbousu);
+                            axios.post('procesoprospectoadmin/finalizar', data).then(response => {
+                                if (response.data.resp == 'si') {
+                                    $('#txtvau').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    $('#cboban').removeClass('form-control is-invalid').addClass('form-control is-valid');
+
+                                    $('#mprematricula').modal('toggle');
+                                    this.limpiar();
+                                    this.getcliente();
+                                    toastr.success("La prematrícula se registró correctamente");
+                                } else {
+                                    if (response.data.vau != undefined) {
+                                        this.msjvau = response.data.vau;
+                                        $('#txtvau').removeClass('form-control').addClass('form-control is-invalid');
+                                    } else {
+                                        this.msjvau = '';
+                                        $('#txtvau').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    }
+                                    if (response.data.ban != undefined) {
+                                        this.msjban = response.data.ban;
+                                        $('#cboban').removeClass('form-control').addClass('form-control is-invalid');
+                                    } else {
+                                        this.msjban = '';
+                                        $('#cboban').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    }
+                                    if (response.data.cli != undefined) {
+                                        this.msjcliente = response.data.cli;
+                                        $('#txtcliente').removeClass('form-control').addClass('form-control is-invalid');
+                                    } else {
+                                        this.msjcliente = '';
+                                        $('#txtcliente').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    }
+                                    if (response.data.tip != undefined) {
+                                        this.msjtipomat = response.data.tip;
+                                        $('#cbotipomat').removeClass('form-control').addClass('form-control is-invalid');
+                                    } else {
+                                        this.msjtipomat = '';
+                                        $('#cbotipomat').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    }
+
                                 }
-                                if (response.data.tip != undefined) {
-                                    toastr.warning(response.data.tip);
-                                }
-                            }
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }
                     },
                     guardarcliente: function () {
                         var data = new FormData();
@@ -655,7 +863,7 @@
                         });
                     },
                     getpaquetecurso: function () {
-                        axios.get('procesoprospecto/paquetecurso?idpaq=' + this.cbopaquete).then(response => {
+                        axios.get('procesoprospectoadmin/paquetecurso?idpaq=' + this.cbopaquete).then(response => {
                             this.paquetecurso = response.data;
                             console.log(response.data)
                         }).catch(function (error) {
@@ -693,28 +901,28 @@
                     eliminar: function (com) {
                         var data = new FormData();
                         data.append('idco', com.idcomanda);
-                        axios.post('procesoprospecto/eliminacomanda', data).then(response => {
+                        axios.post('procesoprospectoadmin/eliminacomanda', data).then(response => {
                             this.getcomanda();
                         }).catch(function (error) {
                             console.log(error);
                         });
                     },
                     getcurso: function () {
-                        axios.get('procesoprospecto/mcurso').then(response => {
+                        axios.get('procesoprospectoadmin/mcurso').then(response => {
                             this.curso = response.data;
                         }).catch(function (error) {
                             console.log(error);
                         });
                     },
                     getcomanda: function () {
-                        axios.get('procesoprospecto/comanda?iddetpro=' + this.iddetpros).then(response => {
+                        axios.get('procesoprospectoadmin/comanda?iddetpro=' + this.iddetpros + '&usu=' + this.cbousu).then(response => {
                             this.comanda = response.data;
                         }).catch(function (error) {
                             console.log(error);
                         });
                     },
                     getpaquete: function () {
-                        axios.get('procesoprospecto/mpaquete').then(response => {
+                        axios.get('procesoprospectoadmin/mpaquete').then(response => {
                             this.paquete = response.data;
                         }).catch(function (error) {
                             console.log(error);
@@ -731,9 +939,10 @@
                                 data.append('curpaq', '0');
                             }
                         }
+                        data.append('usu', this.cbousu);
                         data.append('tipo', this.cbotipo);
                         data.append('detpro', this.iddetpros);
-                        axios.post('procesoprospecto/guardar', data).then(response => {
+                        axios.post('procesoprospectoadmin/guardar', data).then(response => {
                             if (response.data.resp == 'si') {
                                 if (response.data.proc == "existepaq") {
                                     toastr.warning("El paquete ya se encuentra registrado");
@@ -778,14 +987,34 @@
                         $("#txtcliente").val("");
                         $('#listacliente').hide();
                         this.cbotipomat = 0;
+
+                        this.msjcliente = '';
+                        this.msjtipomat = '';
+                        this.msjvau = '';
+                        this.msjban = '';
+                        this.cboban=0;
+                        $('#txtcliente').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbotipomat').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cboban').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#txtvau').removeClass('form-control is-valid is-invalid').addClass('form-control');
+
                     },
                     seleccionar: function (cli) {
                         this.iddetpros = cli.iddetalleprospecto;
                         this.getcomanda();
                     },
                     getcliente: function () {
-                        axios.get('procesoprospecto/mostrar').then(response => {
+                        axios.get('procesoprospectoadmin/mostrar?usu=' + this.cbousu).then(response => {
                             this.cliente = response.data;
+                            this.config("tabdatos");
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getclientever: function () {
+                        axios.get('procesoprospectoadmin/mostrarver?usu=' + this.cbousu).then(response => {
+                            this.clientever = response.data;
+                            this.config("tabdato");
                         }).catch(function (error) {
                             console.log(error);
                         });
@@ -795,7 +1024,7 @@
                         data.append('esta', "CALIENTE");
                         data.append('idpro', cli.fkidprospecto);
                         data.append('iddetpro', cli.iddetalleprospecto);
-                        axios.post('procesoprospecto/actualizarestado', data).then(response => {
+                        axios.post('procesoprospectoadmin/actualizarestado', data).then(response => {
                             this.getcliente();
                         }).catch(error => {
                         })
@@ -805,7 +1034,7 @@
                         data.append('esta', "TIBIO");
                         data.append('idpro', cli.fkidprospecto);
                         data.append('iddetpro', cli.iddetalleprospecto);
-                        axios.post('procesoprospecto/actualizarestado', data).then(response => {
+                        axios.post('procesoprospectoadmin/actualizarestado', data).then(response => {
                             this.getcliente();
                         }).catch(error => {
                         })
@@ -815,7 +1044,7 @@
                         data.append('esta', "FRIO");
                         data.append('idpro', cli.fkidprospecto);
                         data.append('iddetpro', cli.iddetalleprospecto);
-                        axios.post('procesoprospecto/actualizarestado', data).then(response => {
+                        axios.post('procesoprospectoadmin/actualizarestado', data).then(response => {
                             this.getcliente();
                         }).catch(error => {
                         })

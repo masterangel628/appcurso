@@ -25,6 +25,6 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
     @Query(value = "insert into clientes(fkidpersona)values(:idper)", nativeQuery = true)
     public void guardardcli(@Param("idper") String idper);
 
-    @Query(value = "select idcliente,concat(dniper,' - ',apeper,' ',nomper) cliente from clientes,personas where clientes.fkidpersona=personas.idpersona and (upper(concat(apeper,' ',nomper)) like concat('%',upper(:bus),'%') or dniper like concat('%',:bus,'%'))", nativeQuery = true)
+    @Query(value = "select idcliente,concat(dniper,' - ',apeper,' ',nomper) cliente from clientes,personas where clientes.fkidpersona=personas.idpersona and (upper(concat(apeper,' ',nomper)) like concat('%',upper(:bus),'%') or dniper like concat('%',:bus,'%')) limit 5", nativeQuery = true)
     public List<Map<String, Object>> getclientebuscar(@Param("bus") String bus);
 }

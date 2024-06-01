@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <p class="login-box-msg">Iniciar Sessión</p>
 
-                        <form  action="/gestioncurso/login" method="post">
+                        <form  action="<%= request.getContextPath()%>/login" method="post">
                             <div class="input-group mb-3">
                                 <input type="text" id="username" name="username" v-model="txtuser" class="form-control" placeholder="USERNAME" autocomplete="off">
 
@@ -46,12 +46,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-8">
-                                    <!--div class="icheck-primary">
-                                        <input type="checkbox" id="remember">
-                                        <label for="remember">
-                                            Remember Me
-                                        </label>
-                                    </div-->
+                                    
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-4">
@@ -61,23 +56,12 @@
                             </div>
                         </form>
 
-                        <!--div class="social-auth-links text-center mt-2 mb-3">
-                            <a href="#" class="btn btn-block btn-primary">
-                                <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                            </a>
-                            <a href="#" class="btn btn-block btn-danger">
-                                <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                            </a>
-                        </div-->
-                        <!-- /.social-auth-links -->
+                       
 
-                        <!--p class="mb-1">
-                            <a href="forgot-password.html">Olvidé mi contraseña
+                        <p class="mb-1">
+                            <a href="forgot-password">Olvidé mi contraseña
                             </a>
                         </p>
-                        <p class="mb-0">
-                            <a href="register" class="text-center">Registrarme</a>
-                        </p-->
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -86,28 +70,6 @@
             <!-- /.login-box -->
         </div>
         <%@include file="scrip.jsp" %>
-        <script>
-            let app = new Vue({
-                el: '#app',
-                data: {
-                    txtuser: "angel97",
-                    txtpass: "1234",
-                },
-                methods: {
-                    guardar: function () {
-                        var data = new FormData();
-                        data.append('username', this.txtuser);
-                        data.append('password', this.txtpass);
-                        axios.post('/gestionproducto/login', data).then(response => {
-                            console.log(response.data);
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-                    },
-
-                },
-            });
-        </script>
     </body>
 </html>
 

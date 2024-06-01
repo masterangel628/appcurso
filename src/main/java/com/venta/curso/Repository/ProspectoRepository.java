@@ -35,6 +35,9 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     public List<Map<String, Object>> getProspectoasesor(@Param("usu") String usu);
 
     @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'  and estaverdetpros='NOVERIFICADO'", nativeQuery = true)
+    public List<Map<String, Object>> getProspectoasesornoverificado(@Param("usu") String usu);
+
+    @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'  and estaverdetpros='VERIFICADO'", nativeQuery = true)
     public List<Map<String, Object>> getProspectoasesorverificado(@Param("usu") String usu);
 
     @Query(value = "select count(*) from prospectos where estatimpros='CALIENTE' and estaaspros='NOASIGNADO'", nativeQuery = true)
@@ -73,10 +76,13 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Query(value = "delete from comandas where idcomanda=:id", nativeQuery = true)
     public void eliminarcomanda(@Param("id") String id);
 
+    @Query(value = "select * from bancos where estadoban='ACTIVO'", nativeQuery = true)
+    public List<Map<String, Object>> getbanco();
+
     @Modifying
     @Transactional
-    @Query(value = "call p_prematricula(:cli,:ses,:tip,:detpro)", nativeQuery = true)
-    public void prematricula(@Param("cli") String cli, @Param("ses") String ses, @Param("tip") String tip, @Param("detpro") String detpro);
+    @Query(value = "call p_prematricula(:cli,:ses,:tip,:detpro,:ban,:vau)", nativeQuery = true)
+    public void prematricula(@Param("cli") String cli, @Param("ses") String ses, @Param("tip") String tip, @Param("detpro") String detpro, @Param("ban") String ban, @Param("vau") String vau);
 
     @Query(value = "select  precpaq, nomcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getPaquetecurso(@Param("id") String idpaq);
@@ -85,6 +91,11 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Transactional
     @Query(value = "update detalleprospectos set estaverdetpros='VERIFICADO' where iddetalleprospecto=:id", nativeQuery = true)
     public void Actualizarpveri(@Param("id") String iddetpro);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update detalleprospectos set estaverdetpros='NOVERIFICADO' where iddetalleprospecto=:id", nativeQuery = true)
+    public void Actualizarpnoveri(@Param("id") String iddetpro);
 
     @Modifying
     @Transactional

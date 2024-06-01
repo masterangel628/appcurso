@@ -14,6 +14,10 @@ public interface PersonaInterface {
 
     public int existepersona(String dni);
 
+    public int existecorreo(String cor);
+
+    public int existecorreoedit(String cor, int idper);
+
     public int existepersonaedit(String dni, int idper);
 
     public List<Map<String, Object>> getDepartamento();
@@ -25,4 +29,8 @@ public interface PersonaInterface {
     public void guardarpersona(PersonaEntity per);
 
     public void editarpersona(PersonaEntity per);
+
+    public void editarceldir(String cel, String dir, String id);
+
+    public Map<String, Object> getperson(String id);
 }

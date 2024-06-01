@@ -5,6 +5,7 @@ import com.venta.curso.Entity.SessionEntity;
 import com.venta.curso.Interface.SessionInterface;
 import com.venta.curso.Repository.SessionRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +34,6 @@ public class SessionService implements SessionInterface{
     }
 
     @Override
-    public List<SessionEntity> getSession() {
-        return sessionrepo.findAll();
-    }
-
-    @Override
     public int verificasession(String usu) {
         return sessionrepo.verificasession(usu);
     }
@@ -45,6 +41,21 @@ public class SessionService implements SessionInterface{
     @Override
     public int verificasessionabi(String usu) {
          return sessionrepo.verificasessionabi(usu);
+    }
+
+    @Override
+    public List<Map<String, Object>> getUsuario() {
+        return sessionrepo.getUsuario();
+    }
+
+    @Override
+    public Map<String, Object> getSesionultimausu(String usu) {
+        return sessionrepo.getSesionultimausu(usu); 
+    }
+
+    @Override
+    public void actualizarestado(String idses, String esta) {
+        sessionrepo.actualizarestado(idses, esta); 
     }
     
 }

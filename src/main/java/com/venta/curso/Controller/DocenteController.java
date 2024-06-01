@@ -84,6 +84,10 @@ public class DocenteController {
         } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
+            }else{
+                if (personainter.existecorreo(cor) == 1) {
+                    validacion.put("cor", "El Correo ya existe");
+                }
             }
         }
 
@@ -206,6 +210,10 @@ public class DocenteController {
         } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
+            }else{
+                if (personainter.existecorreoedit(cor,Integer.parseInt(idper)) == 1) {
+                    validacion.put("cor", "El Correo ya existe");
+                }
             }
         }
         if (validacion.isEmpty()) {

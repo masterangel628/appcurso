@@ -1,4 +1,3 @@
-
 package com.venta.curso.Service;
 
 import com.venta.curso.Entity.ProspectoEntity;
@@ -15,12 +14,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class ProspectoService implements ProspectoInterface{
+public class ProspectoService implements ProspectoInterface {
+
     private final ProspectoRepository prospectorepo;
 
     @Override
     public void guardar(ProspectoEntity pros) {
         prospectorepo.save(pros);
+    }
+
+    @Override
+    public List<Map<String, Object>> getbanco() {
+        return prospectorepo.getbanco();
     }
 
     @Override
@@ -45,7 +50,7 @@ public class ProspectoService implements ProspectoInterface{
 
     @Override
     public void guardarasesorpros(String esta, String cant, String usu) {
-         prospectorepo.guardarasesorpros(esta, cant, usu); 
+        prospectorepo.guardarasesorpros(esta, cant, usu);
     }
 
     @Override
@@ -75,7 +80,7 @@ public class ProspectoService implements ProspectoInterface{
 
     @Override
     public void cambiarestatiempo(String id, String esta) {
-        prospectorepo.cambiarestadotiempo(esta, id); 
+        prospectorepo.cambiarestadotiempo(esta, id);
     }
 
     @Override
@@ -89,8 +94,8 @@ public class ProspectoService implements ProspectoInterface{
     }
 
     @Override
-    public List<Map<String, Object>> procesoprematricula(String curpaq, String tipo, String usu,String detpro) {
-        return prospectorepo.procesoprematricula(curpaq, tipo, usu,detpro); 
+    public List<Map<String, Object>> procesoprematricula(String curpaq, String tipo, String usu, String detpro) {
+        return prospectorepo.procesoprematricula(curpaq, tipo, usu, detpro);
     }
 
     @Override
@@ -100,13 +105,10 @@ public class ProspectoService implements ProspectoInterface{
 
     @Override
     public void eliminarcomanda(String ico) {
-         prospectorepo.eliminarcomanda(ico);
+        prospectorepo.eliminarcomanda(ico);
     }
 
-    @Override
-    public void prematricula(String cli, String ses, String tip, String detpro) {
-        prospectorepo.prematricula(cli, ses, tip, detpro);
-    }
+   
 
     @Override
     public List<Map<String, Object>> getPaquetecurso(String idpaq) {
@@ -151,5 +153,20 @@ public class ProspectoService implements ProspectoInterface{
     @Override
     public int cantclientematriculado(String usu) {
         return prospectorepo.cantclientematriculado(usu);
+    }
+
+    @Override
+    public void prematricula(String cli, String ses, String tip, String detpro, String ban, String vau) {
+        prospectorepo.prematricula(cli, ses, tip, detpro,ban,vau);
+    }
+
+    @Override
+    public List<Map<String, Object>> getProspectoasesornoverificado(String usu) {
+        return prospectorepo.getProspectoasesornoverificado(usu);
+    }
+
+    @Override
+    public void Actualizarpnoveri(String iddetpros) {
+        prospectorepo.Actualizarpnoveri(iddetpros);
     }
 }

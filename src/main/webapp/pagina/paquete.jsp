@@ -50,7 +50,7 @@
                                     <div class="card-body">
 
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>Nombre</th>
@@ -244,6 +244,38 @@
                     this.getcurso();
                 },
                 methods: {
+                    tabla: function () {
+                        this.$nextTick(() => {
+                            $('#tabdatos').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                     config: function () {
+                        $("#tabdatos").DataTable().destroy();
+                        this.tabla();
+                    },
                     limpiar: function () {
                         this.txtnom = "";
                         $('#txtnom').removeClass('form-control is-valid is-invalid').addClass('form-control');
@@ -253,6 +285,7 @@
                     getpaquete: function () {
                         axios.get('paquete/mpaquete').then(response => {
                             this.paquete = response.data;
+                            this.config();
                         }).catch(function (error) {
                             console.log(error);
                         });

@@ -55,7 +55,7 @@
                                                         <td>{{key+1}}</td>
                                                         <td>{{ ro.role}}</td>
                                                         <td>
-                                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modverpermiso" @click="seleccionar(ro)">Ver</button>
+                                                            <button class="btn btn-primary btn-sm" title="Ver permisos" data-toggle="modal" data-target="#modverpermiso" @click="seleccionar(ro)"><i class="fa fa-eye"></i></button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -95,7 +95,7 @@
                                                     <td>{{key+1}}</td>
                                                     <td>{{ per[1] }}</td>
                                                     <td>
-                                                        <button class="btn btn-primary" @click="asignar(per)">Asignar</button>
+                                                        <button class="btn btn-primary btn-sm" @click="asignar(per)">Asignar</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -118,7 +118,7 @@
                                                     <td>{{key+1}}</td>
                                                     <td>{{ rolperm[2] }}</td>
                                                     <td>
-                                                        <button class="btn btn-primary" @click="quitar(rolperm)">Quitar</button>
+                                                        <button class="btn btn-primary btn-sm" @click="quitar(rolperm)">Quitar</button>
                                                     </td>
                                                 </tr>
                                             </tbody>

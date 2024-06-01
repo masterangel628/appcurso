@@ -9,6 +9,8 @@ import java.util.Map;
  * @author Asus
  */
 public interface ProspectoInterface {
+    
+    public List<Map<String, Object>> getbanco();
 
     public void guardar(ProspectoEntity pros);
 
@@ -25,6 +27,8 @@ public interface ProspectoInterface {
     public List<Map<String, Object>> getProspectoasesor(String usu);
 
     public List<Map<String, Object>> getProspectoasesorverificado(String usu);
+    
+    public List<Map<String, Object>> getProspectoasesornoverificado(String usu);
 
     public int contcliescalnoas();
 
@@ -46,11 +50,13 @@ public interface ProspectoInterface {
 
     public void eliminarcomanda(String ico);
 
-    public void prematricula(String cli, String ses, String tip, String detpro);
+    public void prematricula(String cli, String ses, String tip, String detpro,String ban,String vau);
 
     public List<Map<String, Object>> getPaquetecurso(String idpaq);
 
     public void Actualizarpveri(String iddetpros);
+    
+    public void Actualizarpnoveri(String iddetpros);
 
     public void Actualizarestadotiempo();
 

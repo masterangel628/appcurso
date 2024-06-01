@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>Username</th>
@@ -65,16 +65,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="usu in usuario">
-                                                        <td>{{usu.username}}</td>
-                                                        <td>{{usu.persona.dniper}}</td>
+                                                        <td width="10%">{{usu.username}}</td>
+                                                        <td width="10%">{{usu.persona.dniper}}</td>
                                                         <td>{{usu.persona.nomper}} {{usu.persona.apeper}}</td>
-                                                        <td>{{usu.persona.celper}}</td>
+                                                        <td width="10%">{{usu.persona.celper}}</td>
                                                         <td>{{usu.roles[0].role}}</td>
-                                                        <td>
+                                                        <td width="10%">
                                                             <span class="badge badge-success" v-if="usu.estado=='ACTIVO'">{{usu.estado}}</span>
                                                             <span class="badge badge-warning" v-if="usu.estado=='INACTIVO'">{{usu.estado}}</span>
                                                         </td>
-                                                        <td>
+                                                        <td width="10%">
                                                             <sec:authorize access="hasAuthority('Editar Usuario')">
                                                                 <button class="btn btn-info btn-sm" title="Cambiar de estado"  @click="cambiar(usu)"><i class="fas fa-sync-alt"></i></button>
                                                                 </sec:authorize>
@@ -447,6 +447,38 @@
                     this.getdepartamento();
                 },
                 methods: {
+                    tabla: function () {
+                        this.$nextTick(() => {
+                            $('#tabdatos').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                     config: function () {
+                        $("#tabdatos").DataTable().destroy();
+                        this.tabla();
+                    },
                     suportprovincia: function (dep) {
                         axios.get('persona/provincia/' + dep).then(response => {
                             this.provincia = response.data;
@@ -617,6 +649,7 @@
                     getusuario: function () {
                         axios.get('usuario/musuario').then(response => {
                             this.usuario = response.data;
+                            this.config();
                         }).catch(function (error) {
                             console.log(error);
                         });

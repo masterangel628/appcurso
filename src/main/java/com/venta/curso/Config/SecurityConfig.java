@@ -32,6 +32,11 @@ public class SecurityConfig {
                     http.requestMatchers("/pagina/**").permitAll();
                     http.requestMatchers("/public/**").permitAll();
 
+                    http.requestMatchers("/forgot-password").permitAll();
+                    http.requestMatchers("/forgot-password/send-token").permitAll();
+                    http.requestMatchers("/reset-password").permitAll();
+                    http.requestMatchers("/reset-password/change-password").permitAll();
+
                     http.requestMatchers("/banco").hasAuthority("Ver Banco");
                     http.requestMatchers("/banco/mbanco").hasAuthority("Ver Banco");
                     http.requestMatchers("/banco/guardar").hasAuthority("Registrar Banco");
@@ -86,9 +91,7 @@ public class SecurityConfig {
                     http.requestMatchers("/matricula").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/mmatricula").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/mcliente").hasAuthority("Matricula");
-                    http.requestMatchers("/matricula/mbanco").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/verificar").hasAuthority("Matricula");
-                    http.requestMatchers("/matricula/guardar").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/images").hasAuthority("Matricula");
 
                     http.requestMatchers("/reportematricula").hasAuthority("Reporte Matricula");
@@ -107,6 +110,7 @@ public class SecurityConfig {
                     http.requestMatchers("/paquete/mcursopaquete").hasAuthority("Paquete");
                     http.requestMatchers("/paquete/eliminarcursopaq").hasAuthority("Paquete");
 
+                    http.requestMatchers("/procesoprospecto/mbanco").hasAuthority("Proceso Prospecto");
                     http.requestMatchers("/procesoprospecto").hasAuthority("Proceso Prospecto");
                     http.requestMatchers("/procesoprospecto/verificasesion").hasAuthority("Proceso Prospecto");
                     http.requestMatchers("/procesoprospecto/mostrar").hasAuthority("Proceso Prospecto");
@@ -118,10 +122,41 @@ public class SecurityConfig {
                     http.requestMatchers("/procesoprospecto/eliminacomanda").hasAuthority("Proceso Prospecto");
                     http.requestMatchers("/procesoprospecto/paquetecurso").hasAuthority("Proceso Prospecto");
                     http.requestMatchers("/procesoprospecto/guardar").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/mostrarver").hasAuthority("Proceso Prospecto");
+                    http.requestMatchers("/procesoprospecto/actualizar").hasAuthority("Proceso Prospecto");
+
+                    http.requestMatchers("/procesoprospectoadmin/mbanco").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/verificasesion").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/mostrar").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/actualizarestado").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/mcurso").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/mpaquete").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/finalizar").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/comanda").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/eliminacomanda").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/paquetecurso").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/guardar").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/mostrarver").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/actualizar").hasAuthority("Proceso Prospecto Administrador");
+                    http.requestMatchers("/procesoprospectoadmin/musuario").hasAuthority("Proceso Prospecto Administrador");
 
                     http.requestMatchers("/session").hasAuthority("Sesion");
                     http.requestMatchers("/session/cerrar").hasAuthority("Sesion");
                     http.requestMatchers("/session/abrir").hasAuthority("Sesion");
+                    
+                    http.requestMatchers("/sessionadmin").hasAuthority("Session Administrador");
+                    http.requestMatchers("/sessionadmin/muser").hasAuthority("Session Administrador");
+                    http.requestMatchers("/sessionadmin/infosesion").hasAuthority("Session Administrador");
+                    http.requestMatchers("/sessionadmin/actualizarestado").hasAuthority("Session Administrador");
+                    http.requestMatchers("/sessionadmin/cerrar").hasAuthority("Session Administrador");
+                    http.requestMatchers("/sessionadmin/abrir").hasAuthority("Session Administrador");
+                    
+                    http.requestMatchers("/certificado").hasAuthority("Certificado");
+                    http.requestMatchers("/certificado/mmatricula").hasAuthority("Certificado");
+                    http.requestMatchers("/certificado/detalle").hasAuthority("Certificado");
+                    http.requestMatchers("/certificado/enviarcert").hasAuthority("Certificado");
+                    
 
                     http.anyRequest().authenticated();
                 })

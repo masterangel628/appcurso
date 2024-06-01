@@ -2,7 +2,6 @@ package com.venta.curso.Interface;
 
 import java.util.List;
 import java.util.Map;
-import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -14,10 +13,6 @@ public interface MatriculaInterface {
 
     public List<Map<String, Object>> getMatricula();
 
-    public void actualizarpago(String idmat, String vau, String ban);
-
-    public List<Map<String, Object>> getbanco();
-
     public void verificar(String idmat);
 
     public List<Map<String, Object>> getMatriculareport(String fecdes,String fechas);
@@ -27,5 +22,7 @@ public interface MatriculaInterface {
     public List<Map<String, Object>> getPaqueteoCurso(String idmat);
 
     public List<Map<String, Object>> getCursoPaquete(String idpaq);
+    
+    public String getMontofec(String fecdes,String fechas);
 
 }

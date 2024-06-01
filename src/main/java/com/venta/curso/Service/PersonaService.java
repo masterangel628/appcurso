@@ -60,4 +60,24 @@ public class PersonaService implements PersonaInterface {
                  , per.getCelper(), per.getCorreoper(), per.getDistrito().getIddistrito(),String.valueOf(per.getIdpersona()));
     }
 
+    @Override
+    public int existecorreo(String cor) {
+        return personarepo.existecorreo(cor);
+    }
+
+    @Override
+    public int existecorreoedit(String cor, int idper) {
+        return personarepo.existecorreoedit(cor,idper);
+    }
+
+    @Override
+    public void editarceldir(String cel, String dir, String id) {
+         personarepo.editarceldir(cel, dir, id); 
+    }
+
+    @Override
+    public Map<String, Object> getperson(String id) {
+        return personarepo.getperson(id);
+    }
+
 }

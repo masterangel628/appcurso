@@ -17,19 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Integer> {
 
-    @Modifying
-    @Transactional
-    @Query(value = "update matriculas set vaumat=:vau,fkidbanco=:ban where idmatricula=:id", nativeQuery = true)
-    public void actualizarpago(@Param("vau") String vau, @Param("ban") String ban, @Param("id") String idmat);
-
     @Query(value = "select * from v_matricula where estadomat='PREMATRICULA'", nativeQuery = true)
     public List<Map<String, Object>> getPrematricula();
 
     @Query(value = "select * from v_matricula where estadomat='MATRICULA'", nativeQuery = true)
     public List<Map<String, Object>> getMatricula();
-
-    @Query(value = "select * from bancos where estadoban='ACTIVO'", nativeQuery = true)
-    public List<Map<String, Object>> getbanco();
+    
+    @Query(value = "select sum(montomat) mont from v_reportdetventa where fecmat between :fecdes and :fechas", nativeQuery = true)
+    public String getMontofec(@Param("fecdes") String fecdes,@Param("fechas") String fechas);
 
     @Modifying
     @Transactional

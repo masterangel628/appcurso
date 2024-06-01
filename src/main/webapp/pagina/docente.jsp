@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>DNI</th>
@@ -66,10 +66,10 @@
                                                     <tr v-for="doc in docente">
                                                         <td>{{doc.persona.dniper}}</td>
                                                         <td>{{doc.persona.nomper}} {{doc.persona.apeper}}</td>
-                                                        <td>{{doc.persona.celper}}</td>
+                                                        <td width="10%">{{doc.persona.celper}}</td>
                                                         <td>{{doc.persona.dirper}}</td>
                                                         <td>{{doc.persona.correoper}}</td>
-                                                        <td>
+                                                        <td width="10%">
                                                             <span class="badge badge-success" v-if="doc.estado=='ACTIVO'">{{doc.estado}}</span>
                                                             <span class="badge badge-warning" v-if="doc.estado=='INACTIVO'">{{doc.estado}}</span>
                                                         </td>
@@ -387,6 +387,38 @@
                 },
 
                 methods: {
+                    tabla: function () {
+                        this.$nextTick(() => {
+                            $('#tabdatos').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                     config: function () {
+                        $("#tabdatos").DataTable().destroy();
+                        this.tabla();
+                    },
                     suportprovincia: function (dep) {
                         axios.get('persona/provincia/' + dep).then(response => {
                             this.provincia = response.data;
@@ -542,6 +574,7 @@
                     getdocente: function () {
                         axios.get('docente/mdocente').then(response => {
                             this.docente = response.data;
+                            this.config();
                         }).catch(function (error) {
                             console.log(error);
                         });

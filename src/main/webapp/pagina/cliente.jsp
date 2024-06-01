@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover"  id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>DNI</th>
@@ -64,12 +64,12 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="cli in cliente">
-                                                        <td>{{cli.persona.dniper}}</td>
+                                                        <td width="10%">{{cli.persona.dniper}}</td>
                                                         <td>{{cli.persona.nomper}} {{cli.persona.apeper}}</td>
                                                         <td>{{cli.persona.celper}}</td>
                                                         <td>{{cli.persona.dirper}}</td>
                                                         <td>{{cli.persona.correoper}}</td>
-                                                        <td>
+                                                        <td width="5%">
                                                             <sec:authorize access="hasAuthority('Editar Cliente')">
                                                                 <button class="btn btn-primary btn-sm" title="Editar Cliente" data-toggle="modal" data-target="#mclientee" @click="seleccionar(cli)"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
                                                                 </sec:authorize>
@@ -375,6 +375,38 @@
                     this.getdepartamento();
                 },
                 methods: {
+                    tabla: function () {
+                        this.$nextTick(() => {
+                            $('#tabdatos').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar " +
+                                            "<select class='custom-select custom-select-sm form-control form-control-sm'>" +
+                                            "<option value='5'>5</option>" +
+                                            "<option value='10'>10</option>" +
+                                            "<option value='25'>25</option>" +
+                                            "<option value='50'>50</option>" +
+                                            "<option value='100'>100</option>" +
+                                            "<option value='-1'>Todo</option>" +
+                                            "</select>" +
+                                            " registros por página",
+                                    "zeroRecords": "No se encontró nada, lo siento",
+                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros disponibles",
+                                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    }
+                                }
+
+                            });
+                        });
+                    },
+                     config: function () {
+                        $("#tabdatos").DataTable().destroy();
+                        this.tabla();
+                    },
                     suportprovincia: function (dep) {
                         axios.get('persona/provincia/' + dep).then(response => {
                             this.provincia = response.data;
@@ -530,6 +562,7 @@
                     getcliente: function () {
                         axios.get('cliente/mcliente').then(response => {
                             this.cliente = response.data;
+                            this.config();
                         }).catch(function (error) {
                             console.log(error);
                         });

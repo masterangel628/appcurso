@@ -1,6 +1,5 @@
 package com.venta.curso.Repository;
 
-import com.venta.curso.Entity.RoleEntity;
 import com.venta.curso.Entity.UserEntity;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    
+    @Query(value = "select exists(select * from users,personas where users.fkidpersona=personas.idpersona and correoper=:email)", nativeQuery = true)
+    public int existemail(@Param("email") String email);
 
     Optional<UserEntity> findUserEntityByUsername(String username);
 
@@ -64,4 +66,18 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "select * from users where username=:usu", nativeQuery = true)
     UserEntity getUsuario(@Param("usu") String usu);
+    
+    
+    @Query(value = "select username from users,personas where users.fkidpersona=personas.idpersona and correoper=:email", nativeQuery = true)
+    public String getUsername(@Param("email") String email);
+    
+    @Query(value = "select concat(apeper,' ',nomper) nom from users,personas where users.fkidpersona=personas.idpersona and correoper=:email", nativeQuery = true)
+    public String getNombre(@Param("email") String email);
+    
+    @Query(value = "select fkidpersona from users where username=:usu", nativeQuery = true)
+    public String getidpersona(@Param("usu") String usu);
+    
+    UserEntity findByUsername(String username);
+    
+    
 }

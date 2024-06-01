@@ -1,6 +1,8 @@
 package com.venta.curso.Repository;
 
 import com.venta.curso.Entity.SessionEntity;
+import java.util.List;
+import java.util.Map;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,8 +32,19 @@ public interface SessionRepository extends JpaRepository<SessionEntity, Integer>
 
     @Query(value = "select exists(select * from sessiones where fkidusuario=:usu and estadoses='ABIERTO')", nativeQuery = true)
     public int verificasessionabi(@Param("usu") String usu);
-    
-     @Query(value = "select exists(select * from sessiones where fkidusuario=:usu and fecinises=curdate())", nativeQuery = true)
+
+    @Query(value = "select exists(select * from sessiones where fkidusuario=:usu and fecinises=curdate())", nativeQuery = true)
     public int verificasession(@Param("usu") String usu);
+
+    @Query(value = "select id, username, dniper, celper,concat(apeper,' ',nomper) usuario, correoper, dirper from users,personas where users.fkidpersona=personas.idpersona", nativeQuery = true)
+    public List<Map<String, Object>> getUsuario();
+
+    @Query(value = "select codses,fecinises,idsession,estadoses,if((estadoses='ABIERTO'),'Por cerrar',fecfinses) fechacierre from sessiones where fkidusuario=:usu order by idsession desc limit 1", nativeQuery = true)
+    public Map<String, Object> getSesionultimausu(@Param("usu") String usu);
+    
+    @Modifying
+    @Transactional
+    @Query(value = "update sessiones set estadoses=:esta,fecfinses=curdate() where idsession=:id", nativeQuery = true)
+    public void actualizarestado(@Param("id") String idses,@Param("esta") String esta);
 
 }

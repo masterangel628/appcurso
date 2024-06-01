@@ -11,7 +11,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Rol</title>
+        <title>Sesión</title>
         <link href="public/dist/img/icono.png" rel="icon">
         <%@include file="estilocss.jsp" %>
     </head>
@@ -95,14 +95,9 @@
             let app = new Vue({
                 el: '#app',
                 data: {
-                    roles: [],
-                    txtrolsel: "",
-                    permisorol: [],
-                    permiso: [],
-                    idrol: 0,
+                    
                 },
                 mounted: function () {
-                    this.getrol();
                 },
                 methods: {
                     abrir: function () {
@@ -132,15 +127,6 @@
                             console.log(error);
                         });
                     },
-                    cerrarss: function () {
-                        var ruta = 'rol/mpermiso?rol=' + this.idrol;
-                        axios.get(ruta).then(response => {
-                            this.permiso = response.data;
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-                    },
-
                 },
             });
         </script>
