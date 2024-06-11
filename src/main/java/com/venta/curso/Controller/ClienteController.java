@@ -119,9 +119,12 @@ public class ClienteController {
         } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
-            }else{
+            } else {
                 if (personainter.existecorreo(cor) == 1) {
-                    validacion.put("cor", "El Correo ya existe");
+                    PersonaEntity d = personainter.getpersonacorreo(cor);
+                    if (clienteinter.existecliente(String.valueOf(d.getIdpersona())) == 1) {
+                        validacion.put("cor", "Ya existe un Cliente con este Correo");
+                    }
                 }
             }
         }
@@ -225,8 +228,8 @@ public class ClienteController {
         } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
-            }else{
-                if (personainter.existecorreoedit(cor,Integer.parseInt(idper)) == 1) {
+            } else {
+                if (personainter.existecorreoedit(cor, Integer.parseInt(idper)) == 1) {
                     validacion.put("cor", "El Correo ya existe");
                 }
             }

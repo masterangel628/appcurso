@@ -80,4 +80,9 @@ public class PersonaService implements PersonaInterface {
         return personarepo.getperson(id);
     }
 
+    @Override
+    public PersonaEntity getpersonacorreo(String correo) {
+        return personarepo.getpersonacor(correo);
+    }
+
 }

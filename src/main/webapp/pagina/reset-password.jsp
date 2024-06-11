@@ -3,16 +3,19 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="description" content="Sistema de Gestión Cursos - ISIPP">
+	<meta name="author" content="Miguel Ángel Toledo Cordova">
         <title>Recuperar contraseña</title>
         <link href="public/dist/img/icono.png" rel="icon">
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="public/plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="<%= request.getContextPath()%>/public/plugins/fontawesome-free/css/all.min.css">
         <!-- icheck bootstrap -->
-        <link rel="stylesheet" href="public/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+        <link rel="stylesheet" href="<%= request.getContextPath()%>/public/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <!-- Theme style -->
-        <link rel="stylesheet" href="public/dist/css/adminlte.min.css">
+        <link rel="stylesheet" href="<%= request.getContextPath()%>/public/dist/css/adminlte.min.css">
     </head>
     <body class="hold-transition login-page">
         <div class="login-box" id="app">
@@ -71,17 +74,17 @@
                         </div>
                     </div>
                     <p class="mt-3 mb-1">
-                        <a href="login">Login</a>
+                        <a href="<%= request.getContextPath()%>/login">Login</a>
                     </p>
                 </div>
             </div>
         </div>
         <!-- jQuery -->
-        <script src="public/plugins/jquery/jquery.min.js"></script>
+        <script src="<%= request.getContextPath()%>/public/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
-        <script src="public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="<%= request.getContextPath()%>/public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
-        <script src="public/dist/js/adminlte.min.js"></script>
+        <script src="<%= request.getContextPath()%>/public/dist/js/adminlte.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script>

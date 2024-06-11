@@ -17,6 +17,9 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
     @Query(value = "select * from personas where dniper=:dni", nativeQuery = true)
     public PersonaEntity getidpersona(@Param("dni") String dni);
+    
+    @Query(value = "select * from personas where correoper=:correo", nativeQuery = true)
+    public PersonaEntity getpersonacor(@Param("correo") String correo);
 
     @Query(value = "select exists(select * from personas where dniper=:dni)", nativeQuery = true)
     public int existepersona(@Param("dni") String dni);

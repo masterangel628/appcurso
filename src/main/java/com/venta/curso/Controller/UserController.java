@@ -137,9 +137,12 @@ public class UserController {
         } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
-            }else{
+            } else {
                 if (personainter.existecorreo(cor) == 1) {
-                    validacion.put("cor", "El Correo ya existe");
+                    PersonaEntity d = personainter.getpersonacorreo(cor);
+                    if (userinter.existeuser(String.valueOf(d.getIdpersona())) == 1) {
+                        validacion.put("cor", "Ya existe un Usuario con este Correo");
+                    }
                 }
             }
         }
@@ -147,6 +150,8 @@ public class UserController {
             if (personainter.existepersona(dni) == 1) {
                 PersonaEntity d = personainter.getpersona(dni);
                 userinter.guardarusuario(user, passwordEncoder.encode(pass), "Activo", String.valueOf(d.getIdpersona()));
+                UserEntity usu = userinter.getUsuario(user);
+                userinter.saveRol(rol, usu.getId());
             } else {
                 DistritoEntity DistritoEntity = new DistritoEntity();
                 DistritoEntity.setIddistrito(dist);
@@ -255,8 +260,8 @@ public class UserController {
         } else {
             if (!val.correo(cor)) {
                 validacion.put("cor", "El campo Correo no es correcto");
-            }else{
-                if (personainter.existecorreoedit(cor,Integer.parseInt(idper)) == 1) {
+            } else {
+                if (personainter.existecorreoedit(cor, Integer.parseInt(idper)) == 1) {
                     validacion.put("cor", "El Correo ya existe");
                 }
             }

@@ -11,6 +11,8 @@ import java.util.Map;
 public interface PersonaInterface {
 
     public PersonaEntity getpersona(String dni);
+    
+    public PersonaEntity getpersonacorreo(String correo);
 
     public int existepersona(String dni);
 

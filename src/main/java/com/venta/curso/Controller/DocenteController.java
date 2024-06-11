@@ -86,7 +86,10 @@ public class DocenteController {
                 validacion.put("cor", "El campo Correo no es correcto");
             }else{
                 if (personainter.existecorreo(cor) == 1) {
-                    validacion.put("cor", "El Correo ya existe");
+                    PersonaEntity d = personainter.getpersonacorreo(cor);
+                    if (docenteinter.existedocente(String.valueOf(d.getIdpersona())) == 1) {
+                        validacion.put("cor", "Ya existe un Docente con este Correo");
+                    }
                 }
             }
         }
