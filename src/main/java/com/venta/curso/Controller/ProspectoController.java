@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
-import static org.apache.poi.ss.usermodel.CellType.BLANK;
-import static org.apache.poi.ss.usermodel.CellType.BOOLEAN;
-import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
-import static org.apache.poi.ss.usermodel.CellType.STRING;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,8 +48,9 @@ public class ProspectoController {
     @PostMapping("prospecto/upload")
     @ResponseBody
     public Map uploadExcelFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
-        String nom = "", num = "";
+        String nom = "", num = "", fec = "";
         Map validacion = new HashMap();
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
         if (file.getOriginalFilename().endsWith(".xlsx")) {
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
@@ -58,21 +58,12 @@ public class ProspectoController {
                 Row row = sheet.getRow(rowIndex);
                 DecimalFormat decimalFormat = new DecimalFormat("#");
                 decimalFormat.setParseBigDecimal(true);
-                for (Cell cell : row) {
-                    switch (cell.getCellType()) {
-                        case NUMERIC:
-                            num = decimalFormat.format(cell.getNumericCellValue());
-                            break;
-                        case STRING:
-                            nom = cell.getStringCellValue();
-                            break;
-                        case BOOLEAN:
-                            break;
-                        case BLANK:
-                            break;
-                        default:
-                            break;
-                    }
+                nom = row.getCell(0).getStringCellValue();
+                num = decimalFormat.format(row.getCell(1).getNumericCellValue());
+                Cell datecell = row.getCell(2);
+                if (DateUtil.isCellDateFormatted(datecell)) {
+                    Date date = datecell.getDateCellValue();
+                    fec = dateformat.format(date);
                 }
                 if (prospectointer.existenum(num) != 1) {
                     ProspectoEntity pros = new ProspectoEntity();
@@ -80,7 +71,7 @@ public class ProspectoController {
                     pros.setNompros(nom);
                     pros.setEstaaspros(EstadoAsEnum.NOASIGNADO);
                     pros.setEstatimpros(EstadoTimEnum.CALIENTE);
-                    pros.setFechorpros(LocalDate.parse(prospectointer.fecactual()));
+                    pros.setFechorpros(LocalDate.parse(fec));
                     prospectointer.guardar(pros);
                 }
                 workbook.close();
@@ -113,13 +104,13 @@ public class ProspectoController {
         prospectointer.Actualizarnoasignado();
         return "si";
     }
-    
+
     @GetMapping("inicio/info")
     @ResponseBody
     public Map info() {
-        Map data=new HashMap();
+        Map data = new HashMap();
         UserEntity usu = userinter.getinfouser();
-        String idusu=String.valueOf(usu.getId());
+        String idusu = String.valueOf(usu.getId());
         data.put("cantcliveri", prospectointer.cantclienteverificado(idusu));
         data.put("cantclinoveri", prospectointer.cantclientenoverificado(idusu));
         data.put("cantcliasig", prospectointer.cantclienteasignado(idusu));

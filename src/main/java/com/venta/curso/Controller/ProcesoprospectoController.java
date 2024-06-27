@@ -71,6 +71,17 @@ public class ProcesoprospectoController {
     @ResponseBody
     public void Prospectomostrar(@RequestParam("esta") String esta, @RequestParam("idpro") String idpro, @RequestParam("iddetpro") String iddetpro) {
         prospectointer.Actualizarpveri(iddetpro);
+        int dias=0;
+        if(esta.equalsIgnoreCase("CALIENTE")){
+            dias=0;
+        }
+        if(esta.equalsIgnoreCase("TIBIO")){
+            dias=-4;
+        }
+        if(esta.equalsIgnoreCase("FRIO")){
+            dias=-9;
+        }
+        prospectointer.cambiarestatiempo(idpro, esta,dias);
     }
 
     @PostMapping("procesoprospecto/actualizar")
@@ -128,7 +139,7 @@ public class ProcesoprospectoController {
         Map validacion = new HashMap();
 
         String ext = file.getOriginalFilename().toLowerCase();
-        if (!ext.endsWith("png") && !ext.endsWith(".png") && !ext.endsWith(".png")) {
+        if (!ext.endsWith("png") && !ext.endsWith(".jpg") && !ext.endsWith(".jpeg")) {
             validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
         }
 

@@ -38,7 +38,7 @@ public interface ProspectoInterface {
 
     public List<Map<String, Object>> getEstado();
 
-    public void cambiarestatiempo(String id, String esta);
+    public void cambiarestatiempo(String id, String esta,int dias);
 
     public List<Map<String, Object>> getCurso();
 

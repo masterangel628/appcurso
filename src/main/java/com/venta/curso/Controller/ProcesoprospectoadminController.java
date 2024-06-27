@@ -1,9 +1,7 @@
 package com.venta.curso.Controller;
 
-import com.venta.curso.Entity.UserEntity;
 import com.venta.curso.Interface.ProspectoInterface;
 import com.venta.curso.Interface.SessionInterface;
-import com.venta.curso.Interface.UserInterface;
 import com.venta.curso.Validation.Validation;
 import jakarta.servlet.ServletContext;
 import java.io.File;
@@ -73,9 +71,19 @@ public class ProcesoprospectoadminController {
     @ResponseBody
     public void Prospectomostrar(@RequestParam("esta") String esta, @RequestParam("idpro") String idpro, @RequestParam("iddetpro") String iddetpro) {
         prospectointer.Actualizarpveri(iddetpro);
-        prospectointer.cambiarestatiempo(idpro, esta);
+        int dias = 0;
+        if (esta.equalsIgnoreCase("CALIENTE")) {
+            dias = 0;
+        }
+        if (esta.equalsIgnoreCase("TIBIO")) {
+            dias = -4;
+        }
+        if (esta.equalsIgnoreCase("FRIO")) {
+            dias = -9;
+        }
+        prospectointer.cambiarestatiempo(idpro, esta, dias);
     }
-    
+
     @PostMapping("procesoprospectoadmin/actualizar")
     @ResponseBody
     public void Prospectoactualizar(@RequestParam("iddetpro") String iddetpro) {
@@ -130,7 +138,7 @@ public class ProcesoprospectoadminController {
         Map validacion = new HashMap();
 
         String ext = file.getOriginalFilename().toLowerCase();
-        if (!ext.endsWith("png") && !ext.endsWith(".png") && !ext.endsWith(".png")) {
+        if (!ext.endsWith("png") && !ext.endsWith(".jpg") && !ext.endsWith(".jpeg")) {
             validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
         }
 

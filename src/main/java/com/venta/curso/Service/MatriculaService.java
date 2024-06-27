@@ -56,6 +56,16 @@ public class MatriculaService implements MatriculaInterface{
     public String getMontofec(String fecdes, String fechas) {
         return matricularepo.getMontofec(fecdes, fechas);
     }
+
+    @Override
+    public List<Map<String, Object>> getVentareport() {
+        return matricularepo.getVentareport();
+    }
+
+    @Override
+    public List<Map<String, Object>> getDetalleventareport(String fecdes, String fechas, String usu) {
+        return matricularepo.getDetalleventareport(fecdes, fechas, usu);
+    }
     
     
 }

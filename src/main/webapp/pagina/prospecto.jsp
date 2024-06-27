@@ -163,7 +163,7 @@
                                             "</select>" +
                                             " registros por página",
                                     "zeroRecords": "No se encontró nada, lo siento",
-                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                                     "infoEmpty": "No hay registros disponibles",
                                     "infoFiltered": "(Filtrado de _MAX_ registros totales)",
                                     "search": "Buscar:",

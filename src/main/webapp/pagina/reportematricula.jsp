@@ -155,7 +155,7 @@
                                 <input type="text" v-model="txtcliente" class="form-control" disabled="true">
                             </div>
                             <div class="table-responsive">
-                                <img v-bind:src="this.vaumat" alt="alt"/>
+                                <img class="img-thumbnail" v-bind:src="this.vaumat" alt="alt"/>
                             </div>
                         </div>
                     </div>

@@ -79,8 +79,8 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public void cambiarestatiempo(String id, String esta) {
-        prospectorepo.cambiarestadotiempo(esta, id);
+    public void cambiarestatiempo(String id, String esta,int dias) {
+        prospectorepo.cambiarestadotiempo(esta, id, String.valueOf(dias)); 
     }
 
     @Override

@@ -54,8 +54,8 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "update prospectos set estatimpros=:esta where idprospecto=:id", nativeQuery = true)
-    public void cambiarestadotiempo(@Param("esta") String esta, @Param("id") String id);
+    @Query(value = "update prospectos set estatimpros=:esta,fechorpros=date_add(curdate(), interval :dias day) where idprospecto=:id", nativeQuery = true)
+    public void cambiarestadotiempo(@Param("esta") String esta, @Param("id") String id, @Param("dias") String dias);
 
     @Query(value = "select * from cursos where estacur='ACTIVO'", nativeQuery = true)
     public List<Map<String, Object>> getCurso();

@@ -61,7 +61,9 @@
                                                     <tr>
                                                         <th>Nombre</th>
                                                         <th>Celular</th>
+                                                        <sec:authorize access="hasAuthority('ROLE_Administrador')">
                                                         <th>Estado de Tiempo</th>
+                                                        </sec:authorize>
                                                         <th>Acción</th>
                                                     </tr>
                                                 </thead>
@@ -69,15 +71,17 @@
                                                     <tr v-for="cli in cliente">
                                                         <td >{{cli.nompros}}</td>
                                                         <td width="15%">{{cli.celpros}}</td>
-                                                        <td width="20%">{{cli.estatimpros}}</td>
-                                                        <td width="20%">
-                                                            <button class="btn btn-warning btn-sm" v-if="cli.estatimpros!='CALIENTE'" @click="cambiarcal(cli)" title="Cambiar a estado Caliente">
+                                                        <sec:authorize access="hasAuthority('ROLE_Administrador')">
+                                                        <td width="25%">{{cli.estatimpros}}</td>
+                                                         </sec:authorize>
+                                                        <td width="25%">
+                                                            <button class="btn btn-warning btn-sm"  @click="cambiarcal(cli)" title="Cambiar a estado Caliente">
                                                                 Caliente
                                                             </button>
-                                                            <button class="btn btn-success btn-sm" v-if="cli.estatimpros!='TIBIO'" @click="cambiarti(cli)" title="Cambiar a estado Tibio">
+                                                            <button class="btn btn-success btn-sm"  @click="cambiarti(cli)" title="Cambiar a estado Tibio">
                                                                 Tibio
                                                             </button>
-                                                            <button class="btn btn-primary btn-sm" v-if="cli.estatimpros!='FRIO'" @click="cambiarfri(cli)" title="Cambiar a estado Frio">
+                                                            <button class="btn btn-primary btn-sm"  @click="cambiarfri(cli)" title="Cambiar a estado Frio">
                                                                 Frio
                                                             </button>
                                                             <button data-toggle="modal" data-target="#mprematricula" @click="seleccionar(cli)" class="btn btn-danger btn-sm" title="Inscribir al cliente">
@@ -391,7 +395,9 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Celular</th>
-                                            <th>Estado de Tiempo</th>
+                                            <sec:authorize access="hasAuthority('ROLE_Administrador')">
+                                                        <th>Estado de Tiempo</th>
+                                                        </sec:authorize>
                                             <th>Acción</th>
                                         </tr>
                                     </thead>
@@ -399,7 +405,9 @@
                                         <tr v-for="cli in clientever">
                                             <td >{{cli.nompros}}</td>
                                             <td width="15%">{{cli.celpros}}</td>
-                                            <td width="25%">{{cli.estatimpros}}</td>
+                                             <sec:authorize access="hasAuthority('ROLE_Administrador')">
+                                                        <td width="25%">{{cli.estatimpros}}</td>
+                                                         </sec:authorize>
                                             <td width="10%">
                                                 <button class="btn btn-warning btn-sm" @click="cambiarnover(cli)" title="Cambiar a estado No Verificado">
                                                     Cambiar

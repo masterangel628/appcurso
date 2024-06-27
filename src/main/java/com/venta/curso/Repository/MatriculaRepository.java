@@ -22,9 +22,9 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
 
     @Query(value = "select * from v_matricula where estadomat='MATRICULA'", nativeQuery = true)
     public List<Map<String, Object>> getMatricula();
-    
+
     @Query(value = "select sum(montomat) mont from v_reportdetventa where fecmat between :fecdes and :fechas", nativeQuery = true)
-    public String getMontofec(@Param("fecdes") String fecdes,@Param("fechas") String fechas);
+    public String getMontofec(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
 
     @Modifying
     @Transactional
@@ -32,15 +32,21 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
     public void verificar(@Param("id") String idmat);
 
     @Query(value = "select * from v_matriculareporte where fecmat between :fecdes and :fechas", nativeQuery = true)
-    public List<Map<String, Object>> getMatriculareport(@Param("fecdes") String fecdes,@Param("fechas") String fechas);
+    public List<Map<String, Object>> getMatriculareport(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
 
     @Query(value = "select * from v_detallematreport where idmatricula=:id and estadetmat=:esta", nativeQuery = true)
-    public List<Map<String, Object>> getDetallematreport(@Param("id") String idmat,@Param("esta") String esta);
+    public List<Map<String, Object>> getDetallematreport(@Param("id") String idmat, @Param("esta") String esta);
 
     @Query(value = "select estadetmat from v_detallematreport where idmatricula=:id group by estadetmat", nativeQuery = true)
     public List<Map<String, Object>> getPaqueteoCurso(@Param("id") String idmat);
 
-    @Query(value = "select nomcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
+    @Query(value = "select codcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getCursoPaquete(@Param("id") String idpaq);
+
+    @Query(value = "select * from v_reportventa", nativeQuery = true)
+    public List<Map<String, Object>> getVentareport();
+
+    @Query(value = "select * from v_reportdetventa where fecmat between :feci and :fecf and idusu=:usu", nativeQuery = true)
+    public List<Map<String, Object>> getDetalleventareport(@Param("feci") String fecdes, @Param("fecf") String fechas, @Param("usu") String usu);
 
 }
