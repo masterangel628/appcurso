@@ -43,8 +43,16 @@ public class DistribuirclienteController {
             validacion.put("esta", "Seleccione un estado");
         }
         if (validacion.isEmpty()) {
-            prospectointer.guardarasesorpros(esta, cant, usu);
-            validacion.put("resp", "si");
+
+            String val = prospectointer.guardarasesorpros(esta, cant, usu).get(0).get("resp").toString();
+            if (val.equalsIgnoreCase("si")) {
+                validacion.put("resp", "si");
+                validacion.put("msj", "si");
+            } else {
+                validacion.put("resp", "si");
+                 validacion.put("msj", val);
+            }
+
         } else {
             validacion.put("resp", "no");
         }
@@ -73,6 +81,7 @@ public class DistribuirclienteController {
     public List getestado() {
         return prospectointer.getEstado();
     }
+
     @GetMapping("distribuircliente/mcliente")
     @ResponseBody
     public List getclienteas(@RequestParam(name = "usu") String usu) {

@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="description" content="Sistema de Gestión Cursos - ISIPP">
-	<meta name="author" content="Miguel Ángel Toledo Cordova">
+        <meta name="author" content="Miguel Ángel Toledo Cordova">
         <title>Distribuir Clientes</title>
         <link href="public/dist/img/icono.png" rel="icon">
         <%@include file="estilocss.jsp" %>
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
-                                   
+
                                 </ol>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                     msjesta: "",
                     idusu: "",
                     cenlod: false,
-                    txtusu:"",
+                    txtusu: "",
                 },
                 mounted: function () {
                     this.getusuario();
@@ -218,7 +218,7 @@
                             });
                         });
                     },
-                     config: function () {
+                    config: function () {
                         $("#tabdatos").DataTable().destroy();
                         this.tabla();
                     },
@@ -256,7 +256,7 @@
                     },
                     seleccionar: function (usu) {
                         this.idusu = usu.id;
-                        this.txtusu=usu.usuario;
+                        this.txtusu = usu.usuario;
                     },
                     limpiar: function () {
                         this.txtcant = "";
@@ -272,15 +272,21 @@
                         data.append('cant', this.txtcant);
                         axios.post('distribuircliente/distribuir', data).then(response => {
                             if (response.data.resp == 'si') {
-                                this.cenlod = false;
-                                $('#cboesta').removeClass('form-control is-invalid').addClass('form-control is-valid');
-                                $('#txtcant').removeClass('form-control is-invalid').addClass('form-control is-valid');
-                                this.getinfocliente();
-                                this.getestado();
-                                this.limpiar();
-                                this.getusuario();
-                                $('#mdistribuir').modal('toggle');
-                                toastr.succeess("Los clientes se asignaron correctamente");
+                                if (response.data.msj == 'si') {
+                                    $('#cboesta').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    $('#txtcant').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                    this.getinfocliente();
+                                    this.getestado();
+                                    this.limpiar();
+                                    this.getusuario();
+                                    $('#mdistribuir').modal('toggle');
+                                    toastr.success("Los clientes se asignaron correctamente");
+                                    this.cenlod = false;
+                                } else {
+                                    toastr.warning(response.data.msj);
+                                    this.cenlod = false;
+                                }
+                                
                             } else {
                                 this.cenlod = false;
                                 if (response.data.cant != undefined) {

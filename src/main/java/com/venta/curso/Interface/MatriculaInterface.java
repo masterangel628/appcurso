@@ -25,8 +25,7 @@ public interface MatriculaInterface {
 
     public String getMontofec(String fecdes, String fechas);
 
-    public List<Map<String, Object>> getVentareport();
+    public List<Map<String, Object>> getVentareport(String fecdes, String fechas);
 
-    public List<Map<String, Object>> getDetalleventareport(String fecdes, String fechas,String usu);
 
 }

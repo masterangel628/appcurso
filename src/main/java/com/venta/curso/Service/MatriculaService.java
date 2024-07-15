@@ -1,4 +1,3 @@
-
 package com.venta.curso.Service;
 
 import com.venta.curso.Interface.MatriculaInterface;
@@ -14,9 +13,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class MatriculaService implements MatriculaInterface{
+public class MatriculaService implements MatriculaInterface {
 
     private final MatriculaRepository matricularepo;
+
     @Override
     public List<Map<String, Object>> getMatricula() {
         return matricularepo.getMatricula();
@@ -24,29 +24,29 @@ public class MatriculaService implements MatriculaInterface{
 
     @Override
     public List<Map<String, Object>> getPrematricula() {
-        return  matricularepo.getPrematricula();
+        return matricularepo.getPrematricula();
     }
 
     @Override
     public void verificar(String idmat) {
-        matricularepo.verificar(idmat); 
+        matricularepo.verificar(idmat);
     }
 
     @Override
-    public List<Map<String, Object>> getMatriculareport(String fecdes,String fechas) {
+    public List<Map<String, Object>> getMatriculareport(String fecdes, String fechas) {
         return matricularepo.getMatriculareport(fecdes, fechas);
     }
 
     @Override
-    public List<Map<String, Object>> getDetallematreport(String idmat,String esta) {
-        return matricularepo.getDetallematreport(idmat,esta);
+    public List<Map<String, Object>> getDetallematreport(String idmat, String esta) {
+        return matricularepo.getDetallematreport(idmat, esta);
     }
-    
+
     @Override
     public List<Map<String, Object>> getPaqueteoCurso(String idmat) {
         return matricularepo.getPaqueteoCurso(idmat);
     }
-    
+
     @Override
     public List<Map<String, Object>> getCursoPaquete(String idpaq) {
         return matricularepo.getCursoPaquete(idpaq);
@@ -58,14 +58,7 @@ public class MatriculaService implements MatriculaInterface{
     }
 
     @Override
-    public List<Map<String, Object>> getVentareport() {
-        return matricularepo.getVentareport();
+    public List<Map<String, Object>> getVentareport(String fecdes, String fechas) {
+        return matricularepo.getVentareport(fecdes, fechas);
     }
-
-    @Override
-    public List<Map<String, Object>> getDetalleventareport(String fecdes, String fechas, String usu) {
-        return matricularepo.getDetalleventareport(fecdes, fechas, usu);
-    }
-    
-    
 }

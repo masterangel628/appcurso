@@ -29,7 +29,7 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Modifying
     @Transactional
     @Query(value = "call p_prospecto(:esta,:cant,:usu)", nativeQuery = true)
-    public void guardarasesorpros(@Param("esta") String esta, @Param("cant") String cant, @Param("usu") String usu);
+    public  List<Map<String, Object>> guardarasesorpros(@Param("esta") String esta, @Param("cant") String cant, @Param("usu") String usu);
 
     @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'", nativeQuery = true)
     public List<Map<String, Object>> getProspectoasesor(@Param("usu") String usu);

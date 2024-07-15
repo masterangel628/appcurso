@@ -49,8 +49,8 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public void guardarasesorpros(String esta, String cant, String usu) {
-        prospectorepo.guardarasesorpros(esta, cant, usu);
+    public  List<Map<String, Object>> guardarasesorpros(String esta, String cant, String usu) {
+        return prospectorepo.guardarasesorpros(esta, cant, usu);
     }
 
     @Override

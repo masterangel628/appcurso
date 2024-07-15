@@ -22,7 +22,7 @@ public interface ProspectoInterface {
 
     public List<Map<String, Object>> getusers();
 
-    public void guardarasesorpros(String esta, String cant, String usu);
+    public  List<Map<String, Object>> guardarasesorpros(String esta, String cant, String usu);
 
     public List<Map<String, Object>> getProspectoasesor(String usu);
 
