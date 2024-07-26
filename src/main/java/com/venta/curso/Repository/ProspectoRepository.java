@@ -31,6 +31,11 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Query(value = "call p_prospecto(:esta,:cant,:usu)", nativeQuery = true)
     public  List<Map<String, Object>> guardarasesorpros(@Param("esta") String esta, @Param("cant") String cant, @Param("usu") String usu);
 
+    @Modifying
+    @Transactional
+    @Query(value = "update prospectos set descpros=:desc where idprospecto=:idpro", nativeQuery = true)
+    public void actualizardesc(@Param("desc") String desc,@Param("idpro") String idpro);
+    
     @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'", nativeQuery = true)
     public List<Map<String, Object>> getProspectoasesor(@Param("usu") String usu);
 
@@ -39,6 +44,9 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
 
     @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'  and estaverdetpros='VERIFICADO'", nativeQuery = true)
     public List<Map<String, Object>> getProspectoasesorverificado(@Param("usu") String usu);
+    
+    @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros,estaverdetpros,descpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'", nativeQuery = true)
+    public List<Map<String, Object>> getProspectoasesorall(@Param("usu") String usu);
 
     @Query(value = "select count(*) from prospectos where estatimpros='CALIENTE' and estaaspros='NOASIGNADO'", nativeQuery = true)
     public int contcliescalnoas();
@@ -81,8 +89,8 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "call p_prematricula(:cli,:ses,:tip,:detpro,:ban,:vau)", nativeQuery = true)
-    public void prematricula(@Param("cli") String cli, @Param("ses") String ses, @Param("tip") String tip, @Param("detpro") String detpro, @Param("ban") String ban, @Param("vau") String vau);
+    @Query(value = "call p_prematricula(:cli,:ses,:tip,:detpro,:ban)", nativeQuery = true)
+    public List<Map<String, Object>> prematricula(@Param("cli") String cli, @Param("ses") String ses, @Param("tip") String tip, @Param("detpro") String detpro, @Param("ban") String ban);
 
     @Query(value = "select  precpaq, nomcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getPaquetecurso(@Param("id") String idpaq);

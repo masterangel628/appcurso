@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -132,7 +132,7 @@
                                             "</select>" +
                                             " registros por página",
                                     "zeroRecords": "No se encontró nada, lo siento",
-                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                                     "infoEmpty": "No hay registros disponibles",
                                     "infoFiltered": "(Filtrado de _MAX_ registros totales)",
                                     "search": "Buscar:",

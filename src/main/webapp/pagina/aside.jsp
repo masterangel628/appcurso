@@ -226,6 +226,14 @@
                                     </a>
                                 </li>
                             </sec:authorize>
+                            <sec:authorize access="hasAuthority('Reporte Venta')">
+                                <li class="nav-item">
+                                    <a href="<%= request.getContextPath()%>/reporteventa" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Venta</p>
+                                    </a>
+                                </li>
+                            </sec:authorize>
                         </ul>
                     </li>
                 </sec:authorize>

@@ -46,5 +46,7 @@ public interface UserInterface {
     
     public UserEntity findByUsername(String username);
     
+    public String getNombreusu(String fkidusu);
+    
     public void Cambiarpassword(String username,String password);
 }

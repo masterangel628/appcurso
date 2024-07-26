@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportmov" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c5016c90-045a-4fef-bfc9-42d50b8fc55e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1"/>
+	<parameter name="usu" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="asesor" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros,estaverdetpros,descpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=$P{usu} and estaaspros='ASIGNADO']]>
+	</queryString>
+	<field name="fecdetpros" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fkidprospecto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="iddetalleprospecto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fechorpros" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="celpros" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nompros" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estatimpros" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estaverdetpros" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descpros" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="62" splitType="Stretch">
+			<staticText>
+				<reportElement x="124" y="21" width="293" height="28" uuid="a18a9186-6f9a-4543-b2b2-1430f9d06187"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="20" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Clientes]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="5" width="300" height="20" uuid="c2ec249e-15f3-4244-8653-7bfde941b3b7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{asesor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="392" y="5" width="149" height="20" uuid="0ff37c68-ade6-4e54-bc50-f5e3a3619210"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="200" height="30" uuid="a03de720-b730-4b94-a5c0-cffc8d804709"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="200" y="0" width="150" height="30" uuid="340cf5d1-948d-411a-89ae-54fb05e0ca24"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="350" y="0" width="205" height="30" uuid="f5e31ab7-68f0-4c2c-84ae-4de6741a93a5"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="200" height="30" uuid="0cd7ce57-5917-461e-8bd6-debf39f9cb9a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="150" height="30" uuid="1e98dc17-6581-42e2-8a43-0297afd698ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Celular]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="205" height="30" uuid="0397a692-0980-4ffc-a958-9c58bf9a4367"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="350" y="0" width="205" height="20" uuid="8ebcaf58-1a5b-4ce7-98ee-96ca4f9b3a2a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="200" y="0" width="150" height="20" uuid="1a1776ad-1894-4bbf-a323-4029990c7f28"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="200" height="20" uuid="f0c5c209-5735-47e9-a6c2-ce5ad4fe8c61"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="200" height="20" uuid="c1ec3b14-3be7-4a69-a73d-276e6d65f732"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nompros}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="150" height="20" uuid="66d68617-155e-465c-8fdc-34e3a7331413"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{celpros}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="205" height="20" uuid="1f8cd2f8-4935-46a9-b86d-db9d4f0b65e2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descpros}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="213" y="19" width="80" height="20" uuid="2958b66f-f898-44c1-8b2c-d87a583620c5"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="293" y="19" width="40" height="20" uuid="6f0b4ed2-645e-486d-8c3e-a03aef439e01"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

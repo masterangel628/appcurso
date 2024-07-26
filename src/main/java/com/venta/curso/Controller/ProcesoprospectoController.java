@@ -4,15 +4,29 @@ import com.venta.curso.Entity.UserEntity;
 import com.venta.curso.Interface.ProspectoInterface;
 import com.venta.curso.Interface.SessionInterface;
 import com.venta.curso.Interface.UserInterface;
+import com.venta.curso.Interface.VaucherInterface;
 import com.venta.curso.Validation.Validation;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +46,11 @@ public class ProcesoprospectoController {
     private final UserInterface userInterface;
     private final SessionInterface sesInterface;
     private final ServletContext servletContext;
+
+    private final VaucherInterface vauInterface;
+
+    @Autowired
+    private DataSource dataSource;
 
     Validation val = new Validation();
 
@@ -57,31 +76,31 @@ public class ProcesoprospectoController {
     @ResponseBody
     public List Prospectonovmostrar() {
         UserEntity user = userInterface.getinfouser();
-        return prospectointer.getProspectoasesornoverificado(String.valueOf(user.getId()));
+        return prospectointer.getProspectoasesorall(String.valueOf(user.getId()));
     }
-    
-     @GetMapping("procesoprospecto/mostrarver")
+
+    @GetMapping("procesoprospecto/mostrarver")
     @ResponseBody
     public List Prospectovermostrar() {
         UserEntity user = userInterface.getinfouser();
         return prospectointer.getProspectoasesorverificado(String.valueOf(user.getId()));
     }
-    
+
     @PostMapping("procesoprospecto/actualizarestado")
     @ResponseBody
     public void Prospectomostrar(@RequestParam("esta") String esta, @RequestParam("idpro") String idpro, @RequestParam("iddetpro") String iddetpro) {
         prospectointer.Actualizarpveri(iddetpro);
-        int dias=0;
-        if(esta.equalsIgnoreCase("CALIENTE")){
-            dias=0;
+        int dias = 0;
+        if (esta.equalsIgnoreCase("CALIENTE")) {
+            dias = 0;
         }
-        if(esta.equalsIgnoreCase("TIBIO")){
-            dias=-4;
+        if (esta.equalsIgnoreCase("TIBIO")) {
+            dias = -4;
         }
-        if(esta.equalsIgnoreCase("FRIO")){
-            dias=-9;
+        if (esta.equalsIgnoreCase("FRIO")) {
+            dias = -9;
         }
-        prospectointer.cambiarestatiempo(idpro, esta,dias);
+        prospectointer.cambiarestatiempo(idpro, esta, dias);
     }
 
     @PostMapping("procesoprospecto/actualizar")
@@ -96,10 +115,40 @@ public class ProcesoprospectoController {
         return prospectointer.getCurso();
     }
 
+    @PostMapping("procesoprospecto/actualizardesc")
+    @ResponseBody
+    public void actualizardesc(@RequestParam("des") String des, @RequestParam("idpro") String idpro) {
+        if (des.trim().length() == 0) {
+            prospectointer.actualizardesc("", idpro);
+        } else {
+            prospectointer.actualizardesc(des, idpro);
+        }
+    }
+
     @GetMapping("procesoprospecto/mpaquete")
     @ResponseBody
     public List getPaquete() {
         return prospectointer.getPaquete();
+    }
+
+    @GetMapping("procesoprospecto/pdf")
+    @ResponseBody
+    public void generateReport(HttpServletResponse response) throws JRException, IOException, SQLException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=reportmov.pdf");
+        UserEntity usu = userInterface.getinfouser();
+        ClassPathResource reportResource = new ClassPathResource("reports/reportmov.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(reportResource.getInputStream());
+        String sub = reportResource.getFile().getParentFile().getAbsolutePath() + "/";
+        Connection connection = dataSource.getConnection();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("usu", usu.getId());
+        parameters.put("asesor", "Asesor: "+userInterface.getNombreusu(""+usu.getId())); 
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+        try (OutputStream out = response.getOutputStream()) {
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+        }
     }
 
     @PostMapping("procesoprospecto/guardar")
@@ -135,12 +184,18 @@ public class ProcesoprospectoController {
     @PostMapping("procesoprospecto/finalizar")
     @ResponseBody
     public Map prematricula(@RequestParam("cli") String cli, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
-             @RequestParam(name = "vau") MultipartFile file, @RequestParam(name = "ban") String ban) {
+            @RequestParam(name = "vau") MultipartFile[] files, @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
 
-        String ext = file.getOriginalFilename().toLowerCase();
-        if (!ext.endsWith("png") && !ext.endsWith(".jpg") && !ext.endsWith(".jpeg")) {
-            validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
+        if (files.length > 0) {
+            for (MultipartFile file : files) {
+                String ext = file.getOriginalFilename().toLowerCase();
+                if (!ext.endsWith("png") && !ext.endsWith(".jpg") && !ext.endsWith(".jpeg")) {
+                    validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
+                }
+            }
+        } else {
+            validacion.put("vau", "Seleccione una imagen");
         }
 
         if (ban.equalsIgnoreCase("0")) {
@@ -154,17 +209,22 @@ public class ProcesoprospectoController {
         }
         if (validacion.isEmpty()) {
             try {
-                String rootDirectory = servletContext.getRealPath("/");
-                File uploadDir = new File(rootDirectory + "uploads");
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                String filePath = uploadDir.getAbsolutePath() + File.separator + uniqueFilename;
-                file.transferTo(new File(filePath));
                 UserEntity usu = userInterface.getinfouser();
                 int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
-                prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro,ban,uniqueFilename);
+                String val = prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro, ban).get(0).get("resp").toString();
+
+                for (MultipartFile file : files) {
+                    String rootDirectory = servletContext.getRealPath("/");
+                    File uploadDir = new File(rootDirectory + "uploads");
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+                    String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                    String filePath = uploadDir.getAbsolutePath() + File.separator + uniqueFilename;
+                    file.transferTo(new File(filePath));
+                    vauInterface.save(uniqueFilename, val);
+                }
+
                 validacion.put("resp", "si");
             } catch (IOException e) {
             }

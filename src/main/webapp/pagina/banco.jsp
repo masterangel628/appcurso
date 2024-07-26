@@ -6,7 +6,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,7 @@
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <h1>Gestión de Bancos</h1>
+                                  <p>Fecha: <%= new java.util.Date() %></p>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
@@ -197,7 +198,7 @@
                                             "</select>" +
                                             " registros por página",
                                     "zeroRecords": "No se encontró nada, lo siento",
-                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                                     "infoEmpty": "No hay registros disponibles",
                                     "infoFiltered": "(Filtrado de _MAX_ registros totales)",
                                     "search": "Buscar:",

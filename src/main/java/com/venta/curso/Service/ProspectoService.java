@@ -156,8 +156,8 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public void prematricula(String cli, String ses, String tip, String detpro, String ban, String vau) {
-        prospectorepo.prematricula(cli, ses, tip, detpro,ban,vau);
+    public List<Map<String, Object>> prematricula(String cli, String ses, String tip, String detpro, String ban) {
+        return prospectorepo.prematricula(cli, ses, tip, detpro,ban);
     }
 
     @Override
@@ -168,5 +168,15 @@ public class ProspectoService implements ProspectoInterface {
     @Override
     public void Actualizarpnoveri(String iddetpros) {
         prospectorepo.Actualizarpnoveri(iddetpros);
+    }
+
+    @Override
+    public List<Map<String, Object>> getProspectoasesorall(String usu) {
+        return prospectorepo.getProspectoasesorall(usu);
+    }
+
+    @Override
+    public void actualizardesc(String desc, String idpro) {
+        prospectorepo.actualizardesc(desc, idpro);
     }
 }

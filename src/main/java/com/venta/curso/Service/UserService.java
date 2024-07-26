@@ -124,4 +124,9 @@ public class UserService implements UserInterface {
         user.setPassword(passwordEncoder.encode(password)); 
         userRepository.save(user);
     }
+
+    @Override
+    public String getNombreusu(String fkidusu) {
+        return userRepository.getNombreusu(fkidusu);
+    }
 }

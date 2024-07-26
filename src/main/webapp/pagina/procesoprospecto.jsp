@@ -6,16 +6,21 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="description" content="Sistema de Gestión Cursos - ISIPP">
-	<meta name="author" content="Miguel Ángel Toledo Cordova">
+        <meta name="author" content="Miguel Ángel Toledo Cordova">
         <title>Proceso Prospecto</title>
         <link href="public/dist/img/icono.png" rel="icon">
         <%@include file="estilocss.jsp" %>
+        <style>
+            .selected{
+                background-color: blue;
+            }
+        </style>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper" id="app">
@@ -51,29 +56,36 @@
                                             Cartera de clientes
                                         </h3>
                                         <div class="card-tools">
+                                            <a class="btn btn-danger btn-sm"  href="<%= request.getContextPath()%>/procesoprospecto/pdf" target="_blank" title="Exportar a PDF">Exportar</a> 
+                                            <button @click="veriseleccion()" class="btn btn-danger btn-sm" title="Inscribir al cliente"><i class="fas fa-save"></i></button>
                                             <button class="btn btn-danger btn-sm" @click="getclientever()" title="Ver clientes verificados" data-toggle="modal" data-target="#mcverificado">Ver</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover"  id="tabdatos">
+                                            <table class="table table-bordered"  id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
                                                         <th>Nombre</th>
                                                         <th>Celular</th>
-                                                        <sec:authorize access="hasAuthority('ROLE_Administrador')">
-                                                        <th>Estado de Tiempo</th>
-                                                        </sec:authorize>
+                                                            <sec:authorize access="hasAuthority('ROLE_Administrador')">
+                                                            <th>Estado de Tiempo</th>
+                                                            </sec:authorize>
                                                         <th>Acción</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="cli in cliente">
+                                                    <tr v-for="cli ,key in cliente" @click="selectrow(key)" :class="{selected: selectindex==key}">
                                                         <td >{{cli.nompros}}</td>
-                                                        <td width="15%">{{cli.celpros}}</td>
+                                                        <td width="15%">
+                                                            <span class="badge badge-warning" v-if="cli.estatimpros=='CALIENTE' && cli.estaverdetpros=='VERIFICADO'">{{cli.celpros}}</span>
+                                                            <span class="badge badge-success" v-if="cli.estatimpros=='TIBIO' && cli.estaverdetpros=='VERIFICADO'">{{cli.celpros}}</span>
+                                                            <span class="badge badge-primary" v-if="cli.estatimpros=='FRIO' && cli.estaverdetpros=='VERIFICADO'">{{cli.celpros}}</span>
+                                                            <span v-if="cli.estaverdetpros=='NOVERIFICADO'">{{cli.celpros}}</span>
+                                                        </td>
                                                         <sec:authorize access="hasAuthority('ROLE_Administrador')">
-                                                        <td width="25%">{{cli.estatimpros}}</td>
-                                                         </sec:authorize>
+                                                            <td width="25%">{{cli.estatimpros}}</td>
+                                                        </sec:authorize>
                                                         <td width="25%">
                                                             <button class="btn btn-warning btn-sm"  @click="cambiarcal(cli)" title="Cambiar a estado Caliente">
                                                                 Caliente
@@ -84,8 +96,8 @@
                                                             <button class="btn btn-primary btn-sm"  @click="cambiarfri(cli)" title="Cambiar a estado Frio">
                                                                 Frio
                                                             </button>
-                                                            <button data-toggle="modal" data-target="#mprematricula" @click="seleccionar(cli)" class="btn btn-danger btn-sm" title="Inscribir al cliente">
-                                                                <i class="far fa-save"></i>
+                                                            <button @click="abrirmodal(cli)" class="btn btn-info btn-sm" title="Agregar descripción">
+                                                                <i class="fas fa-plus"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -245,7 +257,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Váucher</label>
-                                                    <input type="file" id="txtvau" @change="getArchivo" accept=".png,.jpg,.jpeg" class="form-control" autocomplete="off">
+                                                    <input type="file" id="txtvau" multiple  @change="getArchivos" accept=".png,.jpg,.jpeg" class="form-control" autocomplete="off">
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{msjvau}}</strong>
                                                     </span>
@@ -395,9 +407,9 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Celular</th>
-                                            <sec:authorize access="hasAuthority('ROLE_Administrador')">
-                                                        <th>Estado de Tiempo</th>
-                                                        </sec:authorize>
+                                                <sec:authorize access="hasAuthority('ROLE_Administrador')">
+                                                <th>Estado de Tiempo</th>
+                                                </sec:authorize>
                                             <th>Acción</th>
                                         </tr>
                                     </thead>
@@ -405,9 +417,9 @@
                                         <tr v-for="cli in clientever">
                                             <td >{{cli.nompros}}</td>
                                             <td width="15%">{{cli.celpros}}</td>
-                                             <sec:authorize access="hasAuthority('ROLE_Administrador')">
-                                                        <td width="25%">{{cli.estatimpros}}</td>
-                                                         </sec:authorize>
+                                            <sec:authorize access="hasAuthority('ROLE_Administrador')">
+                                                <td width="25%">{{cli.estatimpros}}</td>
+                                            </sec:authorize>
                                             <td width="10%">
                                                 <button class="btn btn-warning btn-sm" @click="cambiarnover(cli)" title="Cambiar a estado No Verificado">
                                                     Cambiar
@@ -417,6 +429,29 @@
                                     </tbody>
                                 </table>
                             </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="mactualizardesc" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
+                            <h5 class="modal-title" id="staticBackdropLabel">Agregar Descripción</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiardes()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <textarea v-model="txtdesc" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal" @click="limpiarcliente()">Cancelar</button>
+                            <button class="btn btn-info" type="button" @click="actualizardes()">Actualizar</button>
                         </div>
                     </div>
                 </div>
@@ -432,8 +467,8 @@
             let app = new Vue({
                 el: '#app',
                 data: {
-
-                    archivo: null,
+                    txtdesc: "",
+                    archivos: [],
                     banco: [],
                     cboban: 0,
                     vaumat: "",
@@ -484,6 +519,8 @@
                     divmen: false,
                     divconte: false,
                     msj: "",
+                    idpro: "",
+                    selectindex: null,
                 },
                 mounted: function () {
                     this.verificarsesion();
@@ -492,6 +529,39 @@
                     this.getbanco();
                 },
                 methods: {
+                    selectrow: function (index) {
+                        this.selectindex = index;
+                        this.iddetpros = this.cliente[this.selectindex].iddetalleprospecto;
+                    },
+                    veriseleccion: function () {
+                        if (this.iddetpros == "") {
+                            toastr.warning("Seleecione un cliente");
+                        } else {
+                            $('#mprematricula').modal('toggle');
+                            this.getcomanda();
+                        }
+                    },
+                    abrirmodal: function (cli) {
+                        $('#mactualizardesc').modal('toggle');
+                        this.txtdesc = cli.descpros;
+                        this.idpro = cli.fkidprospecto;
+                    },
+                    limpiardes: function () {
+                        this.txtdesc = "";
+                    },
+                    actualizardes: function () {
+                        var data = new FormData();
+                        data.append('des', this.txtdesc);
+                        data.append('idpro', this.idpro);
+                        axios.post('procesoprospecto/actualizardesc', data).then(response => {
+                            $('#mactualizardesc').modal('toggle');
+                            this.getcliente();
+                            this.iddetpros = "";
+                            this.selectindex = null;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
                     actualizartabla: function () {
                         this.getcliente();
                     },
@@ -518,7 +588,7 @@
                                             "</select>" +
                                             " registros por página",
                                     "zeroRecords": "No se encontró nada, lo siento",
-                                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                                     "infoEmpty": "No hay registros disponibles",
                                     "infoFiltered": "(Filtrado de _MAX_ registros totales)",
                                     "search": "Buscar:",
@@ -542,12 +612,8 @@
                             console.log(error);
                         });
                     },
-                    getArchivo(event) {
-                        if (!event.target.files.length) {
-                            this.archivo = null;
-                        } else {
-                            this.archivo = event.target.files[0];
-                        }
+                    getArchivos(event) {
+                        this.archivos = Array.from(event.target.files);
                     },
                     suportprovincia: function (dep) {
                         axios.get('persona/provincia/' + dep).then(response => {
@@ -695,14 +761,16 @@
                         }
                     },
                     finalizar: function () {
-                        if (this.archivo == null) {
+                        if (this.archivos == null) {
                             toastr.warning("Seleccione un archivo");
                         } else {
                             var data = new FormData();
                             data.append('tip', this.cbotipomat);
                             data.append('detpro', this.iddetpros);
                             data.append('cli', $("#txtidcliente").val());
-                            data.append('vau', this.archivo);
+                            this.archivos.forEach(file => {
+                                data.append('vau', file);
+                            });
                             data.append('ban', this.cboban);
                             axios.post('procesoprospecto/finalizar', data).then(response => {
                                 if (response.data.resp == 'si') {
@@ -968,6 +1036,7 @@
                         $("#txtcliente").val("");
                         $('#listacliente').hide();
                         this.cbotipomat = 0;
+                        this.selectindex = null;
 
                         this.msjcliente = '';
                         this.msjtipomat = '';
@@ -979,10 +1048,6 @@
                         $('#cboban').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtvau').removeClass('form-control is-valid is-invalid').addClass('form-control');
 
-                    },
-                    seleccionar: function (cli) {
-                        this.iddetpros = cli.iddetalleprospecto;
-                        this.getcomanda();
                     },
                     getcliente: function () {
                         axios.get('procesoprospecto/mostrar').then(response => {
@@ -1001,34 +1066,85 @@
                         });
                     },
                     cambiarcal: function (cli) {
-                        var data = new FormData();
-                        data.append('esta', "CALIENTE");
-                        data.append('idpro', cli.fkidprospecto);
-                        data.append('iddetpro', cli.iddetalleprospecto);
-                        axios.post('procesoprospecto/actualizarestado', data).then(response => {
-                            this.getcliente();
-                        }).catch(error => {
-                        })
+                        Swal.fire({
+                            title: "Mensaje del Sistema",
+                            text: "¿Desea cambiar a estado Caliente?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Si, Cambiar"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                var data = new FormData();
+                                data.append('esta', "CALIENTE");
+                                data.append('idpro', cli.fkidprospecto);
+                                data.append('iddetpro', cli.iddetalleprospecto);
+                                axios.post('procesoprospecto/actualizarestado', data).then(response => {
+                                    this.getcliente();
+                                    this.iddetpros = "";
+                                    this.selectindex = null;
+                                }).catch(error => {
+                                })
+                            }else {
+                                this.iddetpros = "";
+                                this.selectindex = null;
+                            }
+                        });
                     },
                     cambiarti: function (cli) {
-                        var data = new FormData();
-                        data.append('esta', "TIBIO");
-                        data.append('idpro', cli.fkidprospecto);
-                        data.append('iddetpro', cli.iddetalleprospecto);
-                        axios.post('procesoprospecto/actualizarestado', data).then(response => {
-                            this.getcliente();
-                        }).catch(error => {
-                        })
+                        Swal.fire({
+                            title: "Mensaje del Sistema",
+                            text: "¿Desea cambiar a estado Tibio?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Si, Cambiar"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                var data = new FormData();
+                                data.append('esta', "TIBIO");
+                                data.append('idpro', cli.fkidprospecto);
+                                data.append('iddetpro', cli.iddetalleprospecto);
+                                axios.post('procesoprospecto/actualizarestado', data).then(response => {
+                                    this.getcliente();
+                                    this.iddetpros = "";
+                                    this.selectindex = null;
+                                }).catch(error => {
+                                })
+                            }else {
+                                this.iddetpros = "";
+                                this.selectindex = null;
+                            }
+                        });
                     },
                     cambiarfri: function (cli) {
-                        var data = new FormData();
-                        data.append('esta', "FRIO");
-                        data.append('idpro', cli.fkidprospecto);
-                        data.append('iddetpro', cli.iddetalleprospecto);
-                        axios.post('procesoprospecto/actualizarestado', data).then(response => {
-                            this.getcliente();
-                        }).catch(error => {
-                        })
+                        Swal.fire({
+                            title: "Mensaje del Sistema",
+                            text: "¿Desea cambiar a estado Frio?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Si, Cambiar"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                var data = new FormData();
+                                data.append('esta', "FRIO");
+                                data.append('idpro', cli.fkidprospecto);
+                                data.append('iddetpro', cli.iddetalleprospecto);
+                                axios.post('procesoprospecto/actualizarestado', data).then(response => {
+                                    this.getcliente();
+                                    this.iddetpros = "";
+                                    this.selectindex = null;
+                                }).catch(error => {
+                                })
+                            } else {
+                                this.iddetpros = "";
+                                this.selectindex = null;
+                            }
+                        });
                     },
                 },
             });

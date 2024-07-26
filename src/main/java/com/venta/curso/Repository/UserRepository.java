@@ -74,6 +74,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "select concat(apeper,' ',nomper) nom from users,personas where users.fkidpersona=personas.idpersona and correoper=:email", nativeQuery = true)
     public String getNombre(@Param("email") String email);
     
+     @Query(value = "select concat(apeper,' ',nomper) nom from users,personas where users.fkidpersona=personas.idpersona and id=:fkidusu", nativeQuery = true)
+    public String getNombreusu(@Param("fkidusu") String fkidusu);
+    
     @Query(value = "select fkidpersona from users where username=:usu", nativeQuery = true)
     public String getidpersona(@Param("usu") String usu);
     

@@ -12,8 +12,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="description" content="Sistema de Gestión Cursos - ISIPP">
-	<meta name="author" content="Miguel Ángel Toledo Cordova">
-        <title>Ver Matricula</title>
+        <meta name="author" content="Miguel Ángel Toledo Cordova">
+        <title>Reporte de ventas</title>
         <link href="public/dist/img/icono.png" rel="icon">
         <%@include file="estilocss.jsp" %>
     </head>
@@ -26,7 +26,7 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Gestión de Matricula</h1>
+                                <h1>Reporte de ventas</h1>
                             </div>
                         </div>
                     </div>
@@ -39,11 +39,11 @@
                                 <div class="card">
                                     <div class="card-header" style="background-color: #ff1a1a;color: #ffffff;" >
                                         <h3 class="card-title">
-                                            Lista de matrícula verificada
+                                            Lista de ventas
                                         </h3>
                                         <div class="card-tools">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button class="btn btn-danger btn-sm" title="Generar reporte de matriculados" data-toggle="modal" data-target="#mcsv"><i class="fas fa-file-csv"></i></button>
+                                                <button class="btn btn-danger btn-sm" title="Generar reporte de venta"  data-toggle="modal" data-target="#mexcel"><i class="fas fa-file-excel"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -52,25 +52,28 @@
                                             <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
-                                                        <th width="15%">Número</th>
-                                                        <th>Cliente</th>
-                                                        <th width="10%">Monto</th>
-                                                        <th width="10%">Grupo</th>
+                                                        <th width="15%">Fecha</th>
                                                         <th>Asesor</th>
-                                                        <th width="10%">Fecha</th>
-                                                        <th width="5%">Acción</th>
+                                                        <th>Cliente</th>
+                                                        <th>Cursos</th>
+                                                        <th width="10%">Monto</th>
+                                                        <th width="10%">Estado</th>
+                                                        <th width="10%">Ver</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="mat in matricula">
-                                                        <td>{{mat.nummat}}</td>
-                                                        <td>{{mat.dniper}} - {{mat.apeper}} {{mat.nomper}}</td>
-                                                        <td>{{mat.montomat}}</td> 
-                                                        <td>{{mat.grupomat}}</td>
-                                                         <td>{{mat.nomusu}}</td>
-                                                        <td>{{mat.fecmat}}</td>
+                                                    <tr v-for="ven in venta">
+                                                        <td>{{ven.fecmat}}</td>
+                                                        <td>{{ven.nomusu}}</td>
+                                                        <td>{{ven.nomcli}}</td> 
+                                                        <td>{{ven.curpa}}</td>
+                                                        <td>{{ven.montomat}}</td>
                                                         <td>
-                                                            <button title="Ver Váucher" data-toggle="modal" @click="getvaucher(mat)" data-target="#mvervaucher" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
+                                                            <span class="badge badge-success" v-if="ven.estado=='Vigente'">{{ven.estado}}</span>
+                                                            <span class="badge badge-warning" v-if="ven.estado=='Anulado'">{{ven.estado}}</span>
+                                                        </td>
+                                                        <td>
+                                                            <button v-if="ven.estado=='Anulado'" class="btn btn-primary btn-sm" title="Ver motivo de anulación" data-toggle="modal" data-target="#mdesc" @click="seleccionar(ven)"><i class="fa fa-eye"></i></button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -84,13 +87,11 @@
                 </section>
             </div>
 
-            
-            
-            <div class="modal fade" id="mcsv" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="mexcel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
-                            <h5 class="modal-title" id="staticBackdropLabel">Reporte de matriculados</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Reporte de venta</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiar()">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -108,39 +109,32 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal" @click="limpiar()">Cancelar</button>
-                            <button class="btn btn-info" @click="reportcsv()">Generar</button>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal"  @click="limpiar()">Cancelar</button>
+                            <button class="btn btn-info" @click="reportexcel()">Generar</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal fade" id="mvervaucher" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
+            <div class="modal fade" id="mdesc" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
-                            <h5 class="modal-title" id="staticBackdropLabel">Ver Váucher</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Ver Descripción</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Cliente</label>
-                                <input type="text" v-model="txtcliente" class="form-control" disabled="true">
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6" v-for="vau in vaucher">
-                                    <div class="card mb-2 bg-gradient-dark">
-                                        <img class="card-img-top" v-bind:src="'matricula/images/'+vau.nomvau" alt="Dist Photo 1">
-                                    </div>
-                                </div>
+                                <label>Descripción</label>
+                                <textarea v-model="txtdesc" class="form-control" readonly="true"></textarea>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
             <%@include file="footer.jsp" %>
         </div>
         <%@include file="scrip.jsp" %>
@@ -148,16 +142,13 @@
             let app = new Vue({
                 el: '#app',
                 data: {
-                    matricula: [],
-                    idmat: "",
-                    txtcliente: "",
-                    vaumat: "",
+                    venta: [],
                     txtfechas: "",
                     txtfecdes: "",
-                    vaucher: [],
+                    txtdesc: "",
                 },
                 mounted: function () {
-                    this.getmatricula();
+                    this.getventa();
                 },
                 methods: {
                     tabla: function () {
@@ -188,7 +179,10 @@
                             });
                         });
                     },
-                     config: function () {
+                    seleccionar: function (ven) {
+                        this.txtdesc = ven.descmat;
+                    },
+                    config: function () {
                         $("#tabdatos").DataTable().destroy();
                         this.tabla();
                     },
@@ -196,28 +190,20 @@
                         this.txtfechas = "";
                         this.txtfecdes = "";
                     },
-                    reportcsv: function () {
+                    reportexcel: function () {
                         if (this.txtfecdes != "" && this.txtfechas != "") {
-                            window.open('reportematricula/csv?fecdes=' + this.txtfecdes + '&fechas=' + this.txtfechas, ' _blank');
-                            $('#mcsv').modal('toggle');
+                            window.open('reporteventa/excel?fecdes=' + this.txtfecdes + '&fechas=' + this.txtfechas, ' _blank');
+                            $('#mexcel').modal('toggle');
                             this.limpiar();
                         } else {
                             toastr.warning("Seleccione las fechas");
                         }
 
                     },
-                    getmatricula: function () {
-                        axios.get('reportematricula/mmatricula').then(response => {
-                            this.matricula = response.data;
+                    getventa: function () {
+                        axios.get('reporteventa/mventa').then(response => {
+                            this.venta = response.data;
                             this.config();
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-                    },
-                    getvaucher: function (mat) {
-                        this.txtcliente = mat.dniper + " - " + mat.apeper + " " + mat.nomper;
-                        axios.get('reportematricula/mvaucher/' + mat.idmatricula).then(response => {
-                            this.vaucher = response.data;
                         }).catch(function (error) {
                             console.log(error);
                         });

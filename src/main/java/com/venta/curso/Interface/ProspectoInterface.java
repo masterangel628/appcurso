@@ -17,6 +17,8 @@ public interface ProspectoInterface {
     public List<ProspectoEntity> getProspecto();
 
     public String fecactual();
+    
+    public void actualizardesc(String desc,String idpro);
 
     public int existenum(String num);
 
@@ -29,6 +31,8 @@ public interface ProspectoInterface {
     public List<Map<String, Object>> getProspectoasesorverificado(String usu);
     
     public List<Map<String, Object>> getProspectoasesornoverificado(String usu);
+    
+     public List<Map<String, Object>> getProspectoasesorall(String usu);
 
     public int contcliescalnoas();
 
@@ -50,7 +54,7 @@ public interface ProspectoInterface {
 
     public void eliminarcomanda(String ico);
 
-    public void prematricula(String cli, String ses, String tip, String detpro,String ban,String vau);
+    public List<Map<String, Object>> prematricula(String cli, String ses, String tip, String detpro,String ban);
 
     public List<Map<String, Object>> getPaquetecurso(String idpaq);
 

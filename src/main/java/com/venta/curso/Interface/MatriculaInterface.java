@@ -14,6 +14,8 @@ public interface MatriculaInterface {
     public List<Map<String, Object>> getMatricula();
 
     public void verificar(String idmat);
+    
+    public void cancelar(String idmat,String des);
 
     public List<Map<String, Object>> getMatriculareport(String fecdes, String fechas);
 
@@ -26,6 +28,7 @@ public interface MatriculaInterface {
     public String getMontofec(String fecdes, String fechas);
 
     public List<Map<String, Object>> getVentareport(String fecdes, String fechas);
+    public List<Map<String, Object>> getVenta();
 
 
 }

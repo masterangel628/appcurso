@@ -69,6 +69,7 @@ public class ProspectoController {
                     ProspectoEntity pros = new ProspectoEntity();
                     pros.setCelpros(num);
                     pros.setNompros(nom);
+                    pros.setDescpros("");
                     pros.setEstaaspros(EstadoAsEnum.NOASIGNADO);
                     pros.setEstatimpros(EstadoTimEnum.CALIENTE);
                     pros.setFechorpros(LocalDate.parse(fec));

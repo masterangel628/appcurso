@@ -61,4 +61,14 @@ public class MatriculaService implements MatriculaInterface {
     public List<Map<String, Object>> getVentareport(String fecdes, String fechas) {
         return matricularepo.getVentareport(fecdes, fechas);
     }
+
+    @Override
+    public void cancelar(String idmat,String des) {
+        matricularepo.cancelar(idmat,des); 
+    }
+
+    @Override
+    public List<Map<String, Object>> getVenta() {
+        return matricularepo.getVenta();
+    }
 }

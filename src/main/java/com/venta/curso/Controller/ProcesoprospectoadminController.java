@@ -2,6 +2,7 @@ package com.venta.curso.Controller;
 
 import com.venta.curso.Interface.ProspectoInterface;
 import com.venta.curso.Interface.SessionInterface;
+import com.venta.curso.Interface.VaucherInterface;
 import com.venta.curso.Validation.Validation;
 import jakarta.servlet.ServletContext;
 import java.io.File;
@@ -29,6 +30,7 @@ public class ProcesoprospectoadminController {
     private final ProspectoInterface prospectointer;
     private final SessionInterface sesInterface;
     private final ServletContext servletContext;
+    private final VaucherInterface vauInterface;
 
     Validation val = new Validation();
 
@@ -41,6 +43,16 @@ public class ProcesoprospectoadminController {
     @ResponseBody
     public List getusuario() {
         return prospectointer.getusers();
+    }
+    
+    @PostMapping("procesoprospectoadmin/actualizardesc")
+    @ResponseBody
+    public void actualizardesc(@RequestParam("des") String des, @RequestParam("idpro") String idpro) {
+        if (des.trim().length() == 0) {
+            prospectointer.actualizardesc("", idpro);
+        } else {
+            prospectointer.actualizardesc(des, idpro);
+        }
     }
 
     @GetMapping("procesoprospectoadmin/verificasesion")
@@ -58,7 +70,7 @@ public class ProcesoprospectoadminController {
     @GetMapping("procesoprospectoadmin/mostrar")
     @ResponseBody
     public List Prospectomostrar(@RequestParam("usu") String usu) {
-        return prospectointer.getProspectoasesornoverificado(usu);
+        return prospectointer.getProspectoasesorall(usu);
     }
 
     @GetMapping("procesoprospectoadmin/mostrarver")
@@ -134,12 +146,18 @@ public class ProcesoprospectoadminController {
     @PostMapping("procesoprospectoadmin/finalizar")
     @ResponseBody
     public Map prematricula(@RequestParam("usu") String usu, @RequestParam("cli") String cli, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
-            @RequestParam(name = "vau") MultipartFile file, @RequestParam(name = "ban") String ban) {
+            @RequestParam(name = "vau") MultipartFile files[], @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
 
-        String ext = file.getOriginalFilename().toLowerCase();
-        if (!ext.endsWith("png") && !ext.endsWith(".jpg") && !ext.endsWith(".jpeg")) {
-            validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
+        if (files.length > 0) {
+            for (MultipartFile file : files) {
+                String ext = file.getOriginalFilename().toLowerCase();
+                if (!ext.endsWith("png") && !ext.endsWith(".jpg") && !ext.endsWith(".jpeg")) {
+                    validacion.put("vau", "Solo esta permitido imagen con extensión .png, .jpg y jpeg");
+                }
+            }
+        } else {
+            validacion.put("vau", "Seleccione una imagen");
         }
 
         if (ban.equalsIgnoreCase("0")) {
@@ -153,16 +171,21 @@ public class ProcesoprospectoadminController {
         }
         if (validacion.isEmpty()) {
             try {
-                String rootDirectory = servletContext.getRealPath("/");
-                File uploadDir = new File(rootDirectory + "uploads");
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                String filePath = uploadDir.getAbsolutePath() + File.separator + uniqueFilename;
-                file.transferTo(new File(filePath));
                 int idses = sesInterface.getidsession(usu);
-                prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro, ban, uniqueFilename);
+                String val = prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro, ban).get(0).get("resp").toString();
+
+                for (MultipartFile file : files) {
+                    String rootDirectory = servletContext.getRealPath("/");
+                    File uploadDir = new File(rootDirectory + "uploads");
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+                    String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                    String filePath = uploadDir.getAbsolutePath() + File.separator + uniqueFilename;
+                    file.transferTo(new File(filePath));
+                    vauInterface.save(uniqueFilename, val);
+                }
+
                 validacion.put("resp", "si");
             } catch (IOException e) {
             }

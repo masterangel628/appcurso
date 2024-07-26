@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Integer> {
 
-    @Query(value = "select * from v_matricula where estadomat='PREMATRICULA'", nativeQuery = true)
+    @Query(value = "select * from v_matricula where estadomat='PREMATRICULA' and estamat='ACTIVO'", nativeQuery = true)
     public List<Map<String, Object>> getPrematricula();
 
     @Query(value = "select * from v_matricula where estadomat='MATRICULA'", nativeQuery = true)
@@ -27,6 +27,11 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
     @Transactional
     @Query(value = "update matriculas set estadomat='MATRICULA' where idmatricula=:id", nativeQuery = true)
     public void verificar(@Param("id") String idmat);
+    
+    @Modifying
+    @Transactional
+    @Query(value = "update matriculas set estamat='INACTIVO',descmat=:des where idmatricula=:id", nativeQuery = true)
+    public void cancelar(@Param("id") String idmat,@Param("des") String des);
 
     @Query(value = "select * from v_matriculareporte where fecmat between :fecdes and :fechas", nativeQuery = true)
     public List<Map<String, Object>> getMatriculareport(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
@@ -48,5 +53,9 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
 
     @Query(value = "select * from v_reportdetventa where fecmat between :feci and :fecf order by fecmat", nativeQuery = true)
     public List<Map<String, Object>> getVentareport(@Param("feci") String fecdes, @Param("fecf") String fechas);
+    
+    @Query(value = "select * from v_reportdetventa order by fecmat", nativeQuery = true)
+    public List<Map<String, Object>> getVenta();
+    
 
 }

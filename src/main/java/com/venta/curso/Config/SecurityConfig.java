@@ -90,15 +90,24 @@ public class SecurityConfig {
 
                     http.requestMatchers("/matricula").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/mmatricula").hasAuthority("Matricula");
-                    http.requestMatchers("/matricula/mcliente").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/verificar").hasAuthority("Matricula");
                     http.requestMatchers("/matricula/images").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/cancelar").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/cancelarall").hasAuthority("Matricula");
+                    http.requestMatchers("/matricula/mvaucher").hasAuthority("Matricula");
+                    
 
                     http.requestMatchers("/reportematricula").hasAuthority("Reporte Matricula");
                     http.requestMatchers("/reportematricula/mmatricula").hasAuthority("Reporte Matricula");
-                    http.requestMatchers("/reportematricula/excel").hasAuthority("Reporte Matricula");
-                    http.requestMatchers("/reportematricula/pdf").hasAuthority("Reporte Matricula");
+                    http.requestMatchers("/reportematricula/csv").hasAuthority("Reporte Matricula");
                     http.requestMatchers("/reportematricula/images").hasAuthority("Reporte Matricula");
+                    http.requestMatchers("/reportematricula/mvaucher").hasAuthority("Reporte Matricula");
+                    
+                    
+                    http.requestMatchers("/reporteventa").hasAuthority("Reporte Venta");
+                    http.requestMatchers("/reporteventa/mventa").hasAuthority("Reporte Venta");
+                    http.requestMatchers("/reporteventa/excel").hasAuthority("Reporte Venta");
+                    
 
                     http.requestMatchers("/paquete").hasAuthority("Paquete");
                     http.requestMatchers("/paquete/mpaquete").hasAuthority("Paquete");

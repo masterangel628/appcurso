@@ -37,7 +37,7 @@ public class MatriculaEntity {
     @Column(name = "idmatricula", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idmatricula;
-    
+
     @Column(name = "nummat", nullable = false, length = 100, unique = true)
     private String nummat;
 
@@ -48,8 +48,8 @@ public class MatriculaEntity {
     @Column(name = "fecmat", nullable = false)
     private LocalDate fecmat;
 
-    @Column(name = "vaumat", nullable = true, length = 100)
-    private String nompaq;
+    @Column(name = "descmat", nullable = true, columnDefinition = "text")
+    private String descmat;
 
     @Column(name = "usernamemat", nullable = false, length = 20)
     private String usernamemat;
@@ -78,4 +78,8 @@ public class MatriculaEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fkidbanco", nullable = true)
     private BancoEntity Banco;
+
+    @Column(name = "estamat")
+    @Enumerated(EnumType.STRING)
+    private EstadoEnum estamat;
 }

@@ -49,4 +49,7 @@ public class ProspectoEntity {
     @Column(name = "estaaspros", nullable = false)
     @Enumerated(EnumType.STRING)
     private EstadoAsEnum estaaspros;
+    
+     @Column(name = "descpros", nullable = true,columnDefinition = "text")
+    private String descpros;
 }

@@ -36,8 +36,7 @@ public class PersonaController {
             resp.put("msj", "bd");
         } else {
             String url = "https://api.factiliza.com/pe/v1/dni/info/" + dni;
-//            String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MjEiLCJuYW1lIjoiTWlndWVsIMOBbmdlbCBUb2xlZG8gQ29yZG92YSAiLCJlbWFpbCI6Imdyb25lX21hc19hQGhvdG1haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiY29uc3VsdG9yIn0.JNwVMeRftn0KZsPCFa703t4PNOavvK9xyAYkLiRfFBY"; // Reemplaza con tu token real
-            String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NjIiLCJuYW1lIjoibWFzdGVyYW5nZWwiLCJlbWFpbCI6Im1hMTl0Yzk3QGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImNvbnN1bHRvciJ9.vSnyP-PcStIwBNjRwLXiqxYJpNFyYiGCvrkvnd9eDao";
+            String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTAiLCJuYW1lIjoiSk9TRSBKQU1BTkNBIiwiZW1haWwiOiJjYXBhY2l0YXBlcnUyMDIyQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImNvbnN1bHRvciJ9.0eYyUNdVknzp8JS7ibt7eiF738F00jz3TUYdbkErVwg";
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(token);
             HttpEntity<String> entity = new HttpEntity<>(headers);
