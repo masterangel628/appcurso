@@ -1,6 +1,5 @@
 package com.venta.curso.Interface;
 
-import com.venta.curso.Entity.ClienteEntity;
 import java.util.List;
 import java.util.Map;
 
@@ -10,11 +9,15 @@ import java.util.Map;
  */
 public interface ClienteInterface {
 
-    public List<ClienteEntity> getCliente();
+    public List<Map<String, Object>> getCliente();
 
-    public int existecliente(String idper);
+    public int existeclienteDNI(String idper);
 
-    public void guardarCliente(String idper);
+    public int existeclienteRUC(String idemp);
 
-    public List<Map<String, Object>> getclientebuscar(String bus);
+    public void guardarClientedni(String idper);
+
+    public void guardarClienteruc(String idemp);
+
+    public List<Map<String, Object>> getclientebuscar(String tipo, String bus);
 }

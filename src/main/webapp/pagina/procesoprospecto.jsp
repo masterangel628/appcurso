@@ -19,6 +19,7 @@
         <style>
             .selected{
                 background-color: blue;
+                color:white;
             }
         </style>
     </head>
@@ -214,11 +215,18 @@
                                                 <div class="form-group">
                                                     <label>Cliente</label>
                                                     <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <select v-model="cbotipocli" class="form-control">
+                                                                <option value="DNI">DNI</option>
+                                                                <option value="RUC">RUC</option>
+                                                            </select>
+
+                                                        </div>
                                                         <input type="text" class="form-control" id="txtcliente" @keyup="buscarcliente" autocomplete="off">
                                                         <input type="hidden" id="txtidcliente">
                                                         <div id="listacliente" class="dropdown-menu"></div>
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-primary" data-toggle="modal" data-target="#mcliente" title="Agregar Cliente"><i class="fas fa-plus"></i>
+                                                            <button class="btn btn-primary" @click="mostrarform()" title="Agregar Cliente"><i class="fas fa-plus"></i>
                                                             </button>
                                                         </div>
                                                         <span class="invalid-feedback" role="alert">
@@ -456,6 +464,108 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="modal fade" id="mclienteruc" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
+                            <h5 class="modal-title" id="staticBackdropLabel">Registro de Cliente</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="limpiarruc()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>RUC</label>
+                                        <input type="text" id="txtruc" v-model="txtruc" maxlength="11" @keyup="completarruc()" class="form-control" autocomplete="off">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjruc}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Razón Social</label>
+                                        <input type="text" id="txtraz" v-model="txtraz" class="form-control" autocomplete="off">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjraz}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Correo</label>
+                                        <input type="text" id="txtcoruc" v-model="txtcoruc" class="form-control" autocomplete="off">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjcoruc}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Celular</label>
+                                        <input type="text" id="txtcelruc" v-model="txtcelruc" class="form-control" autocomplete="off">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjcelruc}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Departamento</label>
+                                <select v-model="cbodepruc" id="cbodepruc" class="form-control" @change="getprovinciaruc">
+                                    <option value="0">Seleccione</option>
+                                    <option v-for="dep in departamento" v-bind:value="dep.iddepartamento">{{dep.nom_dep}}</option>
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{msjdepruc}}</strong>
+                                </span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <select v-model="cboprovruc" id="cboprovruc" class="form-control" @change="getdistritoruc">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="prov in provincia" v-bind:value="prov.idprovincia">{{prov.nom_prov}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjprovruc}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Distrito</label>
+                                        <select v-model="cbodistruc" id="cbodistruc" class="form-control">
+                                            <option value="0">Seleccione</option>
+                                            <option v-for="dist in distrito" v-bind:value="dist.iddistrito">{{dist.nom_dist}}</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{msjdistruc}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Dirección</label>
+                                <textarea v-model="txtdiruc" id="txtdiruc" class="form-control"></textarea>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{msjdirruc}}</strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal" @click="limpiarruc()">Cancelar</button>
+                            <button class="btn btn-info" type="button" @click="guardaruc()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <%@include file="scrip.jsp" %>
@@ -521,6 +631,26 @@
                     msj: "",
                     idpro: "",
                     selectindex: null,
+
+                    cbotipocli: "DNI",
+                    
+                    txtruc: "",
+                    txtraz: "",
+                    txtcoruc: "",
+                    txtcelruc: "",
+                    cbodepruc: 0,
+                    cboprovruc: 0,
+                    cbodistruc: 0,
+                    txtdiruc: "",
+
+                    msjruc: "",
+                    msjraz: "",
+                    msjcoruc: "",
+                    msjcelruc: "",
+                    msjdepruc: "",
+                    msjprovruc: "",
+                    msjdistruc: "",
+                    msjdirruc: "",
                 },
                 mounted: function () {
                     this.verificarsesion();
@@ -529,6 +659,76 @@
                     this.getbanco();
                 },
                 methods: {
+                    mostrarform: function () {
+                        if (this.cbotipocli == "DNI") {
+                            $('#mcliente').modal('toggle');
+                        }
+                        if (this.cbotipocli == "RUC") {
+                            $('#mclienteruc').modal('toggle');
+                        }
+                    },
+                    limpiarruc: function () {
+                        this.txtruc = "";
+                        this.txtraz = "";
+                        this.txtdiruc = "";
+                        this.cbodepruc = 0;
+                        this.cboprovruc = 0;
+                        this.cbodistruc = 0;
+                        this.txtcoruc = "";
+                        this.txtcelruc = "";
+                        this.distrito = [];
+                        this.provincia = [];
+
+                        $('#txtruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#txtraz').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#txtdiruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbodepruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cboprovruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#cbodistruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#txtcoruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+                        $('#txtcelruc').removeClass('form-control is-valid is-invalid').addClass('form-control');
+
+                    },
+                    completarruc: function () {
+                        if (this.txtruc.length == 11) {
+                            axios.get('empresa/consulta/' + this.txtruc).then(response => {
+                                if (response.data.msj == "bd") {
+                                    this.txtruc = response.data.empresa.rucemp;
+                                    this.txtraz = response.data.empresa.razsoemp;
+                                    this.txtdiruc = response.data.empresa.diremp;
+                                    this.txtcoruc = response.data.empresa.correoemp;
+                                    this.txtcelruc = response.data.empresa.celemp;
+                                    this.cbodepruc = response.data.empresa.distrito.provincia.departamento.iddepartamento;
+                                    this.suportprovincia(this.cbodepruc);
+                                    this.cboprovruc = response.data.empresa.distrito.provincia.idprovincia;
+                                    this.suportdistrito(this.cboprovruc);
+                                    this.cbodistruc = response.data.empresa.distrito.iddistrito;
+                                }
+                                if (response.data.msj == "api") {
+                                    var p = JSON.parse(response.data.empresa);
+                                    this.txtraz = p.data.nombre_o_razon_social;
+                                    this.txtdiruc = p.data.direccion;
+                                    this.cbodepruc = p.data.ubigeo[0];
+                                    this.suportprovincia(this.cbodepruc);
+                                    this.cboprovruc = p.data.ubigeo[1];
+                                    this.suportdistrito(this.cboprovruc);
+                                    this.cbodistruc = p.data.ubigeo[2];
+                                }
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        } else {
+                            this.txtraz = "";
+                            this.txtdiruc = "";
+                            this.cbodepruc = 0;
+                            this.cboprovruc = 0;
+                            this.cbodistruc = 0;
+                            this.txtcoruc = "";
+                            this.txtcelruc = "";
+                            this.distrito = [];
+                            this.provincia = [];
+                        }
+                    },
                     selectrow: function (index) {
                         this.selectindex = index;
                         this.iddetpros = this.cliente[this.selectindex].iddetalleprospecto;
@@ -704,6 +904,111 @@
 
                         });
                     },
+                    guardaruc: function () {
+                        var data = new FormData();
+                        data.append('ruc', this.txtruc);
+                        data.append('raz', this.txtraz);
+                        data.append('dir', this.txtdiruc);
+                        data.append('cel', this.txtcelruc);
+                        data.append('cor', this.txtcoruc);
+                        data.append('dep', this.cbodepruc);
+                        data.append('prov', this.cboprovruc);
+                        data.append('dist', this.cbodistruc);
+                        axios.post('cliente/ruc/guardar', data).then(response => {
+
+                            if (response.data.resp == 'si') {
+                                $('#txtruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#txtraz').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#txtdiruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#txtcelruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#txtdir').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#txtcoruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cbodepruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cboprovruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cbodistruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#mclienteruc').modal('toggle');
+                                this.getcliente();
+                                this.limpiarruc();
+                            } else {
+                                if (response.data.ruc != undefined) {
+                                    this.msjruc = response.data.ruc;
+                                    $('#txtruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjruc = '';
+                                    $('#txtruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.raz != undefined) {
+                                    this.msjraz = response.data.raz;
+                                    $('#txtraz').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjraz = '';
+                                    $('#txtraz').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.dir != undefined) {
+                                    this.msjdiruc = response.data.dir;
+                                    $('#txtdiruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdiruc = '';
+                                    $('#txtdiruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.cor != undefined) {
+                                    this.msjcoruc = response.data.cor;
+                                    $('#txtcoruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjcoruc = '';
+                                    $('#txtcoruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.cel != undefined) {
+                                    this.msjcelruc = response.data.cel;
+                                    $('#txtcelruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjcelruc = '';
+                                    $('#txtcelruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.dep != undefined) {
+                                    this.msjdepruc = response.data.dep;
+                                    $('#cbodepruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdepruc = '';
+                                    $('#cbodepruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.prov != undefined) {
+                                    this.msjprovruc = response.data.prov;
+                                    $('#cboprovruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjprovruc = '';
+                                    $('#cboprovruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.dist != undefined) {
+                                    this.msjdistruc = response.data.dist;
+                                    $('#cbodistruc').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjdistruc = '';
+                                    $('#cbodistruc').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                            }
+
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getdistritoruc: function () {
+                        var url = 'persona/distrito/' + this.cboprovruc;
+                        axios.get(url).then(response => {
+                            this.cbodistruc = 0;
+                            this.distrito = response.data;
+                        })
+                    },
+                    getprovinciaruc: function () {
+                        var url = 'persona/provincia/' + this.cbodepruc;
+                        axios.get(url).then(response => {
+                            this.cboprovruc = 0;
+                            this.provincia = response.data;
+                            this.cbodistruc = 0;
+                            this.distrito = [];
+                        })
+                    },
                     limpiarcliente: function () {
                         this.txtdni = "";
                         this.txtape = "";
@@ -742,7 +1047,7 @@
                         var palabra = $("#txtcliente").val();
                         if (palabra.length > 0) {
                             $.ajax({
-                                url: 'cliente/buscar?bus=' + palabra,
+                                url: 'cliente/buscar?bus=' + palabra + "&tipo=" + this.cbotipocli,
                                 type: 'GET',
                                 success: function (data) {
                                     lista.find('li').remove();
@@ -761,7 +1066,7 @@
                         }
                     },
                     finalizar: function () {
-                        if (this.archivos == null) {
+                        if (this.archivos.length == 0) {
                             toastr.warning("Seleccione un archivo");
                         } else {
                             var data = new FormData();
@@ -817,6 +1122,7 @@
                             });
                         }
                     },
+                    
                     guardarcliente: function () {
                         var data = new FormData();
                         data.append('dni', this.txtdni);
@@ -828,7 +1134,7 @@
                         data.append('dep', this.cbodep);
                         data.append('prov', this.cboprov);
                         data.append('dist', this.cbodist);
-                        axios.post('cliente/guardar', data).then(response => {
+                        axios.post('cliente/dni/guardar', data).then(response => {
                             if (response.data.resp == 'si') {
                                 $('#txtdni').removeClass('form-control is-invalid').addClass('form-control is-valid');
                                 $('#txtape').removeClass('form-control is-invalid').addClass('form-control is-valid');
@@ -1086,7 +1392,7 @@
                                     this.selectindex = null;
                                 }).catch(error => {
                                 })
-                            }else {
+                            } else {
                                 this.iddetpros = "";
                                 this.selectindex = null;
                             }
@@ -1113,7 +1419,7 @@
                                     this.selectindex = null;
                                 }).catch(error => {
                                 })
-                            }else {
+                            } else {
                                 this.iddetpros = "";
                                 this.selectindex = null;
                             }

@@ -19,22 +19,32 @@ public class ClienteService implements ClienteInterface {
     private final ClienteRepository clienterepo;
 
     @Override
-    public List<ClienteEntity> getCliente() {
-        return clienterepo.findAll();
+    public List<Map<String, Object>> getCliente() {
+        return clienterepo.getCliente();
     }
 
     @Override
-    public int existecliente(String idper) {
-        return clienterepo.existedocente(idper);
+    public List<Map<String, Object>> getclientebuscar(String tipo, String bus) {
+        return clienterepo.getclientebuscar(tipo, bus);
     }
 
     @Override
-    public void guardarCliente(String idper) {
-        clienterepo.guardardcli(idper);
+    public void guardarClientedni(String idper) {
+        clienterepo.guardardclidni(idper);
     }
 
     @Override
-    public List<Map<String, Object>> getclientebuscar(String bus) {
-        return clienterepo.getclientebuscar(bus);
+    public void guardarClienteruc(String idemp) {
+        clienterepo.guardardcliruc(idemp);
+    }
+
+    @Override
+    public int existeclienteDNI(String idper) {
+        return clienterepo.existeclientedni(idper);
+    }
+
+    @Override
+    public int existeclienteRUC(String idemp) {
+        return clienterepo.existeclienteruc(idemp);
     }
 }

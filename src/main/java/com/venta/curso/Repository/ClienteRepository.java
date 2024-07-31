@@ -17,14 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer> {
 
+    @Query(value = "select * from v_cliente", nativeQuery = true)
+    public List<Map<String, Object>> getCliente();
+
     @Query(value = "select exists(select * from clientes where fkidpersona=:idper)", nativeQuery = true)
-    public int existedocente(@Param("idper") String idper);
+    public int existeclientedni(@Param("idper") String idper);
+
+    @Query(value = "select exists(select * from clientes where fkidempresa=:idemp)", nativeQuery = true)
+    public int existeclienteruc(@Param("idemp") String idemp);
 
     @Modifying
     @Transactional
-    @Query(value = "insert into clientes(fkidpersona)values(:idper)", nativeQuery = true)
-    public void guardardcli(@Param("idper") String idper);
+    @Query(value = "insert into clientes(fkidpersona,tipocli)values(:idper,'DNI')", nativeQuery = true)
+    public void guardardclidni(@Param("idper") String idper);
 
-    @Query(value = "select idcliente,concat(dniper,' - ',apeper,' ',nomper) cliente from clientes,personas where clientes.fkidpersona=personas.idpersona and (upper(concat(apeper,' ',nomper)) like concat('%',upper(:bus),'%') or dniper like concat('%',:bus,'%')) limit 5", nativeQuery = true)
-    public List<Map<String, Object>> getclientebuscar(@Param("bus") String bus);
+    @Modifying
+    @Transactional
+    @Query(value = "insert into clientes(fkidempresa,tipocli)values(:idemp,'RUC')", nativeQuery = true)
+    public void guardardcliruc(@Param("idemp") String idemp);
+
+    @Query(value = "select idcliente, tipocli,documento, concat(documento,' - ',nombre) cliente from v_cliente where tipocli=:tipo and (upper(nombre) like concat('%',upper(:bus),'%') or documento like concat('%',:bus,'%')) limit 5", nativeQuery = true)
+    public List<Map<String, Object>> getclientebuscar(@Param("tipo") String tipo, @Param("bus") String bus);
 }

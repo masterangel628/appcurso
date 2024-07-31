@@ -60,14 +60,14 @@
                                                 <tbody>
                                                     <tr v-for="mat in matricula">
                                                         <td width="15%">{{mat.nummat}}</td>
-                                                        <td>{{mat.dniper}} - {{mat.apeper}} {{mat.nomper}}</td>
+                                                        <td>{{mat.documento}} - {{mat.nombre}}</td>
                                                         <td width="15%">{{mat.montomat}}</td> 
                                                         <td width="15%">{{mat.grupomat}}</td>
                                                         <td width="15%">{{mat.nomusu}}</td>
                                                         <td width="15%">{{mat.fecmat}}</td>
                                                         <td width="15%">
                                                             <button title="Ver Váucher" data-toggle="modal" @click="getvaucher(mat)" data-target="#mvervaucher" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
-                                                            <button title="Verificar Váucher" @click="verificar(mat)" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button>
+                                                            <button title="Verificar Váucher" @click="selectmatricula(mat)" data-toggle="modal" data-target="#mvervecom"  class="btn btn-success btn-sm"><i class="fas fa-check"></i></button>
                                                             <button title="Anular Matricula" data-toggle="modal" @click="seleccionar(mat)" data-target="#mregvaucher" class="btn btn-danger btn-sm"><i class="fas fa-window-close"></i></button>
                                                         </td>
                                                     </tr>
@@ -81,6 +81,7 @@
                     </div>
                 </section>
             </div>
+
             <div class="modal fade" id="mregvaucher" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
@@ -116,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="modal fade" id="mvervaucher" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
                     <div class="modal-content">
@@ -142,6 +144,53 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="mvervecom" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
+                            <h5 class="modal-title" id="staticBackdropLabel">Verificar matrícula y enviar comprobante</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Comprobante a emitir</label>
+                                    <select v-model="cbotipcom" class="form-control" disabled="true">
+                                        <option value="0">Seleccione</option>
+                                        <option v-for="tc in tipocomp" v-bind:value="tc.idtipocomprobante">{{tc.nomtipcom}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group  col-md-6">
+                                    <label>Número</label>
+                                    <div class="input-group">
+                                        <input type="text" v-model="txtnum" class="form-control" readonly="true">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" @click="getnumero()" title="Cargar número"><i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rad" id="radgv" value="1" v-model="radoption">
+                                    <label class="form-check-label" for="radgv">Validar la matrícula</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rad" id="rades" value="2" v-model="radoption">
+                                    <label class="form-check-label" for="rades">Validar la matrícula y enviar comprobante a Sunat</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-info" type="button" @click="verificar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <%@include file="footer.jsp" %>
         </div>
         <%@include file="scrip.jsp" %>
@@ -149,11 +198,15 @@
             let app = new Vue({
                 el: '#app',
                 data: {
+                    cbotipcom: 0,
+                    txtnum: "",
+                    tipocomp: [],
+                    radoption: 1,
+
                     archivos: [],
                     txtdesc: "",
                     msjdes: "",
                     msjvau: "",
-
                     matricula: [],
                     idmat: "",
                     txtcliente: "",
@@ -203,6 +256,34 @@
                             console.log(error);
                         });
                     },
+                    selectmatricula: function (mat) {
+                        this.idmat = mat.idmatricula;
+                        this.gettipocomprobante();
+                        if (mat.tipocli == "RUC") {
+                            this.cbotipcom = "1";
+                            this.getnumero();
+                        }
+                        if (mat.tipocli == "DNI") {
+                            this.cbotipcom = "2";
+                            this.getnumero();
+                        }
+                    },
+                    gettipocomprobante: function () {
+                        axios.get('matricula/mtipocomprobante').then(response => {
+                            this.tipocomp = response.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getnumero: function () {
+                        if (this.cbotipcom != 0) {
+                            axios.get('matricula/mnumero?tipo=' + this.cbotipcom).then(response => {
+                                this.txtnum = response.data[0].getnum;
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }
+                    },
                     getvaucher: function (mat) {
                         this.txtcliente = mat.dniper + " - " + mat.apeper + " " + mat.nomper;
                         axios.get('matricula/mvaucher/' + mat.idmatricula).then(response => {
@@ -214,11 +295,15 @@
                     getArchivos(event) {
                         this.archivos = Array.from(event.target.files);
                     },
-                    verificar: function (mat) {
+                    verificar: function () {
                         var data = new FormData();
-                        data.append('mat', mat.idmatricula);
+                        data.append('mat', this.idmat);
+                        data.append('tip', this.cbotipcom);
+                        data.append('num', this.txtnum);
+                        data.append('ev', this.radoption);
                         axios.post('matricula/verificar', data).then(response => {
                             this.getmatricula();
+                            $('#mvervecom').modal('toggle');
                         }).catch(function (error) {
                             console.log(error);
                         });
@@ -234,7 +319,7 @@
                         $('#txtdesc').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtvau').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         this.archivos = [];
-                        this.idmat="";
+                        this.idmat = "";
                     },
                     cancelar: function () {
                         var url = "";

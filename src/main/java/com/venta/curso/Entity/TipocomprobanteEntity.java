@@ -3,8 +3,6 @@ package com.venta.curso.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,22 +23,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "bancos")
-public class BancoEntity {
-
+@Table(name = "tipocomprobantes")
+public class TipocomprobanteEntity {
     @Id
-    @Column(name = "idbanco", nullable = false)
+    @Column(name = "idtipocomprobante", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idbanco;
+    private int idtipocomprobante;
 
-    @Column(name = "nomban", nullable = false, length = 80)
-    private String nomban;
+    @Column(name = "codtipcom", nullable = false, length = 10)
+    private String codtipcom;
 
-    @Column(name = "nmroban", nullable = false, length = 80)
-    private String nmroban;
-
-    @Column(name = "estadoban")
-    @Enumerated(EnumType.STRING)
-    private EstadoEnum estado;
-
+    @Column(name = "nomtipcom", nullable = false, length = 120)
+    private String nomtipcom;
 }

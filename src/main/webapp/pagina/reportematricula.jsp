@@ -64,7 +64,7 @@
                                                 <tbody>
                                                     <tr v-for="mat in matricula">
                                                         <td>{{mat.nummat}}</td>
-                                                        <td>{{mat.dniper}} - {{mat.apeper}} {{mat.nomper}}</td>
+                                                        <td>{{mat.documento}} - {{mat.nombre}}</td>
                                                         <td>{{mat.montomat}}</td> 
                                                         <td>{{mat.grupomat}}</td>
                                                          <td>{{mat.nomusu}}</td>

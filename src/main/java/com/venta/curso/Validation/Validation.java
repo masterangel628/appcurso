@@ -1,5 +1,9 @@
 package com.venta.curso.Validation;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +12,18 @@ import java.util.regex.Pattern;
  * @author Asus
  */
 public class Validation {
+
+    public String getfec(String fectim) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.parse(fectim, formatter);
+        LocalDateTime localDateTim = LocalDateTime.of(localDateTime.getYear(),
+                localDateTime.getMonthValue(), localDateTime.getDayOfMonth(), localDateTime.getHour(),
+                 localDateTime.getMinute(), localDateTime.getSecond());
+        ZoneId zoneId = ZoneId.of("America/Lima");
+        ZonedDateTime zonedDateTime = localDateTim.atZone(zoneId);
+        DateTimeFormatter formatte = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+        return zonedDateTime.format(formatte);
+    }
 
     public boolean correo(String correo) {
         String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";

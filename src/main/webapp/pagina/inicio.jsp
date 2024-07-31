@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="description" content="Sistema de Gestión Cursos - ISIPP">
-	<meta name="author" content="Miguel Ángel Toledo Cordova">
+        <meta name="author" content="Miguel Ángel Toledo Cordova">
         <title>Inicio</title>
         <link href="public/dist/img/icono.png" rel="icon">
         <%@include file="estilocss.jsp" %>
@@ -30,6 +30,7 @@
                 </div>
                 <section class="content">
                     <div class="container-fluid">
+                        <button @click="enviar()">Enviar</button>
                         <div class="row">
                             <div class="col-lg-3 col-6">
                                 <div class="small-box bg-info">
@@ -109,6 +110,15 @@
                         this.cantclimat = response.data.cantclimat;
                         this.cantclinoveri = response.data.cantclinoveri;
                         this.cantcliveri = response.data.cantcliveri;
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                enviar: function () {
+                    var data = new FormData();
+                    data.append('mat', '3');
+                    axios.post('enviarcomprobante', data).then(response => {
+                        console.log(response.data);
                     }).catch(function (error) {
                         console.log(error);
                     });

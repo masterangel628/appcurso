@@ -26,18 +26,30 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "vauchers")
-public class VaucherEntity {
+@Table(name = "empresas")
+public class EmpresaEntity {
 
     @Id
-    @Column(name = "idvaucher", nullable = false)
+    @Column(name = "idempresa", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idvaucher;
+    private int idempresa;
 
-    @Column(name = "nomvau", nullable = true, length = 200,unique = true)
-    private String nomvau;
+    @Column(name = "rucemp", nullable = false, unique = true, length = 11)
+    private String rucemp;
+
+    @Column(name = "razsoemp", nullable = false, length = 200)
+    private String razsoemp;
+
+    @Column(name = "diremp", columnDefinition = "text", nullable = false)
+    private String diremp;
+
+    @Column(name = "celemp", length = 9, nullable = false)
+    private String celemp;
     
+    @Column(name = "correoemp", length = 100)
+    private String correoemp;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fkidmatricula", nullable = true)
-    private MatriculaEntity Matricula;
+    @JoinColumn(name = "fkiddistrito", nullable = true)
+    private DistritoEntity Distrito;
 }

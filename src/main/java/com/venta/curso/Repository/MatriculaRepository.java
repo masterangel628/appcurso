@@ -25,13 +25,13 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "update matriculas set estadomat='MATRICULA' where idmatricula=:id", nativeQuery = true)
-    public void verificar(@Param("id") String idmat);
-    
+    @Query(value = "call p_vermatyecomp(:mat,:tip,:num,:ev)", nativeQuery = true)
+    public List<Map<String, Object>> verificar(@Param("mat") String mat, @Param("tip") String tip, @Param("num") String num, @Param("ev") String ev);
+
     @Modifying
     @Transactional
     @Query(value = "update matriculas set estamat='INACTIVO',descmat=:des where idmatricula=:id", nativeQuery = true)
-    public void cancelar(@Param("id") String idmat,@Param("des") String des);
+    public void cancelar(@Param("id") String idmat, @Param("des") String des);
 
     @Query(value = "select * from v_matriculareporte where fecmat between :fecdes and :fechas", nativeQuery = true)
     public List<Map<String, Object>> getMatriculareport(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
@@ -45,17 +45,32 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
     @Query(value = "select codcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getCursoPaquete(@Param("id") String idpaq);
 
-    
-    
-    
     @Query(value = "select sum(montomat) from v_reportdetventa where fecmat between :fecdes and :fechas", nativeQuery = true)
     public String getMontofec(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
 
     @Query(value = "select * from v_reportdetventa where fecmat between :feci and :fecf order by fecmat", nativeQuery = true)
     public List<Map<String, Object>> getVentareport(@Param("feci") String fecdes, @Param("fecf") String fechas);
-    
+
     @Query(value = "select * from v_reportdetventa order by fecmat", nativeQuery = true)
     public List<Map<String, Object>> getVenta();
+
+    @Query(value = "select * from tipocomprobantes", nativeQuery = true)
+    public List<Map<String, Object>> getTipocomprobante();
+
+    @Query(value = "select f_gencomprobante(:tip) as getnum", nativeQuery = true)
+    public List<Map<String, Object>> getNumero(@Param("tip") String tip);
+
+    @Query(value = "select * from v_venta where idmatricula=:mat", nativeQuery = true)
+    public List<Map<String, Object>> getventa(@Param("mat") String mat);
+
+    @Query(value = " select * from v_detventa where fkidmatricula=:mat", nativeQuery = true)
+    public List<Map<String, Object>> getdetventa(@Param("mat") String mat);
     
+    @Modifying
+    @Transactional
+    @Query(value = "update comprobantes set desccomp=:des , obscomp=:note where idcomprobante=:id", nativeQuery = true)
+    public void actualizarcom(@Param("id") String id, @Param("des") String des, @Param("note") String note);
+    
+     
 
 }

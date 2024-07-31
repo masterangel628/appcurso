@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +48,9 @@ public class MatriculaEntity {
 
     @Column(name = "fecmat", nullable = false)
     private LocalDate fecmat;
+    
+    @Column(name = "horamat", nullable = false,columnDefinition = "time")
+    private Time horamat;
 
     @Column(name = "descmat", nullable = true, columnDefinition = "text")
     private String descmat;
