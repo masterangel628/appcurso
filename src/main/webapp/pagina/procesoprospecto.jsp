@@ -308,8 +308,13 @@
                                                 <strong>{{msjvau}}</strong>
                                             </span>
                                         </div>
+
                                         <button class="btn btn-danger" onclick="stepper.previous()">Anterior</button>
-                                        <button type="button" class="btn btn-primary" @click="finalizar()">Guardar</button>
+
+                                        <button class="btn btn-primary" @click="finalizar()" id="btngventa">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="spicarventa"></span>
+                                            {{btngventa}}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -687,6 +692,8 @@
             let app = new Vue({
                 el: '#app',
                 data: {
+                    btngventa: 'Guardar',
+                    spicarventa: false,
                     txtdesc: "",
                     archivos: [],
                     banco: [],
@@ -792,6 +799,8 @@
                     this.getdepartamento();
                     this.getbanco();
                     $("#txtalumno").attr('disabled', true);
+                    this.spicarventa = false;
+                    this.btngventa = "Guardar";
 
                 },
                 methods: {
@@ -852,8 +861,8 @@
                             $('#mclienteruc').modal('toggle');
                         }
                     },
-                    
-        limpiarruc: function () {
+
+                    limpiarruc: function () {
                         this.txtruc = "";
                         this.txtraz = "";
                         this.txtdiruc = "";
@@ -1261,7 +1270,7 @@
                         this.msjprov = "";
                         this.msjdist = "";
                     },
-        buscaralumno: function () {
+                    buscaralumno: function () {
                         var lista = $("#listaalumno");
                         var palabra = $("#txtalumno").val();
                         if (palabra.length > 0) {
@@ -1283,8 +1292,8 @@
                         } else {
                             $('#listaalumno').hide();
                         }
-                    },            
-        limpiaralumno: function () {
+                    },
+                    limpiaralumno: function () {
                         this.txtdnial = "";
                         this.txtapeal = "";
                         this.txtnomal = "";
@@ -1338,10 +1347,16 @@
                             $('#listacliente').hide();
                         }
                     },
-                             
+
                     finalizar: function () {
+                        this.spicarventa = true;
+                        this.btngventa = "Guardando...";
+                        $("#btngventa").attr('disabled', true);
                         if (this.archivos.length == 0) {
                             toastr.warning("Seleccione un archivo");
+                            this.spicarventa = false;
+                            this.btngventa = "Guardar";
+                            $("#btngventa").removeAttr("disabled");
                         } else {
                             var data = new FormData();
                             data.append('tip', this.cbotipomat);
@@ -1359,7 +1374,13 @@
                                     this.limpiar();
                                     this.getcliente();
                                     toastr.success("La prematrícula se registró correctamente");
+                                     this.spicarventa = false;
+                                    this.btngventa = "Guardar";
+                                    $("#btngventa").removeAttr("disabled");
                                 } else {
+                                    this.spicarventa = false;
+                                    this.btngventa = "Guardar";
+                                    $("#btngventa").removeAttr("disabled");
                                     if (response.data.vau != undefined) {
                                         this.msjvau = response.data.vau;
                                         $('#txtvau').removeClass('form-control').addClass('form-control is-invalid');
@@ -1579,7 +1600,7 @@
                             console.log(error);
                         });
                     },
-                    
+
                     getpaquetecurso: function () {
                         axios.get('procesoprospecto/paquetecurso?idpaq=' + this.cbopaquete).then(response => {
                             this.paquetecurso = response.data;
@@ -1698,7 +1719,7 @@
                         });
                     },
                     limpiar: function () {
-                        this.txtclidesc="";
+                        this.txtclidesc = "";
                         $("#txtidcliente").val("");
                         $("#txtcliente").val("");
                         $("#txtidpem").val("");

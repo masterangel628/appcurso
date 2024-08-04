@@ -208,7 +208,7 @@
                         </ul>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAnyAuthority('Reporte Matricula')">
+                <sec:authorize access="hasAnyAuthority('Reporte Matricula','Comprobante','Reporte Venta')">
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-folder-open"></i>
@@ -234,12 +234,14 @@
                                     </a>
                                 </li>
                             </sec:authorize>
+                                <sec:authorize access="hasAuthority('Comprobante')">
                                 <li class="nav-item">
                                     <a href="<%= request.getContextPath()%>/comprobante" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Comprobante</p>
                                     </a>
                                 </li>
+                                </sec:authorize>
                         </ul>
                     </li>
                 </sec:authorize>

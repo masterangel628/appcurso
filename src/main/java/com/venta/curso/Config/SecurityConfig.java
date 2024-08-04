@@ -166,6 +166,11 @@ public class SecurityConfig {
                     http.requestMatchers("/certificado/detalle").hasAuthority("Certificado");
                     http.requestMatchers("/certificado/enviarcert").hasAuthority("Certificado");
                     
+                    http.requestMatchers("/comprobante").hasAuthority("Comprobante");
+                    http.requestMatchers("/comprobante/mcomprobante").hasAuthority("Comprobante");
+                    http.requestMatchers("/comprobante/pdf").hasAuthority("Comprobante");
+                    http.requestMatchers("/comprobante/xml").hasAuthority("Comprobante");
+                    
 
                     http.anyRequest().authenticated();
                 })

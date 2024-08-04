@@ -18,11 +18,23 @@ public class Validation {
         LocalDateTime localDateTime = LocalDateTime.parse(fectim, formatter);
         LocalDateTime localDateTim = LocalDateTime.of(localDateTime.getYear(),
                 localDateTime.getMonthValue(), localDateTime.getDayOfMonth(), localDateTime.getHour(),
-                 localDateTime.getMinute(), localDateTime.getSecond());
+                localDateTime.getMinute(), localDateTime.getSecond());
         ZoneId zoneId = ZoneId.of("America/Lima");
         ZonedDateTime zonedDateTime = localDateTim.atZone(zoneId);
         DateTimeFormatter formatte = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
         return zonedDateTime.format(formatte);
+    }
+
+    public String factnumero(String num, int cant) {
+        cant = cant - num.length();
+        int i = 1;
+        String resp = "";
+        while (i <= cant) {
+            resp = resp + "0";
+            i++;
+        }
+        resp = resp + num;
+        return resp;
     }
 
     public boolean correo(String correo) {

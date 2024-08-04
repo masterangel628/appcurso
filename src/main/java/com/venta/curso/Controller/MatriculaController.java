@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -57,6 +58,12 @@ public class MatriculaController {
         return matriculainter.getPrematricula();
     }
 
+    @GetMapping("matricula/matricula/info/{mat}")
+    @ResponseBody
+    public String info(@PathVariable String mat) {
+        return getBody(mat);
+    }
+
     @GetMapping("matricula/mvaucher/{mat}")
     @ResponseBody
     public List getVaucher(@PathVariable String mat) {
@@ -65,35 +72,46 @@ public class MatriculaController {
 
     @PostMapping("matricula/verificar")
     @ResponseBody
-    public String Verificar(@RequestParam(name = "mat") String mat, @RequestParam(name = "tip") String tip, @RequestParam(name = "num") String num, @RequestParam(name = "ev") String ev) {
-        String resp = matriculainter.verificar(mat, tip, num, ev).get(0).get("resp").toString();
+    public Map Verificar(@RequestParam(name = "mat") String mat, @RequestParam(name = "tip") String tip, @RequestParam(name = "num") String num, @RequestParam(name = "ev") String ev) {
+        Map validacion = new HashMap();
+        String resp = "";
         if (ev.equalsIgnoreCase("1")) {
+            matriculainter.verificar(mat, tip, num, ev).get(0).get("resp").toString();
             resp = "La matrícula se verificó correctamente";
+            validacion.put("envio", "no");
+            validacion.put("resp", resp);
         }
         if (ev.equalsIgnoreCase("2")) {
-            String json = matriculainter.penvio(getBody(mat));
-            org.json.JSONObject jsonObject = new org.json.JSONObject(json);
-            org.json.JSONObject data = jsonObject.getJSONObject("data");
-            org.json.JSONObject sunatResponse = data.getJSONObject("sunatResponse");
-            org.json.JSONObject cdrResponse = sunatResponse.getJSONObject("cdrResponse");
-            String description = cdrResponse.getString("description");
-            org.json.JSONArray notes = cdrResponse.getJSONArray("notes");
-            String notas = "";
-            if (notes.length() > 0) {
-                for (int i = 0; i < notes.length(); i++) {
-                    if (notas.length() == 0) {
-                        notas = notes.getString(i);
-                    } else {
-                        notas = notas + "-" + notes.getString(i);
+            try {
+                resp = matriculainter.verificar(mat, tip, num, ev).get(0).get("resp").toString();
+                String json = matriculainter.penvio(getBody(mat));
+                org.json.JSONObject jsonObject = new org.json.JSONObject(json);
+                org.json.JSONObject data = jsonObject.getJSONObject("data");
+                org.json.JSONObject sunatResponse = data.getJSONObject("sunatResponse");
+                org.json.JSONObject cdrResponse = sunatResponse.getJSONObject("cdrResponse");
+                String description = cdrResponse.getString("description");
+                org.json.JSONArray notes = cdrResponse.getJSONArray("notes");
+                String notas = "";
+                if (notes.length() > 0) {
+                    for (int i = 0; i < notes.length(); i++) {
+                        if (notas.length() == 0) {
+                            notas = notes.getString(i);
+                        } else {
+                            notas = notas + "-" + notes.getString(i);
+                        }
                     }
+                    matriculainter.actualizarcomprobante(resp, description, notas);
+                } else {
+                    matriculainter.actualizarcomprobante(resp, description, "");
                 }
-                matriculainter.actualizarcomprobante(resp, description, notas);
-            } else {
-                matriculainter.actualizarcomprobante(resp, description, "");
+                validacion.put("envio", "si");
+                validacion.put("resp", resp);
+            } catch (Exception e) {
+                validacion.put("envio", "no");
+                validacion.put("resp", "Este documento ya se encuentra declarado en la SUNAT");
             }
-
         }
-        return resp;
+        return validacion;
     }
 
     @PostMapping("matricula/cancelar")
@@ -196,7 +214,7 @@ public class MatriculaController {
         objetoCabecera.put("tipo_Operacion", "0101");
         objetoCabecera.put("tipo_Doc", lisven.get(0).get("codtipcom").toString());
         objetoCabecera.put("serie", lisven.get(0).get("serie").toString());
-        objetoCabecera.put("correlativo", lisven.get(0).get("num").toString());
+        objetoCabecera.put("correlativo", val.factnumero(lisven.get(0).get("num").toString(), 8));
         objetoCabecera.put("tipo_Moneda", "PEN");
         objetoCabecera.put("fecha_Emision", val.getfec(fectim));
 

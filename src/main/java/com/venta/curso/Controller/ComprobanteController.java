@@ -36,7 +36,6 @@ import org.springframework.web.client.RestTemplate;
 public class ComprobanteController {
 
     private final ComprobanteInterface comprointer;
-    private final MatriculaInterface matriculainter;
     private final RestTemplate restTemplate;
 
     @GetMapping("/comprobante")

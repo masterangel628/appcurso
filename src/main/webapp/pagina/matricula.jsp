@@ -333,7 +333,11 @@
                         axios.post('matricula/verificar', data).then(response => {
                             this.getmatricula();
                             $('#mvervecom').modal('toggle');
-                            this.pdf(response.data);
+                            if(response.data.envio=="si"){
+                                this.pdf(response.data.resp);
+                            }else{
+                                toastr.success(response.data.resp.message);
+                            }
                         }).catch(function (error) {
                             console.log(error);
                         });
