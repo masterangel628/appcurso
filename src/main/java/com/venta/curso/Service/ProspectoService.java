@@ -49,7 +49,7 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public  List<Map<String, Object>> guardarasesorpros(String esta, String cant, String usu) {
+    public List<Map<String, Object>> guardarasesorpros(String esta, String cant, String usu) {
         return prospectorepo.guardarasesorpros(esta, cant, usu);
     }
 
@@ -79,8 +79,8 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public void cambiarestatiempo(String id, String esta,int dias) {
-        prospectorepo.cambiarestadotiempo(esta, id, String.valueOf(dias)); 
+    public void cambiarestatiempo(String id, String esta, int dias) {
+        prospectorepo.cambiarestadotiempo(esta, id, String.valueOf(dias));
     }
 
     @Override
@@ -107,8 +107,6 @@ public class ProspectoService implements ProspectoInterface {
     public void eliminarcomanda(String ico) {
         prospectorepo.eliminarcomanda(ico);
     }
-
-   
 
     @Override
     public List<Map<String, Object>> getPaquetecurso(String idpaq) {
@@ -156,8 +154,8 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public List<Map<String, Object>> prematricula(String cli, String ses, String tip, String detpro, String ban) {
-        return prospectorepo.prematricula(cli, ses, tip, detpro,ban);
+    public List<Map<String, Object>> prematricula(String ses, String tip, String detpro, String ban) {
+        return prospectorepo.prematricula(ses, tip, detpro, ban);
     }
 
     @Override
@@ -178,5 +176,15 @@ public class ProspectoService implements ProspectoInterface {
     @Override
     public void actualizardesc(String desc, String idpro) {
         prospectorepo.actualizardesc(desc, idpro);
+    }
+
+    @Override
+    public List<Map<String, Object>> getClicom(String idses, String detpro) {
+        return prospectorepo.getClicom(idses, detpro);
+    }
+
+    @Override
+    public void guardarClicom(String idses, String detpro, String per, String cli) {
+        prospectorepo.guardarClicom(idses, per, cli, detpro);
     }
 }

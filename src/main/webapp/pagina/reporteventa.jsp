@@ -127,8 +127,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
+                                <label>Cliente</label>
+                                <input type="text" v-model="txtcliente" class="form-control" disabled="true">
+                            </div>
+                            <div class="form-group">
                                 <label>Descripción</label>
                                 <textarea v-model="txtdesc" class="form-control" readonly="true"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" v-for="vau in vaucher">
+                                    <div class="card mb-2 bg-gradient-dark">
+                                        <img class="card-img-top" v-bind:src="'matricula/images/'+vau.nomvau" alt="Dist Photo 1">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -146,6 +157,9 @@
                     txtfechas: "",
                     txtfecdes: "",
                     txtdesc: "",
+
+                    vaucher: [],
+                    txtcliente: '',
                 },
                 mounted: function () {
                     this.getventa();
@@ -181,6 +195,7 @@
                     },
                     seleccionar: function (ven) {
                         this.txtdesc = ven.descmat;
+                        this.getvaucher(ven);
                     },
                     config: function () {
                         $("#tabdatos").DataTable().destroy();
@@ -204,6 +219,14 @@
                         axios.get('reporteventa/mventa').then(response => {
                             this.venta = response.data;
                             this.config();
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getvaucher: function (mat) {
+                        this.txtcliente = mat.dnicli + " - " + mat.nomcli;
+                        axios.get('reportematricula/mvaucher/' + mat.idmatricula).then(response => {
+                            this.vaucher = response.data;
                         }).catch(function (error) {
                             console.log(error);
                         });

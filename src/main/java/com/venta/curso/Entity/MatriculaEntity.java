@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -86,4 +87,9 @@ public class MatriculaEntity {
     @Column(name = "estamat")
     @Enumerated(EnumType.STRING)
     private EstadoEnum estamat;
+    
+    
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fkidalumno", nullable = false)
+    private AlumnoEntity Alumno;
 }

@@ -1,5 +1,6 @@
 package com.venta.curso.Controller;
 
+import com.venta.curso.Entity.UserEntity;
 import com.venta.curso.Interface.ProspectoInterface;
 import com.venta.curso.Interface.SessionInterface;
 import com.venta.curso.Interface.VaucherInterface;
@@ -38,6 +39,23 @@ public class ProcesoprospectoadminController {
     public String Prospecto() {
         return "procesoprospectoadmin";
     }
+    
+    @PostMapping("procesoprospectoadmin/guardarclicom")
+    @ResponseBody
+    public void GuardarClicom(@RequestParam("usu") String usu, @RequestParam("detpro") String detpro,@RequestParam("per") String per,
+            @RequestParam("cli") String cli) {
+        int idses = sesInterface.getidsession(usu);
+        prospectointer.guardarClicom(""+idses, detpro, per, cli); 
+        
+    }
+    
+    @GetMapping("procesoprospectoadmin/mclicom")
+    @ResponseBody
+    public List getClicom(@RequestParam("usu") String usu,@RequestParam("detpro") String detpro) {
+        int idses = sesInterface.getidsession(usu);
+        return prospectointer.getClicom(""+idses, detpro);
+    }
+
 
     @GetMapping("procesoprospectoadmin/musuario")
     @ResponseBody
@@ -73,12 +91,6 @@ public class ProcesoprospectoadminController {
         return prospectointer.getProspectoasesorall(usu);
     }
 
-    @GetMapping("procesoprospectoadmin/mostrarver")
-    @ResponseBody
-    public List Prospectovermostrar(@RequestParam("usu") String usu) {
-        return prospectointer.getProspectoasesorverificado(usu);
-    }
-
     @PostMapping("procesoprospectoadmin/actualizarestado")
     @ResponseBody
     public void Prospectomostrar(@RequestParam("esta") String esta, @RequestParam("idpro") String idpro, @RequestParam("iddetpro") String iddetpro) {
@@ -94,12 +106,6 @@ public class ProcesoprospectoadminController {
             dias = -9;
         }
         prospectointer.cambiarestatiempo(idpro, esta, dias);
-    }
-
-    @PostMapping("procesoprospectoadmin/actualizar")
-    @ResponseBody
-    public void Prospectoactualizar(@RequestParam("iddetpro") String iddetpro) {
-        prospectointer.Actualizarpnoveri(iddetpro);
     }
 
     @GetMapping("procesoprospectoadmin/mcurso")
@@ -145,7 +151,7 @@ public class ProcesoprospectoadminController {
 
     @PostMapping("procesoprospectoadmin/finalizar")
     @ResponseBody
-    public Map prematricula(@RequestParam("usu") String usu, @RequestParam("cli") String cli, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
+    public Map prematricula(@RequestParam("usu") String usu, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
             @RequestParam(name = "vau") MultipartFile files[], @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
 
@@ -163,16 +169,13 @@ public class ProcesoprospectoadminController {
         if (ban.equalsIgnoreCase("0")) {
             validacion.put("ban", "Seleccione un banco");
         }
-        if (!val.vacio(cli)) {
-            validacion.put("cli", "El campo Cliente es obligatorio");
-        }
         if (tip.equalsIgnoreCase("0")) {
             validacion.put("tip", "Seleccione un tipo de matrícula");
         }
         if (validacion.isEmpty()) {
             try {
                 int idses = sesInterface.getidsession(usu);
-                String val = prospectointer.prematricula(cli, String.valueOf(idses), tip, detpro, ban).get(0).get("resp").toString();
+                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban).get(0).get("resp").toString();
 
                 for (MultipartFile file : files) {
                     String rootDirectory = servletContext.getRealPath("/");

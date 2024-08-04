@@ -35,4 +35,7 @@ public interface PersonaInterface {
     public void editarceldir(String cel, String dir, String id);
 
     public Map<String, Object> getperson(String id);
+    
+    public List<Map<String, Object>> getPersona(String bus);
+    
 }

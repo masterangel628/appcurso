@@ -49,7 +49,7 @@ public class ComprobanteEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fkidmatricula", nullable = false)
-    private ComprobanteEntity Comprobante;
+    private MatriculaEntity Matricula;
     
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fkidtipocomprobante", nullable = false)

@@ -36,6 +36,6 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
     @Query(value = "insert into clientes(fkidempresa,tipocli)values(:idemp,'RUC')", nativeQuery = true)
     public void guardardcliruc(@Param("idemp") String idemp);
 
-    @Query(value = "select idcliente, tipocli,documento, concat(documento,' - ',nombre) cliente from v_cliente where tipocli=:tipo and (upper(nombre) like concat('%',upper(:bus),'%') or documento like concat('%',:bus,'%')) limit 5", nativeQuery = true)
+    @Query(value = "select idcliente, tipocli,documento,idpem, concat(documento,' - ',nombre) cliente from v_cliente where tipocli=:tipo and (upper(nombre) like concat('%',upper(:bus),'%') or documento like concat('%',:bus,'%')) limit 5", nativeQuery = true)
     public List<Map<String, Object>> getclientebuscar(@Param("tipo") String tipo, @Param("bus") String bus);
 }

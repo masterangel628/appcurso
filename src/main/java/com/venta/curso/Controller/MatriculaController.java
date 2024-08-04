@@ -1,10 +1,9 @@
 package com.venta.curso.Controller;
 
-import Clases.Numero_a_Letra;
-import static com.lowagie.text.xml.simpleparser.EntitiesToUnicode.map;
 import com.venta.curso.Config.Info;
 import com.venta.curso.Interface.MatriculaInterface;
 import com.venta.curso.Interface.VaucherInterface;
+import com.venta.curso.Validation.Numero_a_Letra;
 import com.venta.curso.Validation.Validation;
 import jakarta.servlet.ServletContext;
 import java.io.File;

@@ -191,6 +191,23 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="modcomprobante" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info">
+                            <h5 class="modal-title" id="staticBackdropLabel">Visualizar Comprobante</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <iframe v-bind:src="compurl" style="width: 100%; height: 500px;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <%@include file="footer.jsp" %>
         </div>
         <%@include file="scrip.jsp" %>
@@ -211,6 +228,7 @@
                     idmat: "",
                     txtcliente: "",
                     vaucher: [],
+                    compurl: "",
                 },
                 mounted: function () {
                     this.getmatricula();
@@ -247,6 +265,17 @@
                     config: function () {
                         $("#tabdatos").DataTable().destroy();
                         this.tabla();
+                    },
+                    pdf: function (com) {
+                        var data = new FormData();
+                        data.append('com', com);
+                        axios.post('comprobante/pdf', data, {responseType: 'blob'}).then(response => {
+                            const blob = new Blob([response.data], {type: 'application/pdf'});
+                            this.compurl = URL.createObjectURL(blob);
+                            $('#modcomprobante').modal('toggle');
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
                     },
                     getmatricula: function () {
                         axios.get('matricula/mmatricula').then(response => {
@@ -285,7 +314,7 @@
                         }
                     },
                     getvaucher: function (mat) {
-                        this.txtcliente = mat.dniper + " - " + mat.apeper + " " + mat.nomper;
+                        this.txtcliente = mat.documento + " - " + mat.nombre;
                         axios.get('matricula/mvaucher/' + mat.idmatricula).then(response => {
                             this.vaucher = response.data;
                         }).catch(function (error) {
@@ -304,13 +333,14 @@
                         axios.post('matricula/verificar', data).then(response => {
                             this.getmatricula();
                             $('#mvervecom').modal('toggle');
+                            this.pdf(response.data);
                         }).catch(function (error) {
                             console.log(error);
                         });
                     },
                     seleccionar: function (mat) {
                         this.idmat = mat.idmatricula;
-                        this.txtcliente = mat.dniper + " - " + mat.apeper + " " + mat.nomper;
+                        this.txtcliente = mat.documento + " - " + mat.nombre;
                     },
                     limpiar: function () {
                         this.txtdesc = "";

@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Asus
  */
 public interface ProspectoInterface {
-    
+
     public List<Map<String, Object>> getbanco();
 
     public void guardar(ProspectoEntity pros);
@@ -17,22 +17,22 @@ public interface ProspectoInterface {
     public List<ProspectoEntity> getProspecto();
 
     public String fecactual();
-    
-    public void actualizardesc(String desc,String idpro);
+
+    public void actualizardesc(String desc, String idpro);
 
     public int existenum(String num);
 
     public List<Map<String, Object>> getusers();
 
-    public  List<Map<String, Object>> guardarasesorpros(String esta, String cant, String usu);
+    public List<Map<String, Object>> guardarasesorpros(String esta, String cant, String usu);
 
     public List<Map<String, Object>> getProspectoasesor(String usu);
 
     public List<Map<String, Object>> getProspectoasesorverificado(String usu);
-    
+
     public List<Map<String, Object>> getProspectoasesornoverificado(String usu);
-    
-     public List<Map<String, Object>> getProspectoasesorall(String usu);
+
+    public List<Map<String, Object>> getProspectoasesorall(String usu);
 
     public int contcliescalnoas();
 
@@ -42,7 +42,7 @@ public interface ProspectoInterface {
 
     public List<Map<String, Object>> getEstado();
 
-    public void cambiarestatiempo(String id, String esta,int dias);
+    public void cambiarestatiempo(String id, String esta, int dias);
 
     public List<Map<String, Object>> getCurso();
 
@@ -54,12 +54,12 @@ public interface ProspectoInterface {
 
     public void eliminarcomanda(String ico);
 
-    public List<Map<String, Object>> prematricula(String cli, String ses, String tip, String detpro,String ban);
+    public List<Map<String, Object>> prematricula(String ses, String tip, String detpro, String ban);
 
     public List<Map<String, Object>> getPaquetecurso(String idpaq);
 
     public void Actualizarpveri(String iddetpros);
-    
+
     public void Actualizarpnoveri(String iddetpros);
 
     public void Actualizarestadotiempo();
@@ -73,5 +73,9 @@ public interface ProspectoInterface {
     public int cantclientenoverificado(String usu);
 
     public int cantclientematriculado(String usu);
+
+    public List<Map<String, Object>> getClicom(String idses, String detpro);
+
+    public void guardarClicom(String idses, String detpro, String per, String cli);
 
 }

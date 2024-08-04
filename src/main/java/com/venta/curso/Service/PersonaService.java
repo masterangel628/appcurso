@@ -22,6 +22,10 @@ public class PersonaService implements PersonaInterface {
     public PersonaEntity getpersona(String dni) {
         return personarepo.getidpersona(dni);
     }
+    @Override
+    public List<Map<String, Object>> getPersona(String bus) {
+        return personarepo.getpersona(bus);
+    }
 
     @Override
     public int existepersona(String dni) {
@@ -84,5 +88,7 @@ public class PersonaService implements PersonaInterface {
     public PersonaEntity getpersonacorreo(String correo) {
         return personarepo.getpersonacor(correo);
     }
+
+    
 
 }

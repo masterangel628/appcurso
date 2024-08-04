@@ -59,5 +59,8 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
     @Query(value = "select * from personas where idpersona=:id", nativeQuery = true)
     public Map<String, Object> getperson(@Param("id") String id);
+    
+    @Query(value = "select * from v_persona where (upper(nombre) like concat('%',upper(:bus),'%') or documento like concat('%',:bus,'%')) limit 5", nativeQuery = true)
+    public List<Map<String, Object>> getpersona(@Param("bus") String bus);
 
 }

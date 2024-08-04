@@ -215,7 +215,7 @@
                         });
                     },
                     getvaucher: function (mat) {
-                        this.txtcliente = mat.dniper + " - " + mat.apeper + " " + mat.nomper;
+                        this.txtcliente = mat.documento + " - " + mat.nombre;
                         axios.get('reportematricula/mvaucher/' + mat.idmatricula).then(response => {
                             this.vaucher = response.data;
                         }).catch(function (error) {

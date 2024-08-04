@@ -33,7 +33,7 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
     @Query(value = "update matriculas set estamat='INACTIVO',descmat=:des where idmatricula=:id", nativeQuery = true)
     public void cancelar(@Param("id") String idmat, @Param("des") String des);
 
-    @Query(value = "select * from v_matriculareporte where fecmat between :fecdes and :fechas", nativeQuery = true)
+    @Query(value = "select * from v_matriculareporte where estadomat='MATRICULA' and estamat='ACTIVO' and fecmat between :fecdes and :fechas", nativeQuery = true)
     public List<Map<String, Object>> getMatriculareport(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
 
     @Query(value = "select * from v_detallematreport where idmatricula=:id and estadetmat=:esta", nativeQuery = true)
@@ -45,13 +45,13 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
     @Query(value = "select codcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getCursoPaquete(@Param("id") String idpaq);
 
-    @Query(value = "select sum(montomat) from v_reportdetventa where fecmat between :fecdes and :fechas", nativeQuery = true)
+    @Query(value = "select sum(montomat) from v_reportdetventa where estadomat='MATRICULA' and fecmat between :fecdes and :fechas", nativeQuery = true)
     public String getMontofec(@Param("fecdes") String fecdes, @Param("fechas") String fechas);
 
-    @Query(value = "select * from v_reportdetventa where fecmat between :feci and :fecf order by fecmat", nativeQuery = true)
+    @Query(value = "select * from v_reportdetventa where estadomat='MATRICULA' and fecmat between :feci and :fecf order by fecmat", nativeQuery = true)
     public List<Map<String, Object>> getVentareport(@Param("feci") String fecdes, @Param("fecf") String fechas);
 
-    @Query(value = "select * from v_reportdetventa order by fecmat", nativeQuery = true)
+    @Query(value = "select * from v_reportdetventa where estadomat='MATRICULA' order by fecmat", nativeQuery = true)
     public List<Map<String, Object>> getVenta();
 
     @Query(value = "select * from tipocomprobantes", nativeQuery = true)

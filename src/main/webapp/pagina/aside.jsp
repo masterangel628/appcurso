@@ -234,6 +234,12 @@
                                     </a>
                                 </li>
                             </sec:authorize>
+                                <li class="nav-item">
+                                    <a href="<%= request.getContextPath()%>/comprobante" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Comprobante</p>
+                                    </a>
+                                </li>
                         </ul>
                     </li>
                 </sec:authorize>
