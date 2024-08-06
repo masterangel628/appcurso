@@ -21,6 +21,38 @@
                 background-color: blue;
                 color:white;
             }
+            .image-preview {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .image-preview img {
+                max-width: 100px;
+                max-height: 100px;
+                border: 1px solid #ccc;
+                object-fit: cover;
+            }
+            .image-preview .image-item {
+                position: relative;
+                display: inline-block;
+            }
+            .image-preview .image-item button {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: rgba(255, 0, 0, 0.6);
+                border: none;
+                color: white;
+                cursor: pointer;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+            }
         </style>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -307,6 +339,7 @@
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{msjvau}}</strong>
                                             </span>
+                                            <!--div class="image-preview" id="imagePreview"></div-->
                                         </div>
 
                                         <button class="btn btn-danger" onclick="stepper.previous()">Anterior</button>
@@ -1374,7 +1407,7 @@
                                     this.limpiar();
                                     this.getcliente();
                                     toastr.success("La prematrícula se registró correctamente");
-                                     this.spicarventa = false;
+                                    this.spicarventa = false;
                                     this.btngventa = "Guardar";
                                     $("#btngventa").removeAttr("disabled");
                                 } else {
@@ -1855,6 +1888,51 @@
                 $("#txtalumno").val(cli);
                 $('#listaalumno').hide();
             }
+
+            const fileInput = document.getElementById('txtvau');
+            const imagePreview = document.getElementById('imagePreview');
+
+            function updateImagePreview() {
+                // Clear previous previews
+                imagePreview.innerHTML = '';
+
+                const files = Array.from(fileInput.files);
+                files.forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+
+                        reader.onload = function (event) {
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+
+                            const container = document.createElement('div');
+                            container.classList.add('image-item');
+
+                            const removeButton = document.createElement('button');
+                            removeButton.textContent = '×';
+                            removeButton.onclick = function () {
+                                removeImage(file);
+                            };
+
+                            container.appendChild(img);
+                            container.appendChild(removeButton);
+                            imagePreview.appendChild(container);
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            function removeImage(fileToRemove) {
+                const files = Array.from(fileInput.files).filter(file => file !== fileToRemove);
+                const dataTransfer = new DataTransfer();
+                files.forEach(file => dataTransfer.items.add(file));
+                fileInput.files = dataTransfer.files;
+                updateImagePreview();
+            }
+            fileInput.addEventListener('change', updateImagePreview);
+
         </script>
     </body>
 </html>

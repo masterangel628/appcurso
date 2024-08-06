@@ -58,7 +58,7 @@
                                                         <th width="10%">Grupo</th>
                                                         <th>Asesor</th>
                                                         <th width="10%">Fecha</th>
-                                                        <th width="5%">Acción</th>
+                                                        <th v-if="4==5" width="5%">Acción</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -69,7 +69,7 @@
                                                         <td>{{mat.grupomat}}</td>
                                                          <td>{{mat.nomusu}}</td>
                                                         <td>{{mat.fecmat}}</td>
-                                                        <td>
+                                                        <td v-if="4==5" >
                                                             <button title="Ver Váucher" data-toggle="modal" @click="getvaucher(mat)" data-target="#mvervaucher" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
                                                         </td>
                                                     </tr>

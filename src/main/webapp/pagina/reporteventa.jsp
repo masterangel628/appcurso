@@ -73,7 +73,7 @@
                                                             <span class="badge badge-warning" v-if="ven.estado=='Anulado'">{{ven.estado}}</span>
                                                         </td>
                                                         <td>
-                                                            <button v-if="ven.estado=='Anulado'" class="btn btn-primary btn-sm" title="Ver motivo de anulación" data-toggle="modal" data-target="#mdesc" @click="seleccionar(ven)"><i class="fa fa-eye"></i></button>
+                                                            <button class="btn btn-primary btn-sm" title="Ver motivo de anulación" data-toggle="modal" data-target="#mdesc" @click="seleccionar(ven)"><i class="fa fa-eye"></i></button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
