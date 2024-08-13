@@ -49,8 +49,8 @@ public class MatriculaEntity {
 
     @Column(name = "fecmat", nullable = false)
     private LocalDate fecmat;
-    
-    @Column(name = "horamat", nullable = false,columnDefinition = "time")
+
+    @Column(name = "horamat", nullable = false, columnDefinition = "time")
     private Time horamat;
 
     @Column(name = "descmat", nullable = true, columnDefinition = "text")
@@ -65,8 +65,14 @@ public class MatriculaEntity {
     @Column(name = "montomat", precision = 9, scale = 2, nullable = false)
     private BigDecimal montomat;
 
+    @Column(name = "descumat", precision = 9, scale = 2, nullable = true)
+    private BigDecimal descumat;
+
     @Column(name = "grupomat", nullable = false, length = 100)
     private String grupomat;
+    
+    @Column(name = "bandesc", nullable = false, length = 100)
+    private String bandesc;
 
     @Column(name = "estatipomat")
     @Enumerated(EnumType.STRING)
@@ -87,8 +93,7 @@ public class MatriculaEntity {
     @Column(name = "estamat")
     @Enumerated(EnumType.STRING)
     private EstadoEnum estamat;
-    
-    
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fkidalumno", nullable = false)
     private AlumnoEntity Alumno;

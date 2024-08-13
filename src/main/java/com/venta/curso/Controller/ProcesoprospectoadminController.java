@@ -148,10 +148,17 @@ public class ProcesoprospectoadminController {
     public List getBanco() {
         return prospectointer.getbanco();
     }
+    
+     @GetMapping("procesoprospectoadmin/montopre")
+    @ResponseBody
+    public String getMonto(@RequestParam("usu") String usu,@RequestParam("iddetpro") String iddetpro) {
+        int idses = sesInterface.getidsession(usu);
+        return prospectointer.getmontoprem(String.valueOf(idses), iddetpro);
+    }
 
     @PostMapping("procesoprospectoadmin/finalizar")
     @ResponseBody
-    public Map prematricula(@RequestParam("usu") String usu, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
+    public Map prematricula(@RequestParam("descu") String descu,@RequestParam("band") String band,@RequestParam("usu") String usu, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
             @RequestParam(name = "vau") MultipartFile files[], @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
 
@@ -175,7 +182,7 @@ public class ProcesoprospectoadminController {
         if (validacion.isEmpty()) {
             try {
                 int idses = sesInterface.getidsession(usu);
-                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban).get(0).get("resp").toString();
+                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban,descu,band).get(0).get("resp");
 
                 for (MultipartFile file : files) {
                     String rootDirectory = servletContext.getRealPath("/");

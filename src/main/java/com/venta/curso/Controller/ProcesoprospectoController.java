@@ -188,7 +188,7 @@ public class ProcesoprospectoController {
 
     @PostMapping("procesoprospecto/finalizar")
     @ResponseBody
-    public Map prematricula(@RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
+    public Map prematricula(@RequestParam("descu") String descu,@RequestParam("band") String band,@RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
             @RequestParam(name = "vau") MultipartFile[] files, @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
 
@@ -213,7 +213,7 @@ public class ProcesoprospectoController {
             try {
                 UserEntity usu = userInterface.getinfouser();
                 int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
-                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban).get(0).get("resp").toString();
+                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban,descu,band).get(0).get("resp");
 
                 for (MultipartFile file : files) {
                     String rootDirectory = servletContext.getRealPath("/");
@@ -242,6 +242,14 @@ public class ProcesoprospectoController {
         UserEntity usu = userInterface.getinfouser();
         int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
         return prospectointer.getComanda(String.valueOf(idses), iddetpro);
+    }
+    
+    @GetMapping("procesoprospecto/montopre")
+    @ResponseBody
+    public String getMonto(@RequestParam("iddetpro") String iddetpro) {
+        UserEntity usu = userInterface.getinfouser();
+        int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
+        return prospectointer.getmontoprem(String.valueOf(idses), iddetpro);
     }
 
     @PostMapping("procesoprospecto/eliminacomanda")

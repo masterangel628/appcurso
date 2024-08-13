@@ -25,8 +25,8 @@ public interface MatriculaRepository extends JpaRepository<MatriculaEntity, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "call p_vermatyecomp(:mat,:tip,:num,:ev)", nativeQuery = true)
-    public List<Map<String, Object>> verificar(@Param("mat") String mat, @Param("tip") String tip, @Param("num") String num, @Param("ev") String ev);
+    @Query(value = "call p_vermatyecomp(:mat,:tip,:num,:ev,:idco)", nativeQuery = true)
+    public List<Map<String, String>> verificar(@Param("mat") String mat, @Param("tip") String tip, @Param("num") String num, @Param("ev") String ev ,@Param("idco")String idco);
 
     @Modifying
     @Transactional

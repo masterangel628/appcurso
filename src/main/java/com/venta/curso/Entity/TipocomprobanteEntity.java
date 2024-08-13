@@ -1,4 +1,3 @@
-
 package com.venta.curso.Entity;
 
 import jakarta.persistence.Column;
@@ -25,6 +24,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "tipocomprobantes")
 public class TipocomprobanteEntity {
+
     @Id
     @Column(name = "idtipocomprobante", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +35,10 @@ public class TipocomprobanteEntity {
 
     @Column(name = "nomtipcom", nullable = false, length = 120)
     private String nomtipcom;
+
+    @Column(name = "serietu", nullable = false, columnDefinition = "INT(3) UNSIGNED ZEROFILL")
+    private int serietu;
+
+    @Column(name = "numtu", nullable = false, columnDefinition = "INT(8) UNSIGNED ZEROFILL")
+    private int numtu;
 }

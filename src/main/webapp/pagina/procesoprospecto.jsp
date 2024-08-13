@@ -332,6 +332,28 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Descuento</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <select v-model="cbotipodesc" class="form-control" @change="mostrardesc">
+                                                                <option value="SI">SI</option>
+                                                                <option value="NO">NO</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="number" id="txtmdesc" v-model="txtmdesc" class="form-control" @keyup="cambiamonto" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Monto a Pagar</label>
+                                                    <input type="text" v-model="txtmonto" class="form-control" disabled="true">
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <label>Váucher</label>
@@ -339,7 +361,7 @@
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{msjvau}}</strong>
                                             </span>
-                                            <!--div class="image-preview" id="imagePreview"></div-->
+                                            <div class="image-preview" id="imagePreview"></div>
                                         </div>
 
                                         <button class="btn btn-danger" onclick="stepper.previous()">Anterior</button>
@@ -825,6 +847,11 @@
                     divregal: false,
                     txtclidesc: '',
 
+                    txtmdesc: '0',
+                    txtmonto: '',
+                    cbotipodesc: 'NO',
+
+                    montopagar: '',
                 },
                 mounted: function () {
                     this.verificarsesion();
@@ -832,11 +859,28 @@
                     this.getdepartamento();
                     this.getbanco();
                     $("#txtalumno").attr('disabled', true);
+                    $("#txtmdesc").attr('disabled', true);
                     this.spicarventa = false;
                     this.btngventa = "Guardar";
 
                 },
                 methods: {
+                    mostrardesc: function () {
+                        if (this.cbotipodesc == "NO") {
+                            $("#txtmdesc").attr('disabled', true);
+                            this.txtmdesc = 0;
+                        } else {
+                            $("#txtmdesc").removeAttr("disabled");
+                        }
+                    },
+                    cambiamonto: function () {
+                        if (this.montopagar > this.txtmdesc) {
+                            this.txtmonto = this.montopagar - this.txtmdesc;
+                        } else {
+                            toastr.warning("El descuento debe ser menor que el monto a pagar");
+                        }
+
+                    },
                     guardarclicom: function () {
                         if (this.iddetpros != "" && $("#txtidcliente").val() != "" && $("#txtidpem").val() != "") {
                             var data = new FormData();
@@ -1391,56 +1435,74 @@
                             this.btngventa = "Guardar";
                             $("#btngventa").removeAttr("disabled");
                         } else {
-                            var data = new FormData();
-                            data.append('tip', this.cbotipomat);
-                            data.append('detpro', this.iddetpros);
-                            this.archivos.forEach(file => {
-                                data.append('vau', file);
-                            });
-                            data.append('ban', this.cboban);
-                            axios.post('procesoprospecto/finalizar', data).then(response => {
-                                if (response.data.resp == 'si') {
-                                    $('#txtvau').removeClass('form-control is-invalid').addClass('form-control is-valid');
-                                    $('#cboban').removeClass('form-control is-invalid').addClass('form-control is-valid');
-
-                                    $('#mprematricula').modal('toggle');
-                                    this.limpiar();
-                                    this.getcliente();
-                                    toastr.success("La prematrícula se registró correctamente");
-                                    this.spicarventa = false;
-                                    this.btngventa = "Guardar";
-                                    $("#btngventa").removeAttr("disabled");
+                            if (this.cbotipodesc == "SI") {
+                                if (this.txtmonto > this.txtmdesc && this.txtmdesc != 0) {
+                                    this.guardarpp();
                                 } else {
+                                    toastr.warning("Ingrese el monto de descuento");
                                     this.spicarventa = false;
                                     this.btngventa = "Guardar";
                                     $("#btngventa").removeAttr("disabled");
-                                    if (response.data.vau != undefined) {
-                                        this.msjvau = response.data.vau;
-                                        $('#txtvau').removeClass('form-control').addClass('form-control is-invalid');
-                                    } else {
-                                        this.msjvau = '';
-                                        $('#txtvau').removeClass('form-control is-invalid').addClass('form-control is-valid');
-                                    }
-                                    if (response.data.ban != undefined) {
-                                        this.msjban = response.data.ban;
-                                        $('#cboban').removeClass('form-control').addClass('form-control is-invalid');
-                                    } else {
-                                        this.msjban = '';
-                                        $('#cboban').removeClass('form-control is-invalid').addClass('form-control is-valid');
-                                    }
-                                    if (response.data.tip != undefined) {
-                                        this.msjtipomat = response.data.tip;
-                                        $('#cbotipomat').removeClass('form-control').addClass('form-control is-invalid');
-                                    } else {
-                                        this.msjtipomat = '';
-                                        $('#cbotipomat').removeClass('form-control is-invalid').addClass('form-control is-valid');
-                                    }
-
                                 }
-                            }).catch(function (error) {
-                                console.log(error);
-                            });
+                            } else {
+                                this.guardarpp();
+                            }
                         }
+                    },
+
+                    guardarpp: function () {
+                        var data = new FormData();
+                        data.append('tip', this.cbotipomat);
+                        data.append('detpro', this.iddetpros);
+                        this.archivos.forEach(file => {
+                            data.append('vau', file);
+                        });
+                        data.append('ban', this.cboban);
+
+                        data.append('descu', this.txtmdesc);
+                        data.append('band', this.cbotipodesc);
+
+                        axios.post('procesoprospecto/finalizar', data).then(response => {
+                            if (response.data.resp == 'si') {
+                                $('#txtvau').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#cboban').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                $('#mprematricula').modal('toggle');
+                                this.limpiar();
+                                this.getcliente();
+                                toastr.success("La prematrícula se registró correctamente");
+                                this.spicarventa = false;
+                                this.btngventa = "Guardar";
+                                $("#btngventa").removeAttr("disabled");
+                            } else {
+                                this.spicarventa = false;
+                                this.btngventa = "Guardar";
+                                $("#btngventa").removeAttr("disabled");
+                                if (response.data.vau != undefined) {
+                                    this.msjvau = response.data.vau;
+                                    $('#txtvau').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjvau = '';
+                                    $('#txtvau').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.ban != undefined) {
+                                    this.msjban = response.data.ban;
+                                    $('#cboban').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjban = '';
+                                    $('#cboban').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+                                if (response.data.tip != undefined) {
+                                    this.msjtipomat = response.data.tip;
+                                    $('#cbotipomat').removeClass('form-control').addClass('form-control is-invalid');
+                                } else {
+                                    this.msjtipomat = '';
+                                    $('#cbotipomat').removeClass('form-control is-invalid').addClass('form-control is-valid');
+                                }
+
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
                     },
 
                     guardarcliente: function () {
@@ -1672,6 +1734,7 @@
                     },
                     siguiente1: function () {
                         if (this.txtclidesc != "") {
+                            this.getcomonto();
                             stepper.next();
                         } else {
                             toastr.warning("Tiene que registrar un cliente");
@@ -1696,6 +1759,15 @@
                     getcomanda: function () {
                         axios.get('procesoprospecto/comanda?iddetpro=' + this.iddetpros).then(response => {
                             this.comanda = response.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    getcomonto: function () {
+                        axios.get('procesoprospecto/montopre?iddetpro=' + this.iddetpros).then(response => {
+                            this.montopagar = response.data;
+                            this.txtmonto = this.montopagar;
+
                         }).catch(function (error) {
                             console.log(error);
                         });
@@ -1752,6 +1824,11 @@
                         });
                     },
                     limpiar: function () {
+                        $("#txtmdesc").attr('disabled', true);
+                        this.txtmdesc = '0';
+                        this.txtmonto = '';
+                        this.cbotipodesc = 'NO';
+                        $("#imagePreview").html("");
                         this.txtclidesc = "";
                         $("#txtidcliente").val("");
                         $("#txtcliente").val("");
@@ -1781,7 +1858,8 @@
                         $('#cbotipomat').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#cboban').removeClass('form-control is-valid is-invalid').addClass('form-control');
                         $('#txtvau').removeClass('form-control is-valid is-invalid').addClass('form-control');
-
+                        $("#txtvau").val("");
+                        this.archivos = [];
                     },
                     getcliente: function () {
                         axios.get('procesoprospecto/mostrar').then(response => {

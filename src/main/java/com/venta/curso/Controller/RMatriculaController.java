@@ -4,28 +4,15 @@ import com.opencsv.CSVWriter;
 import com.venta.curso.Interface.MatriculaInterface;
 import com.venta.curso.Interface.VaucherInterface;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import net.sf.jasperreports.engine.JRException;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -96,7 +83,7 @@ public class RMatriculaController {
                         for (Map<String, Object> detmat : lisdetmat) {
                             List<Map<String, Object>> liscurpaq = matriculainter.getCursoPaquete(detmat.get("idcurpaq").toString());
                             for (Map<String, Object> paqcur : liscurpaq) {
-                                bod = bod + ";" + detmat.get("codcur").toString() + ";" + paqcur.get("estatipomat").toString();
+                                bod = bod + ";" + paqcur.get("codcur").toString() + ";" + detmat.get("estatipomat").toString();
                             }
                         }
                     }

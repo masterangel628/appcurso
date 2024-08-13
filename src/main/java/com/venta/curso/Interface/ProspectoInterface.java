@@ -52,9 +52,11 @@ public interface ProspectoInterface {
 
     public List<Map<String, Object>> getComanda(String idses, String detpro);
 
+    public String getmontoprem(String idses, String detpro);
+
     public void eliminarcomanda(String ico);
 
-    public List<Map<String, Object>> prematricula(String ses, String tip, String detpro, String ban);
+    public List<Map<String, String>> prematricula(String ses, String tip, String detpro, String ban,String descu,String band);
 
     public List<Map<String, Object>> getPaquetecurso(String idpaq);
 

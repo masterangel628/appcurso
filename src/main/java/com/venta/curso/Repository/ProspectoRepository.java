@@ -89,8 +89,10 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "call p_prematricula(:ses,:tip,:detpro,:ban)", nativeQuery = true)
-    public List<Map<String, Object>> prematricula(@Param("ses") String ses, @Param("tip") String tip, @Param("detpro") String detpro, @Param("ban") String ban);
+    @Query(value = "call p_prematricula(:ses,:tip,:detpro,:ban,:descu,:band)", nativeQuery = true)
+    public List<Map<String, String>> prematricula(@Param("ses") String ses, @Param("tip") 
+            String tip, @Param("detpro") String detpro, @Param("ban") String ban,
+            @Param("descu") String descu,@Param("band") String band);
 
     @Query(value = "select  precpaq, nomcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getPaquetecurso(@Param("id") String idpaq);
@@ -135,4 +137,7 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Query(value = "call p_pmcliente(:usu,:per,:cli,:detpro)", nativeQuery = true)
     public void guardarClicom(@Param("usu") String usu, @Param("per") String per, @Param("cli") String cli, @Param("detpro") String detpro);
 
+     @Query(value = "select sum(montocom) from v_comanda where fkidsession=:idses and detpros=:detpro", nativeQuery = true)
+    public String getmontoprem(@Param("idses") String idses,@Param("detpro")  String detpro);
+   
 }

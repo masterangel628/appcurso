@@ -84,8 +84,8 @@ public class MatriculaService implements MatriculaInterface {
     }
 
     @Override
-    public List<Map<String, Object>> verificar(String mat, String tip, String num, String ev) {
-        return matricularepo.verificar(mat, tip, num, ev);
+    public List<Map<String, String>> verificar(String mat, String tip, String num, String ev,String idco) {
+        return matricularepo.verificar(mat, tip, num, ev,idco);
     }
 
     @Override

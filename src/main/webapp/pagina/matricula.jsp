@@ -128,10 +128,18 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label>Cliente</label>
-                                <input type="text" v-model="txtcliente" class="form-control" disabled="true">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Cliente</label>
+                                    <input type="text" v-model="txtcliente" class="form-control" disabled="true">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Banco</label>
+                                    <input type="text" v-model="txtbanco" class="form-control" disabled="true">
+                                </div>
                             </div>
+
+
                             <div class="row">
                                 <div class="col-md-6" v-for="vau in vaucher">
                                     <div class="card mb-2 bg-gradient-dark">
@@ -174,6 +182,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                 <label>Opción</label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="rad" id="radgv" value="1" v-model="radoption">
                                     <label class="form-check-label" for="radgv">Validar la matrícula</label>
@@ -229,6 +238,8 @@
                     txtcliente: "",
                     vaucher: [],
                     compurl: "",
+                    txtbanco: '',
+                    
                 },
                 mounted: function () {
                     this.getmatricula();
@@ -315,6 +326,7 @@
                     },
                     getvaucher: function (mat) {
                         this.txtcliente = mat.documento + " - " + mat.nombre;
+                        this.txtbanco = mat.nomban;
                         axios.get('matricula/mvaucher/' + mat.idmatricula).then(response => {
                             this.vaucher = response.data;
                         }).catch(function (error) {
@@ -329,14 +341,16 @@
                         data.append('mat', this.idmat);
                         data.append('tip', this.cbotipcom);
                         data.append('num', this.txtnum);
+                       
                         data.append('ev', this.radoption);
+                        
                         axios.post('matricula/verificar', data).then(response => {
                             this.getmatricula();
                             $('#mvervecom').modal('toggle');
-                            if(response.data.envio=="si"){
+                            if (response.data.envio == "si") {
                                 this.pdf(response.data.resp);
-                            }else{
-                                toastr.success(response.data.resp.message);
+                            } else {
+                                toastr.success(response.data.resp);
                             }
                         }).catch(function (error) {
                             console.log(error);

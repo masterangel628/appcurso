@@ -19,9 +19,9 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css" rel="stylesheet">
         <style>
             pre {
-                height: 50vh; 
-                overflow: auto; 
-                white-space: pre-wrap; 
+                height: 50vh;
+                overflow: auto;
+                white-space: pre-wrap;
             }
         </style>
     </head>
@@ -55,26 +55,34 @@
                                             <table class="table table-striped table-bordered table-hover" id="tabdatos">
                                                 <thead class="table-success">
                                                     <tr>
-                                                        <th>Comprobante</th>
-                                                        <th>Número</th>
-                                                        <th>Cliente</th>
-                                                        <th>Monto</th>
                                                         <th>Fecha</th>
-                                                        <th>Descripción</th>
-                                                        <th>Ver</th>
+                                                        <th>Comprobante</th>
+                                                        <th>Cliente</th>
+                                                        <th width="5%">PDF</th>
+                                                        <th width="5%">XML</th>
+                                                        <th width="10%">SUNAT</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="com in comprobante">
-                                                        <td>{{com.nomtipcom}}</td>
-                                                        <td>{{com.numero}}</td>
+                                                        <td>{{com.fecmat}}</td>
+                                                        <td>{{com.nomtipcom}} {{com.numero}}</td>
                                                         <td>{{com.nombre}}</td>
-                                                        <td>{{com.mcigv_ven}}</td>
-                                                        <td>{{com.fecmat}} {{com.horamat}}</td>
-                                                        <td>{{com.desccomp}}</td>
+                                                        <td><button class="btn btn-sm" @click="pdf(com)"><img src="public/dist/img/pdf.png" alt=""></button></td>
+                                                        <td><button class="btn btn-sm" @click="xml(com)"><img src="public/dist/img/xml.png" alt=""></button></td>
                                                         <td>
-                                                            <button class="btn btn-info btn-sm" @click="pdf(com)">PDF</button>
-                                                            <button class="btn btn-info btn-sm" @click="xml(com)">XML</button>
+                                                            <ul class="nav nav-pills">
+                                                                <li class="nav-item dropdown">
+                                                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="public/dist/img/check.png" alt=""></a>
+                                                                    <div class="dropdown-menu">
+                                                                        <a class="dropdown-item">Información de comprobante</a>
+                                                                        <div class="dropdown-divider"></div>
+                                                                        <a class="dropdown-item">Descripción: {{com.desccomp}}</a>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            
+                                                            
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -90,7 +98,7 @@
             <div class="modal fade" id="modcomprobante" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <div class="modal-header bg-info">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
                             <h5 class="modal-title" id="staticBackdropLabel">Visualizar Comprobante</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -107,7 +115,7 @@
             <div class="modal fade" id="modxml" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <div class="modal-header bg-info">
+                        <div class="modal-header" style="background-color: #ff1a1a;color: #ffffff;">
                             <h5 class="modal-title" id="staticBackdropLabel">Visualizar Comprobante</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>

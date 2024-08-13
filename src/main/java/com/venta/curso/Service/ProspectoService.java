@@ -154,8 +154,9 @@ public class ProspectoService implements ProspectoInterface {
     }
 
     @Override
-    public List<Map<String, Object>> prematricula(String ses, String tip, String detpro, String ban) {
-        return prospectorepo.prematricula(ses, tip, detpro, ban);
+    public List<Map<String, String>> prematricula(String ses, String tip, String detpro, String ban,String descu,
+            String band) {
+        return prospectorepo.prematricula(ses, tip, detpro, ban,descu,band);
     }
 
     @Override
@@ -186,5 +187,10 @@ public class ProspectoService implements ProspectoInterface {
     @Override
     public void guardarClicom(String idses, String detpro, String per, String cli) {
         prospectorepo.guardarClicom(idses, per, cli, detpro);
+    }
+
+    @Override
+    public String getmontoprem(String idses, String detpro) {
+        return prospectorepo.getmontoprem(idses, detpro);
     }
 }

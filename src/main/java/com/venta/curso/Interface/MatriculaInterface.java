@@ -34,7 +34,7 @@ public interface MatriculaInterface {
 
     public List<Map<String, Object>> getNumero(String tipcom);
 
-    public List<Map<String, Object>> verificar(String mat, String tip, String num, String ev);
+    public List<Map<String, String>> verificar(String mat, String tip, String num, String ev,String idco);
 
     public String penvio(String request);
 

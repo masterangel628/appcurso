@@ -58,12 +58,6 @@ public class MatriculaController {
         return matriculainter.getPrematricula();
     }
 
-    @GetMapping("matricula/matricula/info/{mat}")
-    @ResponseBody
-    public String info(@PathVariable String mat) {
-        return getBody(mat);
-    }
-
     @GetMapping("matricula/mvaucher/{mat}")
     @ResponseBody
     public List getVaucher(@PathVariable String mat) {
@@ -74,17 +68,20 @@ public class MatriculaController {
     @ResponseBody
     public Map Verificar(@RequestParam(name = "mat") String mat, @RequestParam(name = "tip") String tip, @RequestParam(name = "num") String num, @RequestParam(name = "ev") String ev) {
         Map validacion = new HashMap();
+        String json="";
         String resp = "";
+        
         if (ev.equalsIgnoreCase("1")) {
-            matriculainter.verificar(mat, tip, num, ev).get(0).get("resp").toString();
+            matriculainter.verificar(mat, tip, num, ev, "0").get(0).get("resp");
             resp = "La matrícula se verificó correctamente";
             validacion.put("envio", "no");
             validacion.put("resp", resp);
         }
         if (ev.equalsIgnoreCase("2")) {
             try {
-                resp = matriculainter.verificar(mat, tip, num, ev).get(0).get("resp").toString();
-                String json = matriculainter.penvio(getBody(mat));
+                resp = matriculainter.verificar(mat, tip, num, ev, "0").get(0).get("resp");
+                 json = matriculainter.penvio(getBody(mat));
+                 
                 org.json.JSONObject jsonObject = new org.json.JSONObject(json);
                 org.json.JSONObject data = jsonObject.getJSONObject("data");
                 org.json.JSONObject sunatResponse = data.getJSONObject("sunatResponse");
@@ -106,9 +103,13 @@ public class MatriculaController {
                 }
                 validacion.put("envio", "si");
                 validacion.put("resp", resp);
+                validacion.put("respuesta pi",json);
             } catch (Exception e) {
+                validacion.put("tujson", getBody(mat));
+                matriculainter.verificar(mat, "0", "", "3", resp);
                 validacion.put("envio", "no");
-                validacion.put("resp", "Este documento ya se encuentra declarado en la SUNAT");
+                validacion.put("resp", e.getMessage());
+                //validacion.put("resp", "Este documento ya se encuentra declarado en la SUNAT");
             }
         }
         return validacion;
@@ -220,8 +221,8 @@ public class MatriculaController {
 
         objetoCabecera.put("empresa_Ruc", Info.ruc);
 
-        String tipdoc = "";
-        String numdoc = "";
+        String tipdoc ;
+        String numdoc ;
         if (lisven.get(0).get("tipocli").toString().equalsIgnoreCase("DNI")) {
             tipdoc = "1";
             numdoc = lisven.get(0).get("documento").toString();
@@ -234,14 +235,25 @@ public class MatriculaController {
         objetoCabecera.put("cliente_Num_Doc", numdoc);
         objetoCabecera.put("cliente_Razon_Social", lisven.get(0).get("nombre").toString());
         objetoCabecera.put("cliente_Direccion", lisven.get(0).get("dir").toString());
-
+        
+        if (lisven.get(0).get("bandesc").toString().equalsIgnoreCase("SI")) {
+            
+            JSONArray listades = new JSONArray();
+            JSONObject desc = new JSONObject();
+            desc.put("cod_Tipo", "02");
+            desc.put("factor", lisven.get(0).get("fac").toString());
+            desc.put("monto", lisven.get(0).get("desenv").toString());
+            desc.put("monto_Base", lisven.get(0).get("mbase").toString());
+            listades.add(desc);
+            objetoCabecera.put("descuento", listades);
+        }
         objetoCabecera.put("monto_Oper_Gravadas", lisven.get(0).get("msigv_ven").toString());
+        
         objetoCabecera.put("monto_Igv", lisven.get(0).get("igv").toString());
         objetoCabecera.put("total_Impuestos", lisven.get(0).get("igv").toString());
         objetoCabecera.put("valor_Venta", lisven.get(0).get("msigv_ven").toString());
         objetoCabecera.put("sub_Total", lisven.get(0).get("mcigv_ven").toString());
         objetoCabecera.put("monto_Imp_Venta", lisven.get(0).get("mcigv_ven").toString());
-
         objetoCabecera.put("monto_Oper_Exoneradas", "0");
 
         objetoCabecera.put("estado_Documento", "0");

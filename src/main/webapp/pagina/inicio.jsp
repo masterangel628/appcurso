@@ -30,7 +30,6 @@
                 </div>
                 <section class="content">
                     <div class="container-fluid">
-                        <button @click="enviar()">Enviar</button>
                         <div class="row">
                             <div class="col-lg-3 col-6">
                                 <div class="small-box bg-info">
@@ -110,15 +109,6 @@
                         this.cantclimat = response.data.cantclimat;
                         this.cantclinoveri = response.data.cantclinoveri;
                         this.cantcliveri = response.data.cantcliveri;
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
-                },
-                enviar: function () {
-                    var data = new FormData();
-                    data.append('mat', '3');
-                    axios.post('enviarcomprobante', data).then(response => {
-                        console.log(response.data);
                     }).catch(function (error) {
                         console.log(error);
                     });
