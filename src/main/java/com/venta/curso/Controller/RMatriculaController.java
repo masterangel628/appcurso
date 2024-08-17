@@ -6,6 +6,8 @@ import com.venta.curso.Interface.VaucherInterface;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -53,21 +55,20 @@ public class RMatriculaController {
     }
 
     @GetMapping("reportematricula/csv")
-    @ResponseBody
-    public void exportToExcel(@RequestParam(name = "fecdes") String fecdes, @RequestParam(name = "fechas") String fechas, HttpServletResponse response) throws IOException {
-        response.setContentType("text/csv");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=reportematricula.csv";
-        response.setHeader(headerKey, headerValue);
-        exportCsv(response.getWriter(), fecdes, fechas);
-    }
-
-    public void exportCsv(Writer writer, String fecdes, String fechas) throws IOException {
+    public void exportToCSV(@RequestParam(name = "fecdes") String fecdes, @RequestParam(name = "fechas") String fechas, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> lismat = matriculainter.getMatriculareport(fecdes, fechas);
-        try (CSVWriter csvWriter = new CSVWriter(writer)) {
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=datos.csv";
+        response.setHeader(headerKey, headerValue);
+        try (OutputStream os = response.getOutputStream(); OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8"); CSVWriter writer = new CSVWriter(osw)) {
+            os.write(0xEF);
+            os.write(0xBB);
+            os.write(0xBF);
             String cab = "username;password;firstname;lastname;email;course1;group1;course2;group2;course3;group3;course4;group4;course5;group5;course6;group6;course7;group7;course8;group8";
             String[] header = {cab};
-            csvWriter.writeNext(header);
+            writer.writeNext(header);
             for (Map<String, Object> mat : lismat) {
                 String bod = mat.get("username").toString() + ";" + mat.get("password").toString() + ";" + mat.get("firstname").toString() + ";" + mat.get("lastname").toString() + ";" + mat.get("email").toString();
                 List<Map<String, Object>> lispaqocur = matriculainter.getPaqueteoCurso(mat.get("idmatricula").toString());
@@ -89,7 +90,8 @@ public class RMatriculaController {
                     }
                 }
                 String[] data = {bod};
-                csvWriter.writeNext(data);
+                writer.writeNext(data);
+
             }
         }
     }

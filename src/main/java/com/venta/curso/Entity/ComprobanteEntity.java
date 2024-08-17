@@ -35,8 +35,8 @@ public class ComprobanteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idcomprobante;
 
-    @Column(name = "seriecomp", nullable = false, columnDefinition = "INT(3) UNSIGNED ZEROFILL")
-    private int seriecomp;
+    @Column(name = "seriecomp", nullable = false)
+    private String seriecomp;
 
     @Column(name = "numcomp", nullable = false, columnDefinition = "INT(8) UNSIGNED ZEROFILL")
     private int numcomp;

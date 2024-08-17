@@ -68,7 +68,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
-                                    <a class="btn btn-danger btn-sm"  href="<%= request.getContextPath()%>/procesoprospecto/pdf" target="_blank" title="Exportar a PDF"><img src="public/dist/img/pdf24.png"/>Exportar</a> 
+                                    <a class="btn btn-danger btn-sm"  href="<%= request.getContextPath()%>/procesoprospecto/excel" target="_blank" title="Exportar a PDF"><i class="fas fa-file-excel"></i>Exportar</a> 
                                     <button @click="veriseleccion()" class="btn btn-danger btn-sm" title="Inscribir al cliente"><img src="public/dist/img/salvado.png"/>Prematrícula</button>
 
                                 </ol>
@@ -854,8 +854,9 @@
                     montopagar: '',
                 },
                 mounted: function () {
+                  
                     this.verificarsesion();
-                    this.getcliente();
+                   this.getcliente();
                     this.getdepartamento();
                     this.getbanco();
                     $("#txtalumno").attr('disabled', true);
@@ -869,6 +870,7 @@
                         if (this.cbotipodesc == "NO") {
                             $("#txtmdesc").attr('disabled', true);
                             this.txtmdesc = 0;
+                            this.getcomonto();
                         } else {
                             $("#txtmdesc").removeAttr("disabled");
                         }
@@ -1038,6 +1040,9 @@
                     actualizartabla: function () {
                         this.getcliente();
                     },
+
+                   
+
                     tabla: function (tab) {
                         this.$nextTick(() => {
                             $('#' + tab).DataTable({
@@ -1436,7 +1441,7 @@
                             $("#btngventa").removeAttr("disabled");
                         } else {
                             if (this.cbotipodesc == "SI") {
-                                if (this.txtmonto > this.txtmdesc && this.txtmdesc != 0) {
+                                if (this.montopagar > this.txtmdesc && this.txtmdesc != 0) {
                                     this.guardarpp();
                                 } else {
                                     toastr.warning("Ingrese el monto de descuento");
@@ -1766,7 +1771,7 @@
                     getcomonto: function () {
                         axios.get('procesoprospecto/montopre?iddetpro=' + this.iddetpros).then(response => {
                             this.montopagar = response.data;
-                            this.txtmonto = this.montopagar;
+                            this.txtmonto = response.data;
 
                         }).catch(function (error) {
                             console.log(error);
@@ -1865,6 +1870,7 @@
                         axios.get('procesoprospecto/mostrar').then(response => {
                             this.cliente = response.data;
                             this.config("tabdatos");
+                            
                         }).catch(function (error) {
                             console.log(error);
                         });

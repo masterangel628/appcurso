@@ -56,6 +56,9 @@
                                                         <th>Asesor</th>
                                                         <th>Cliente</th>
                                                         <th>Cursos</th>
+                                                        <th>Celular</th>
+                                                        <th>Correo</th>
+                                                        <th>Banco</th>
                                                         <th width="10%">Monto</th>
                                                         <th width="10%">Estado</th>
                                                         <th width="10%">Ver</th>
@@ -67,6 +70,9 @@
                                                         <td>{{ven.nomusu}}</td>
                                                         <td>{{ven.nomcli}}</td> 
                                                         <td>{{ven.curpa}}</td>
+                                                        <td>{{ven.cel}}</td>
+                                                        <td>{{ven.cor}}</td>
+                                                        <td>{{ven.nomban}}</td>
                                                         <td>{{ven.montomat}}</td>
                                                         <td>
                                                             <span class="badge badge-success" v-if="ven.estado=='Vigente'">{{ven.estado}}</span>

@@ -61,7 +61,10 @@ public class RVentaController {
         sheet.setColumnWidth(3, 12000);
         sheet.setColumnWidth(4, 12000);
         sheet.setColumnWidth(5, 4000);
-        sheet.setColumnWidth(6, 12000);
+        sheet.setColumnWidth(6, 10000);
+        sheet.setColumnWidth(7, 10000);
+        sheet.setColumnWidth(8, 4000);
+        sheet.setColumnWidth(9, 12000);
         // Crear el estilo de la celda de encabezado
         CellStyle headerCellStyle = workbook.createCellStyle();
         Font headerFont = workbook.createFont();
@@ -95,7 +98,7 @@ public class RVentaController {
         List<Map<String, Object>> lisvent = matriculainter.getVentareport(fecdes, fechas);
         int rowCount = 3;
 
-        String[] columnHeaders = {"Fecha", "Asesor", "Monto", "Cliente", "Cursos", "Estado", "Descripción"};
+        String[] columnHeaders = {"Fecha", "Asesor", "Monto", "Cliente", "Cursos", "Celular", "Correo", "Banco", "Estado", "Descripción"};
         bodyRow = sheet.createRow(2);
         for (int i = 0; i < columnHeaders.length; i++) {
             Cell cell = bodyRow.createCell(i);
@@ -124,12 +127,24 @@ public class RVentaController {
             Cell celcurd = bodyRow.createCell(4);
             celcurd.setCellValue(lis.get("curpa").toString());
             celcurd.setCellStyle(headerCellStylefull);
-            
-            Cell estacurd = bodyRow.createCell(5);
+
+            Cell celcel = bodyRow.createCell(5);
+            celcel.setCellValue(lis.get("cel").toString());
+            celcel.setCellStyle(headerCellStylefull);
+
+            Cell celcor = bodyRow.createCell(6);
+            celcor.setCellValue(lis.get("cor").toString());
+            celcor.setCellStyle(headerCellStylefull);
+
+            Cell celban = bodyRow.createCell(7);
+            celban.setCellValue(lis.get("nomban").toString());
+            celban.setCellStyle(headerCellStylefull);
+
+            Cell estacurd = bodyRow.createCell(8);
             estacurd.setCellValue(lis.get("estado").toString());
             estacurd.setCellStyle(headerCellStylefull);
-            
-            Cell descurd = bodyRow.createCell(6);
+
+            Cell descurd = bodyRow.createCell(9);
             descurd.setCellValue(lis.get("descmat").toString());
             descurd.setCellStyle(headerCellStylefull);
 

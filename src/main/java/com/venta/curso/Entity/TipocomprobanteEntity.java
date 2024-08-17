@@ -36,8 +36,8 @@ public class TipocomprobanteEntity {
     @Column(name = "nomtipcom", nullable = false, length = 120)
     private String nomtipcom;
 
-    @Column(name = "serietu", nullable = false, columnDefinition = "INT(3) UNSIGNED ZEROFILL")
-    private int serietu;
+    @Column(name = "serietu", nullable = false)
+    private String serietu;
 
     @Column(name = "numtu", nullable = false, columnDefinition = "INT(8) UNSIGNED ZEROFILL")
     private int numtu;

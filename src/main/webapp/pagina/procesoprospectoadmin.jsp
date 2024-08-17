@@ -868,6 +868,7 @@
                         if (this.cbotipodesc == "NO") {
                             $("#txtmdesc").attr('disabled', true);
                             this.txtmdesc = 0;
+                            this.getcomonto();
                         } else {
                             $("#txtmdesc").removeAttr("disabled");
                         }
@@ -1547,7 +1548,7 @@
                             toastr.warning("Seleccione un archivo");
                         } else {
                             if (this.cbotipodesc == "SI") {
-                                if (this.txtmonto > this.txtmdesc && this.txtmdesc != 0) {
+                                if (this.montopagar > this.txtmdesc && this.txtmdesc != 0) {
                                     this.guardarpp();
                                 } else {
                                     toastr.warning("Ingrese el monto de descuento");
@@ -1762,7 +1763,7 @@
                     getcomonto: function () {
                         axios.get('procesoprospectoadmin/montopre?iddetpro=' + this.iddetpros + '&usu=' + this.cbousu).then(response => {
                             this.montopagar = response.data;
-                            this.txtmonto = this.montopagar;
+                            this.txtmonto = response.data;
 
                         }).catch(function (error) {
                             console.log(error);

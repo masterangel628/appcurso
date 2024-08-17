@@ -193,4 +193,9 @@ public class ProspectoService implements ProspectoInterface {
     public String getmontoprem(String idses, String detpro) {
         return prospectorepo.getmontoprem(idses, detpro);
     }
+
+    @Override
+    public List<Map<String, Object>> getClienteAsig(String idus) {
+         return prospectorepo.getClienteAsig(idus);
+    }
 }

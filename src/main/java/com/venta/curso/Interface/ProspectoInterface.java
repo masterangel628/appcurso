@@ -56,7 +56,7 @@ public interface ProspectoInterface {
 
     public void eliminarcomanda(String ico);
 
-    public List<Map<String, String>> prematricula(String ses, String tip, String detpro, String ban,String descu,String band);
+    public List<Map<String, String>> prematricula(String ses, String tip, String detpro, String ban, String descu, String band);
 
     public List<Map<String, Object>> getPaquetecurso(String idpaq);
 
@@ -79,5 +79,8 @@ public interface ProspectoInterface {
     public List<Map<String, Object>> getClicom(String idses, String detpro);
 
     public void guardarClicom(String idses, String detpro, String per, String cli);
+
+    public List<Map<String, Object>> getClienteAsig(String idus);
+     
 
 }

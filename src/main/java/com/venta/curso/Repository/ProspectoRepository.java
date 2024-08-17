@@ -90,9 +90,8 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     @Modifying
     @Transactional
     @Query(value = "call p_prematricula(:ses,:tip,:detpro,:ban,:descu,:band)", nativeQuery = true)
-    public List<Map<String, String>> prematricula(@Param("ses") String ses, @Param("tip") 
-            String tip, @Param("detpro") String detpro, @Param("ban") String ban,
-            @Param("descu") String descu,@Param("band") String band);
+    public List<Map<String, String>> prematricula(@Param("ses") String ses, @Param("tip") String tip, @Param("detpro") String detpro, @Param("ban") String ban,
+            @Param("descu") String descu, @Param("band") String band);
 
     @Query(value = "select  precpaq, nomcur from detallepaquetes,cursos where detallepaquetes.fkidcurso=cursos.idcurso and fkidpaquete=:id", nativeQuery = true)
     public List<Map<String, Object>> getPaquetecurso(@Param("id") String idpaq);
@@ -130,14 +129,16 @@ public interface ProspectoRepository extends JpaRepository<ProspectoEntity, Inte
     public int cantclienteasignado(@Param("id") String idusu);
 
     @Query(value = "select fkidsession, detpros,getpersona(idper) persona,getcliente(idcli) cliente,gettipo(idcli) tipo from comandaclis where fkidsession=:idses and detpros=:detpro", nativeQuery = true)
-    public List<Map<String, Object>> getClicom(@Param("idses") String idses,@Param("detpro")  String detpro);
-    
+    public List<Map<String, Object>> getClicom(@Param("idses") String idses, @Param("detpro") String detpro);
+
     @Modifying
     @Transactional
     @Query(value = "call p_pmcliente(:usu,:per,:cli,:detpro)", nativeQuery = true)
     public void guardarClicom(@Param("usu") String usu, @Param("per") String per, @Param("cli") String cli, @Param("detpro") String detpro);
 
-     @Query(value = "select sum(montocom) from v_comanda where fkidsession=:idses and detpros=:detpro", nativeQuery = true)
-    public String getmontoprem(@Param("idses") String idses,@Param("detpro")  String detpro);
-   
+    @Query(value = "select sum(montocom) from v_comanda where fkidsession=:idses and detpros=:detpro", nativeQuery = true)
+    public String getmontoprem(@Param("idses") String idses, @Param("detpro") String detpro);
+
+    @Query(value = "select fecdetpros, fkidprospecto, iddetalleprospecto, fechorpros, celpros, nompros, estatimpros,estaverdetpros,descpros from detalleprospectos,prospectos where detalleprospectos.fkidprospecto=prospectos.idprospecto and fecdetpros=curdate() and fkidusuario=:usu and estaaspros='ASIGNADO'", nativeQuery = true)
+    public List<Map<String, Object>> getClienteAsig(@Param("usu") String idus);
 }

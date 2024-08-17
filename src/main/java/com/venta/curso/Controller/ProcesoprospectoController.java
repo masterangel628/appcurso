@@ -7,6 +7,7 @@ import com.venta.curso.Interface.UserInterface;
 import com.venta.curso.Interface.VaucherInterface;
 import com.venta.curso.Validation.Validation;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import net.sf.jasperreports.engine.JRException;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * @author Asus
@@ -58,23 +71,23 @@ public class ProcesoprospectoController {
     public String Prospecto() {
         return "procesoprospecto";
     }
-    
+
     @PostMapping("procesoprospecto/guardarclicom")
     @ResponseBody
-    public void GuardarClicom(@RequestParam("detpro") String detpro,@RequestParam("per") String per,
+    public void GuardarClicom(@RequestParam("detpro") String detpro, @RequestParam("per") String per,
             @RequestParam("cli") String cli) {
         UserEntity usu = userInterface.getinfouser();
         int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
-        prospectointer.guardarClicom(""+idses, detpro, per, cli); 
-        
+        prospectointer.guardarClicom("" + idses, detpro, per, cli);
+
     }
-    
+
     @GetMapping("procesoprospecto/mclicom")
     @ResponseBody
     public List getClicom(@RequestParam("detpro") String detpro) {
         UserEntity usu = userInterface.getinfouser();
         int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
-        return prospectointer.getClicom(""+idses, detpro);
+        return prospectointer.getClicom("" + idses, detpro);
     }
 
     @GetMapping("procesoprospecto/verificasesion")
@@ -136,26 +149,6 @@ public class ProcesoprospectoController {
         return prospectointer.getPaquete();
     }
 
-    @GetMapping("procesoprospecto/pdf")
-    @ResponseBody
-    public void generateReport(HttpServletResponse response) throws JRException, IOException, SQLException {
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=reportmov.pdf");
-        UserEntity usu = userInterface.getinfouser();
-        ClassPathResource reportResource = new ClassPathResource("reports/reportmov.jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(reportResource.getInputStream());
-        String sub = reportResource.getFile().getParentFile().getAbsolutePath() + "/";
-        Connection connection = dataSource.getConnection();
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("usu", usu.getId());
-        parameters.put("asesor", "Asesor: "+userInterface.getNombreusu(""+usu.getId())); 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-
-        try (OutputStream out = response.getOutputStream()) {
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        }
-    }
-
     @PostMapping("procesoprospecto/guardar")
     @ResponseBody
     public Map guardar(@RequestParam("curpaq") String curpaq, @RequestParam("tipo") String tipo, @RequestParam("detpro") String detpro) {
@@ -188,7 +181,7 @@ public class ProcesoprospectoController {
 
     @PostMapping("procesoprospecto/finalizar")
     @ResponseBody
-    public Map prematricula(@RequestParam("descu") String descu,@RequestParam("band") String band,@RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
+    public Map prematricula(@RequestParam("descu") String descu, @RequestParam("band") String band, @RequestParam("tip") String tip, @RequestParam("detpro") String detpro,
             @RequestParam(name = "vau") MultipartFile[] files, @RequestParam(name = "ban") String ban) {
         Map validacion = new HashMap();
 
@@ -213,7 +206,7 @@ public class ProcesoprospectoController {
             try {
                 UserEntity usu = userInterface.getinfouser();
                 int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
-                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban,descu,band).get(0).get("resp");
+                String val = prospectointer.prematricula(String.valueOf(idses), tip, detpro, ban, descu, band).get(0).get("resp");
 
                 for (MultipartFile file : files) {
                     String rootDirectory = servletContext.getRealPath("/");
@@ -243,7 +236,7 @@ public class ProcesoprospectoController {
         int idses = sesInterface.getidsession(String.valueOf(usu.getId()));
         return prospectointer.getComanda(String.valueOf(idses), iddetpro);
     }
-    
+
     @GetMapping("procesoprospecto/montopre")
     @ResponseBody
     public String getMonto(@RequestParam("iddetpro") String iddetpro) {
@@ -262,5 +255,80 @@ public class ProcesoprospectoController {
     @ResponseBody
     public List getPaquetecurso(@RequestParam("idpaq") String idpaq) {
         return prospectointer.getPaquetecurso(idpaq);
+    }
+
+    @GetMapping("procesoprospecto/excel")
+    @ResponseBody
+    public void generateReport(HttpServletResponse response) throws JRException, IOException, SQLException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=clienteasignados.xlsx";
+        response.setHeader(headerKey, headerValue);
+        Row bodyRow;
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Clientes Asignados");
+        sheet.setColumnWidth(0, 12000);
+        sheet.setColumnWidth(1, 5000);
+        sheet.setColumnWidth(2, 12000);
+        // Crear el estilo de la celda de encabezado
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerCellStyle.setFont(headerFont);
+        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        // Crear el estilo de la celda de encabezado
+        CellStyle headerCellStylefull = workbook.createCellStyle();
+        Font headerFontfull = workbook.createFont();
+        headerFontfull.setBold(true);
+        headerCellStylefull.setFont(headerFont);
+        headerCellStylefull.setBorderBottom(BorderStyle.THIN);
+        headerCellStylefull.setBorderTop(BorderStyle.THIN);
+        headerCellStylefull.setBorderRight(BorderStyle.THIN);
+        headerCellStylefull.setBorderLeft(BorderStyle.THIN);
+        headerCellStylefull.setAlignment(HorizontalAlignment.CENTER);
+
+        bodyRow = sheet.createRow(0);
+        Cell celltitulo = bodyRow.createCell(0);
+        celltitulo.setCellStyle(headerCellStyle);
+        celltitulo.setCellValue("Reporte de Clientes asignados");
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+        UserEntity usu = userInterface.getinfouser();
+        bodyRow = sheet.createRow(1);
+        Cell cellfec = bodyRow.createCell(0);
+        cellfec.setCellStyle(headerCellStyle);
+        cellfec.setCellValue("Asesor: " + userInterface.getNombreusu("" + usu.getId())+"                    Fecha: "+prospectointer.fecactual());
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 4));
+
+        List<Map<String, Object>> lisvent = prospectointer.getClienteAsig(""+usu.getId()); 
+        int rowCount = 3;
+
+        String[] columnHeaders = {"Nombre", "Celular", "Descripción"};
+        bodyRow = sheet.createRow(2);
+        for (int i = 0; i < columnHeaders.length; i++) {
+            Cell cell = bodyRow.createCell(i);
+            cell.setCellValue(columnHeaders[i]);
+            cell.setCellStyle(headerCellStylefull);
+        }
+
+        for (Map<String, Object> lis : lisvent) {
+            bodyRow = sheet.createRow(rowCount++);
+            Cell celfecd = bodyRow.createCell(0);
+            celfecd.setCellValue(lis.get("nompros").toString());
+            celfecd.setCellStyle(headerCellStylefull);
+
+            Cell celasd = bodyRow.createCell(1);
+            celasd.setCellValue(lis.get("celpros").toString());
+            celasd.setCellStyle(headerCellStylefull);
+
+            Cell celmond = bodyRow.createCell(2);
+            celmond.setCellValue(lis.get("descpros").toString());
+            celmond.setCellStyle(headerCellStylefull);
+        }
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        }
+
     }
 }
